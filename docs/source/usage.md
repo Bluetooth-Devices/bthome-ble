@@ -1,6 +1,7 @@
 # Usage BThome for DIY sensors
 
 ## Introduction
+
 The BThome BLE format was originally developed as HA BLE for the custom Home Assistant integration "BLE monitor", and is soon also available for the official Home Assistant Bluetooth integration.
 The BThome BLE format allows you to create for your own DIY BLE sensors, which can be read by the Home Assistant Bluetooth integration.
 This format tries to provide an energy effective, but still flexible BLE format that can be customized to your own needs.
@@ -50,6 +51,7 @@ In the `BThome BLE` format, the advertising payload should contain the following
 In the example, we have:
 
 - First AD element: `020106`
+
   - `0x02` = length (2 bytes)
     `0x01` = Flags
     `0x06` = in bits, this is `00000110`. Bit 1 and bit 2 are 1, meaning:
@@ -58,6 +60,7 @@ In the example, we have:
   - This part always has to be added, and is always the same (`0x020106`)
 
 - Second AD element: `0B161C182302C4090303BF13` (BThome BLE data)
+
   - `0x0B` = length (11 bytes)
     `0x16` = Service Data - 16-bit UUID
     `0x1C182302C4090303BF13` = BThome BLE data
@@ -117,7 +120,6 @@ At the moment, the following sensors are supported. A preferred data type is giv
 | `0x13`    | voc         | uint16 (2 bytes)    | 1      | `03133301`       | 307          | `ug/m3`    |         |
 |           | mac         | 6 bytes (reversed)  |        | `86A6808FE64854` | 5448E68F80A6 |            | [1] [4] |
 
-
 **Notes**
 
 Full example payloads are given in the test tests.
@@ -134,6 +136,7 @@ The `packet id` is optional and was used to filter duplicate data in BLE monitor
 **_3. weight (unit) (not supported in HA integration yet)_**
 
 The `weight unit` is in `kg` by default, but can be set with the weight unit property. Examples of `weight unit` packets are:
+
 - kg (`63076B67`)
 - lbs (`64076C6273`)
 - jin (`64076A696E`)

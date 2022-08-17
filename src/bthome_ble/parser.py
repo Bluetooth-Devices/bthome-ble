@@ -209,17 +209,17 @@ class BThomeBluetoothDeviceData(BluetoothData):
                     else:
                         _LOGGER.debug(
                             "UNKNOWN dataobject in BThome BLE payload! Adv: %s",
-                            data.hex()
+                            data.hex(),
                         )
                 elif obj_data_format == 4:
-                    # Using a different MAC address that the source mac address is not supported yet
-                    data_mac = parse_mac(payload[payload_start + 1:next_start])
+                    # Using a different MAC address than the source mac address
+                    # is not supported yet
+                    data_mac = parse_mac(payload[payload_start + 1 : next_start])
                     if data_mac:
                         bthome_ble_mac = data_mac  # noqa: F841
                 else:
                     _LOGGER.error(
-                        "UNKNOWN dataobject in BThome BLE payload! Adv: %s",
-                        data.hex()
+                        "UNKNOWN dataobject in BThome BLE payload! Adv: %s", data.hex(),
                     )
             payload_start = next_start
 
@@ -251,10 +251,7 @@ class BThomeBluetoothDeviceData(BluetoothData):
 
         # check for minimum length of encrypted advertisement
         if len(data) < 15:
-            _LOGGER.debug(
-                "Invalid data length (for decryption), adv: %s",
-                data.hex()
-            )
+            _LOGGER.debug("Invalid data length (for decryption), adv: %s", data.hex())
 
         # prepare the data for decryption
         uuid = b"\x1e\x18"
