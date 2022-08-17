@@ -197,7 +197,7 @@ class BThomeBluetoothDeviceData(BluetoothData):
             if obj_data_length != 0:
                 if obj_data_format <= 3:
                     if obj_meas_type in DATA_MEAS_DICT:
-                        meas_data = payload[payload_start + 2:next_start]
+                        meas_data = payload[payload_start + 2:next_start]  # noqa: E203
                         meas_type = DATA_MEAS_DICT[obj_meas_type][0]
                         meas_factor = DATA_MEAS_DICT[obj_meas_type][1]
                         if obj_data_format == 3:
@@ -215,7 +215,8 @@ class BThomeBluetoothDeviceData(BluetoothData):
                 elif obj_data_format == 4:
                     # Using a different MAC address than the source mac address
                     # is not supported yet
-                    data_mac = parse_mac(payload[payload_start + 1:next_start])
+                    data_mac = parse_mac(
+                        payload[payload_start + 1:next_start])  # noqa: E203
                     if data_mac:
                         bthome_ble_mac = data_mac  # noqa: F841
                 else:
