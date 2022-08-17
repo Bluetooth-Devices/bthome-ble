@@ -3,16 +3,16 @@
 This file is shamelessly copied from the following repository:
 https://github.com/Ernst79/bleparser/blob/ac8757ad64f1fc17674dcd22111e547cdf2f205b/package/bleparser/ha_ble.py
 
-BThome was originally developed as HA BLE for ble_monitor and been renamed to BThome for Home Assistant
-Bluetooth integrations.
+BThome was originally developed as HA BLE for ble_monitor and been renamed to
+BThome for Home Assistant Bluetooth integrations.
 
 MIT License applies.
 """
 from __future__ import annotations
 
 import logging
-import sys
 import struct
+import sys
 from typing import Any
 
 from bluetooth_sensor_state_data import BluetoothData
@@ -36,27 +36,30 @@ def to_mac(addr: bytes) -> str:
     return ":".join(f"{i:02X}" for i in addr)
 
 
-def parse_uint(data_obj, factor=1) -> float:
+def parse_uint(data_obj: bytes, factor: float = 1) -> float:
     """convert bytes (as unsigned integer) and factor to float"""
-    decimal_places = -int(f'{factor:e}'.split('e')[-1])
-    return round(int.from_bytes(data_obj, "little", signed=False) * factor, decimal_places)
+    decimal_places = -int(f"{factor:e}".split("e")[-1])
+    return round(
+        int.from_bytes(data_obj, "little", signed=False) * factor, decimal_places
+    )
 
 
-def parse_int(data_obj: bytes, factor=1) -> float:
+def parse_int(data_obj: bytes, factor: float = 1) -> float:
     """convert bytes (as signed integer) and factor to float"""
-    decimal_places = -int(f'{factor:e}'.split('e')[-1])
-    return round(int.from_bytes(data_obj, "little", signed=True) * factor, decimal_places)
+    decimal_places = -int(f"{factor:e}".split("e")[-1])
+    return round(
+        int.from_bytes(data_obj, "little", signed=True) * factor, decimal_places
+    )
 
-
-def parse_float(data_obj: bytes, factor=1) -> float | None:
+def parse_float(data_obj: bytes, factor: float = 1) -> float | None:
     """convert bytes (as float) and factor to float"""
-    decimal_places = -int(f'{factor:e}'.split('e')[-1])
+    decimal_places = -int(f"{factor:e}".split("e")[-1])
     if len(data_obj) == 2:
-        [val] = struct.unpack('e', data_obj)
+        [val] = struct.unpack("e", data_obj)
     elif len(data_obj) == 4:
-        [val] = struct.unpack('f', data_obj)
+        [val] = struct.unpack("f", data_obj)
     elif len(data_obj) == 8:
-        [val] = struct.unpack('d', data_obj)
+        [val] = struct.unpack("d", data_obj)
     else:
         _LOGGER.error("only 2, 4 or 8 byte long floats are supported in BThome BLE")
         return None
@@ -65,7 +68,7 @@ def parse_float(data_obj: bytes, factor=1) -> float | None:
 
 def parse_string(data_obj: bytes) -> str:
     """convert bytes to string"""
-    return data_obj.decode('UTF-8')
+    return data_obj.decode("UTF-8")
 
 
 def parse_mac(data_obj: bytes) -> bytes | None:
@@ -96,7 +99,10 @@ DATA_MEAS_DICT = {
     0x0D: [SensorLibrary.PM25__CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, 1],
     0x0E: [SensorLibrary.PM10__CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, 1],
     0x12: [SensorLibrary.CO2__CONCENTRATION_PARTS_PER_MILLION, 1],
-    0x13: [SensorLibrary.VOLATILE_ORGANIC_COMPOUNDS__CONCENTRATION_PARTS_PER_MILLION, 1],
+    0x13: [
+        SensorLibrary.VOLATILE_ORGANIC_COMPOUNDS__CONCENTRATION_PARTS_PER_MILLION,
+        1,
+    ],
 }
 
 
@@ -154,12 +160,12 @@ class BThomeBluetoothDeviceData(BluetoothData):
         source_mac = bytes.fromhex(mac_readable.replace(":", ""))
 
         uuid16 = service_info.service_uuids
-        if uuid16 == ['0000181c-0000-1000-8000-00805f9b34fb']:
+        if uuid16 == ["0000181c-0000-1000-8000-00805f9b34fb"]:
             # Non-encrypted BThome BLE format
             payload = data
             firmware = "BThome BLE"
             packet_id = None  # noqa: F841
-        elif uuid16 == ['0000181e-0000-1000-8000-00805f9b34fb']:
+        elif uuid16 == ["0000181e-0000-1000-8000-00805f9b34fb"]:
             # Encrypted BThome BLE format
             try:
                 payload = self._decrypt_bthome(data, source_mac)
@@ -190,7 +196,7 @@ class BThomeBluetoothDeviceData(BluetoothData):
             if obj_data_length != 0:
                 if obj_data_format <= 3:
                     if obj_meas_type in DATA_MEAS_DICT:
-                        meas_data = payload[payload_start + 2:next_start]
+                        meas_data = payload[payload_start + 2 : next_start]
                         meas_type = DATA_MEAS_DICT[obj_meas_type][0]
                         meas_factor = DATA_MEAS_DICT[obj_meas_type][1]
                         if obj_data_format == 3:
@@ -201,21 +207,27 @@ class BThomeBluetoothDeviceData(BluetoothData):
                         self.update_predefined_sensor(meas_type, meas)
                         result = True
                     else:
-                        _LOGGER.debug("UNKNOWN dataobject in BThome BLE payload! Adv: %s", data.hex())
+                        _LOGGER.debug(
+                            "UNKNOWN dataobject in BThome BLE payload! Adv: %s",
+                            data.hex()
+                        )
                 elif obj_data_format == 4:
                     # Using a different MAC address that the source mac address is not supported yet
                     data_mac = parse_mac(payload[payload_start + 1:next_start])
                     if data_mac:
                         bthome_ble_mac = data_mac  # noqa: F841
                 else:
-                    _LOGGER.error("UNKNOWN dataobject in BThome BLE payload! Adv: %s", data.hex())
+                    _LOGGER.error(
+                        "UNKNOWN dataobject in BThome BLE payload! Adv: %s",
+                        data.hex()
+                    )
             payload_start = next_start
 
         if not result:
             _LOGGER.info(
                 "BLE ADV from UNKNOWN BThome BLE DEVICE: MAC: %s, ADV: %s",
                 to_mac(source_mac),
-                data.hex()
+                data.hex(),
             )
             return False
 
@@ -239,7 +251,10 @@ class BThomeBluetoothDeviceData(BluetoothData):
 
         # check for minimum length of encrypted advertisement
         if len(data) < 15:
-            _LOGGER.debug("Invalid data length (for decryption), adv: %s", data.hex())
+            _LOGGER.debug(
+                "Invalid data length (for decryption), adv: %s",
+                data.hex()
+            )
 
         # prepare the data for decryption
         uuid = b"\x1e\x18"

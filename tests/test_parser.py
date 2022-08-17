@@ -76,7 +76,7 @@ def test_can_create():
 
 def test_bthome_temperature_humidity(caplog):
     """Test BThome parser for temperature humidity reading without encryption."""
-    data_string = b'#\x02\xca\t\x03\x03\xbf\x13'
+    data_string = b"#\x02\xca\t\x03\x03\xbf\x13"
     advertisement = bytes_to_service_info(
         data_string, local_name="ATC_8D18B2", address="A4:C1:38:8D:18:B2"
     )
@@ -125,7 +125,7 @@ def test_bthome_temperature_humidity(caplog):
 
 
 def test_bthome_temperature_humidity_battery(caplog):
-    """Test BThome parser for temperature humidity battery reading without encryption."""
+    """Test BThome parser for temperature humidity battery reading."""
     data_string = b"\x02\x00\xa8#\x02]\t\x03\x03\xb7\x18\x02\x01]"
     advertisement = bytes_to_service_info(
         data_string, local_name="ATC_8D18B2", address="A4:C1:38:8D:18:B2"
@@ -415,12 +415,16 @@ def test_bthome_pm(caplog):
             KEY_PM25: SensorDescription(
                 device_key=KEY_PM25,
                 device_class=DeviceClass.PM25,
-                native_unit_of_measurement=Units.CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
+                native_unit_of_measurement=(
+                    Units.CONCENTRATION_MICROGRAMS_PER_CUBIC_METER
+                ),
             ),
             KEY_PM10: SensorDescription(
                 device_key=KEY_PM10,
                 device_class=DeviceClass.PM10,
-                native_unit_of_measurement=Units.CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
+                native_unit_of_measurement=(
+                    Units.CONCENTRATION_MICROGRAMS_PER_CUBIC_METER
+                ),
             ),
             KEY_SIGNAL_STRENGTH: SensorDescription(
                 device_key=KEY_SIGNAL_STRENGTH,
@@ -429,12 +433,8 @@ def test_bthome_pm(caplog):
             ),
         },
         entity_values={
-            KEY_PM25: SensorValue(
-                device_key=KEY_PM25, name="Pm25", native_value=3090
-            ),
-            KEY_PM10: SensorValue(
-                device_key=KEY_PM10, name="Pm10", native_value=7170
-            ),
+            KEY_PM25: SensorValue(device_key=KEY_PM25, name="Pm25", native_value=3090),
+            KEY_PM10: SensorValue(device_key=KEY_PM10, name="Pm10", native_value=7170),
             KEY_SIGNAL_STRENGTH: SensorValue(
                 device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
             ),

@@ -53,8 +53,8 @@ In the example, we have:
   - `0x02` = length (2 bytes)
     `0x01` = Flags
     `0x06` = in bits, this is `00000110`. Bit 1 and bit 2 are 1, meaning:
-      Bit 1: “LE General Discoverable Mode”
-      Bit 2: “BR/EDR Not Supported”
+    Bit 1: “LE General Discoverable Mode”
+    Bit 2: “BR/EDR Not Supported”
   - This part always has to be added, and is always the same (`0x020106`)
 
 - Second AD element: `0B161C182302C4090303BF13` (BThome BLE data)
@@ -78,7 +78,7 @@ Let's explain how the last two data packets work. The temperature packet is used
   - The object format (bit 5-7) `001` = 1 = Signed Integer (see table below)
 
 | type | bit 5-7 | format | Data type              |
-| -----| ------- | -------| ---------------------- |
+| ---- | ------- | ------ | ---------------------- |
 | `0`  | `000`   | uint   | unsingned integer      |
 | `1`  | `001`   | int    | signed integer         |
 | `2`  | `010`   | float  | float                  |
@@ -87,14 +87,14 @@ Let's explain how the last two data packets work. The temperature packet is used
 
 - The second byte `0x02` is defining the type of measurement (temperature, see table below)
 - The remaining bytes `0xC409` is the object value (little endian), which will be multiplied with the factor in the table below to get a sufficient number of digits.
-  - The object length is telling us that the value is 2 bytes long (object length = 3 bytes minus the second byte) and the object format is telling us that the value is an Signed Integer (possitive or negative integer).
+  - The object length is telling us that the value is 2 bytes long (object length = 3 bytes minus the second byte) and the object format is telling us that the value is a Signed Integer (positive or negative integer).
   - `0xC409` as unsigned integer in little endian is equal to 2500.
   - The factor for a temperature measurement is 0.01, resulting in a temperature of 25.00°C
 
-At the moment, the following sensors are supported. A preferred data type is given for your convienience, which should give you a short data message and at the same time a sufficient number of digits to display your data with high accuracy in Home Assistant. But you are free to use a different data type. If you want another sensor, let us know by creating a new issue on Github.
+At the moment, the following sensors are supported. A preferred data type is given for your convenience, which should give you a short data message and at the same time a sufficient number of digits to display your data with high accuracy in Home Assistant. But you are free to use a different data type. If you want another sensor, let us know by creating a new issue on Github.
 
 | Object id | Property    | Preferred data type | Factor | example          | result       | Unit in HA | Notes   |
-| --------- |-------------| --------------------| -------| ---------------- | -------------|------------|---------|
+| --------- | ----------- | ------------------- | ------ | ---------------- | ------------ | ---------- | ------- |
 | `0x00`    | packet id   | uint8 (1 byte)      | 1      | `020009`         | 9            |            | [1] [2] |
 | `0x01`    | battery     | uint8 (1 byte)      | 1      | `020161`         | 97           | `%`        |         |
 | `0x02`    | temperature | sint16 (2 bytes)    | 0.01   | `2302CA09`       | 25.06        | `°C`       |         |
@@ -122,23 +122,23 @@ At the moment, the following sensors are supported. A preferred data type is giv
 
 Full example payloads are given in the test tests.
 
-***1. Not supported measurement type***
+**_1. Not supported measurement type_**
 
 The sensors with [1] is the last column are not yet supported in the official HA integration and will be added soon.
 For these measurement types, use [BLE monitor](https://github.com/custom_components/ble_monitor) for the time being.
 
-***2. packet id (not supported in HA integration yet)***
+**_2. packet id (not supported in HA integration yet)_**
 
 The `packet id` is optional and was used to filter duplicate data in BLE monitor. This functionality is not supported in the official Home Assistant integration.
 
-***3. weight (unit) (not supported in HA integration yet)***
+**_3. weight (unit) (not supported in HA integration yet)_**
 
 The `weight unit` is in `kg` by default, but can be set with the weight unit property. Examples of `weight unit` packets are:
 - kg (`63076B67`)
 - lbs (`64076C6273`)
 - jin (`64076A696E`)
 
-***4. mac (not supported in HA integration yet)***
+**_4. mac (not supported in HA integration yet)_**
 
 The `mac` functionality is not yet supported in the official Home Assistant integration, but was developed for BLE monitor.
 We will most likely add this in a future update.
