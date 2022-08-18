@@ -2,6 +2,15 @@
 
 <!--next-version-placeholder-->
 
+## v0.2.0 (2022-08-18)
+### Feature
+* **sensor-state-data:** Update dependency ([`b624ef5`](https://github.com/Bluetooth-Devices/bthome-ble/commit/b624ef51b40f371eb23dfe2a66b2ecc1752832fd))
+* **poetry:** Update dependencies ([`b0177f4`](https://github.com/Bluetooth-Devices/bthome-ble/commit/b0177f4427464e54262e1ca087d94bad570087a7))
+
+### Fix
+* Delete poetry log ([`1376c47`](https://github.com/Bluetooth-Devices/bthome-ble/commit/1376c473aa5f9c3783f9f2b03dfccf483f224335))
+* Update sensor-state-data version ([`132cf9e`](https://github.com/Bluetooth-Devices/bthome-ble/commit/132cf9e74560a2abd5e263ddda04c70c9a6a1cfd))
+
 ## v0.1.0 (2022-08-18)
 ### Feature
 * Initial release ([`c097555`](https://github.com/Bluetooth-Devices/bthome-ble/commit/c0975559955bddab4c96aa993e381107b4f7c152))
