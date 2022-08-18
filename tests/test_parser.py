@@ -1,3 +1,4 @@
+"""Tests for the parser of BLE advertisements in BThome format."""
 import logging
 from unittest.mock import patch
 
