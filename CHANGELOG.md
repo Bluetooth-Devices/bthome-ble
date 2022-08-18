@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.2.1 (2022-08-18)
+### Fix
+* Auto release ([`1eac241`](https://github.com/Bluetooth-Devices/bthome-ble/commit/1eac2415693e1a60d948e023fce5b8db108d56c1))
+
 ## v0.2.0 (2022-08-18)
 ### Feature
 * **sensor-state-data:** Update dependency ([`b624ef5`](https://github.com/Bluetooth-Devices/bthome-ble/commit/b624ef51b40f371eb23dfe2a66b2ecc1752832fd))
