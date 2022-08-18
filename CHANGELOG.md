@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.2.2 (2022-08-18)
+### Fix
+* Auto release test ([`8fa2ba6`](https://github.com/Bluetooth-Devices/bthome-ble/commit/8fa2ba6831e793652d0658292730942345585bf5))
+
 ## v0.2.1 (2022-08-18)
 ### Fix
 * Auto release ([`1eac241`](https://github.com/Bluetooth-Devices/bthome-ble/commit/1eac2415693e1a60d948e023fce5b8db108d56c1))
