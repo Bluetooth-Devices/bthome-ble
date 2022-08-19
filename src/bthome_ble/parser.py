@@ -13,6 +13,7 @@ from __future__ import annotations
 import logging
 import struct
 import sys
+from enum import Enum
 from typing import Any
 
 from bluetooth_sensor_state_data import BluetoothData
@@ -30,6 +31,15 @@ def short_address(address: str) -> str:
     if len(results[-1]) == 2:
         return f"{results[-2].upper()}{results[-1].upper()}"
     return results[-1].upper()
+
+
+class EncryptionScheme(Enum):
+
+    # No encryption is needed to use this device
+    NONE = "none"
+
+    # 16 byte encryption key expected
+    BTHOME_BINDKEY = "bthome_bindkey"
 
 
 def to_mac(addr: bytes) -> str:
@@ -92,8 +102,8 @@ class BThomeBluetoothDeviceData(BluetoothData):
         # Data that we know how to parse but don't yet map to the SensorData model.
         self.unhandled: dict[str, Any] = {}
 
-        # If true, the data is encrypted
-        self.is_encrypted = False
+        # Encryption to expect, based on flags in the UUID.
+        self.encryption_scheme = EncryptionScheme.NONE
 
         # If true, then we know the actual MAC of the device.
         # On macOS, we don't unless the device includes it in the advertisement
@@ -115,6 +125,24 @@ class BThomeBluetoothDeviceData(BluetoothData):
         # value with a new bindkey.
         self.last_service_info: BluetoothServiceInfo | None = None
 
+    def supported(self, data: BluetoothServiceInfo) -> bool:
+        if not super().supported(data):
+            return False
+
+        # Where a device uses encryption we need to know its actual MAC address.
+        # As the encryption uses it as part of the nonce.
+        # On macOS we instead only know its CoreBluetooth UUID.
+        # It seems its impossible to automatically get that in the general case.
+        # So devices do duplicate the MAC in the advertisement, we use that
+        # when we can on macOS.
+        # We may want to ask the user for the MAC address during config flow
+        # For now, just hide these devices for macOS users.
+        if self.encryption_scheme != EncryptionScheme.NONE:
+            if not self.mac_known:
+                return False
+
+        return True
+
     def _start_update(self, service_info: BluetoothServiceInfo) -> None:
         """Update from BLE advertisement data."""
         _LOGGER.debug("Parsing BThome BLE advertisement data: %s", service_info)
@@ -131,23 +159,32 @@ class BThomeBluetoothDeviceData(BluetoothData):
         mac_readable = service_info.address
         if len(mac_readable) != 17 and mac_readable[2] != ":":
             # On macOS, we get a UUID, which is useless for BThome sensors
-            mac_readable = "00:00:00:00:00:00"  # noqa: F841
+            self.mac_known = False
             return False
+        else:
+            self.mac_known = True
         source_mac = bytes.fromhex(mac_readable.replace(":", ""))
+
+        identifier = service_info.address
+        self.set_title(f"{name} ({identifier})")
+        self.set_device_name(f"{name} ({identifier})")
 
         uuid16 = service_info.service_uuids
         if uuid16 == ["0000181c-0000-1000-8000-00805f9b34fb"]:
             # Non-encrypted BThome BLE format
+            self.encryption_scheme = EncryptionScheme.NONE
+            self.set_device_sw_version("BThome BLE")
             payload = data
-            firmware = "BThome BLE"
             packet_id = None  # noqa: F841
         elif uuid16 == ["0000181e-0000-1000-8000-00805f9b34fb"]:
             # Encrypted BThome BLE format
+            self.encryption_scheme = EncryptionScheme.BTHOME_BINDKEY
+            self.set_device_sw_version("BThome BLE (encrypted)")
             try:
                 payload = self._decrypt_bthome(data, source_mac)
             except (ValueError, TypeError):
                 return False
-            firmware = "BThome BLE (encrypted)"
+
             packet_id = parse_uint(data[-8:-4])  # noqa: F841
         else:
             return False
@@ -222,10 +259,6 @@ class BThomeBluetoothDeviceData(BluetoothData):
         if not result:
             return False
 
-        identifier = service_info.address
-        self.set_title(f"{name} ({identifier})")
-        self.set_device_name(f"{name} ({identifier})")
-        self.set_device_sw_version(firmware)
         return True
 
     def _decrypt_bthome(self, data: bytes, bthome_mac: bytes) -> bytes:
@@ -252,7 +285,7 @@ class BThomeBluetoothDeviceData(BluetoothData):
         mic = data[-4:]
 
         # nonce: mac [6], uuid16 [2], count_id [4] (6+2+4 = 12 bytes)
-        nonce = b"".join([bthome_mac[::-1], uuid, count_id])
+        nonce = b"".join([bthome_mac, uuid, count_id])
         cipher = AES.new(self.bindkey, AES.MODE_CCM, nonce=nonce, mac_len=4)
         cipher.update(b"\x11")
 
@@ -260,6 +293,7 @@ class BThomeBluetoothDeviceData(BluetoothData):
         try:
             decrypted_payload = cipher.decrypt_and_verify(encrypted_payload, mic)
         except ValueError as error:
+            self.bindkey_verified = False
             _LOGGER.warning("Decryption failed: %s", error)
             _LOGGER.debug("mic: %s", mic.hex())
             _LOGGER.debug("nonce: %s", nonce.hex())
