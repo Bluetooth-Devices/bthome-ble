@@ -12,7 +12,7 @@ from sensor_state_data import (
     Units,
 )
 
-from bthome_ble.parser import EncryptionScheme, BThomeBluetoothDeviceData
+from bthome_ble.parser import BThomeBluetoothDeviceData, EncryptionScheme
 
 KEY_TEMPERATURE = DeviceKey(key="temperature", device_id=None)
 KEY_HUMIDITY = DeviceKey(key="humidity", device_id=None)
@@ -81,7 +81,7 @@ def test_encryption_key_needed():
     advertisement = bytes_to_encrypted_service_info(
         payload=data_string,
         local_name="ATC_8D18B2",
-        address="A4:C1:38:8D:18:B2"
+        address="A4:C1:38:8D:18:B2",
     )
 
     device = BThomeBluetoothDeviceData()
@@ -97,7 +97,7 @@ def test_encryption_no_key_needed():
     advertisement = bytes_to_service_info(
         payload=data_string,
         local_name="ATC_8D18B2",
-        address="A4:C1:38:8D:18:B2"
+        address="A4:C1:38:8D:18:B2",
     )
 
     device = BThomeBluetoothDeviceData()
@@ -110,9 +110,7 @@ def test_encryption_no_key_needed():
 def test_bindkey_wrong():
     """Test BThome parser with wrong encryption key."""
     bindkey = "814aac74c4f17b6c1581e1ab87816b99"
-    data_string = (
-        b'\xfb\xa45\xe4\xd3\xc3\x12\xfb\x00\x11"3W\xd9\n\x99'
-    )
+    data_string = b'\xfb\xa45\xe4\xd3\xc3\x12\xfb\x00\x11"3W\xd9\n\x99'
     advertisement = bytes_to_encrypted_service_info(
         data_string,
         local_name="ATC_8D18B2",
@@ -151,9 +149,7 @@ def test_bindkey_wrong():
 def test_bindkey_correct():
     """Test BThome parser with correct encryption key."""
     bindkey = "231d39c1d7cc1ab1aee224cd096db932"
-    data_string = (
-        b'\xfb\xa45\xe4\xd3\xc3\x12\xfb\x00\x11"3W\xd9\n\x99'
-    )
+    data_string = b'\xfb\xa45\xe4\xd3\xc3\x12\xfb\x00\x11"3W\xd9\n\x99'
     advertisement = bytes_to_encrypted_service_info(
         data_string,
         local_name="ATC_8F80A5",
@@ -208,9 +204,7 @@ def test_bindkey_correct():
 def test_bindkey_verified_can_be_unset():
     """Test BThome parser with wrong encryption key."""
     bindkey = "814aac74c4f17b6c1581e1ab87816b99"
-    data_string = (
-        b'\xfb\xa45\xe4\xd3\xc3\x12\xfb\x00\x11"3W\xd9\n\x99'
-    )
+    data_string = b'\xfb\xa45\xe4\xd3\xc3\x12\xfb\x00\x11"3W\xd9\n\x99'
     advertisement = bytes_to_encrypted_service_info(
         data_string,
         local_name="ATC_8D18B2",
