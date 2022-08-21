@@ -2,6 +2,13 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.0 (2022-08-19)
+### Feature
+* Add encryption support ([`e299228`](https://github.com/Bluetooth-Devices/bthome-ble/commit/e299228e02313c154027bdef017a64db5d7fbe4c))
+
+### Fix
+* Isort ([`d85e345`](https://github.com/Bluetooth-Devices/bthome-ble/commit/d85e345ddfc4380c317df83774ef9fe61594d037))
+
 ## v0.2.2 (2022-08-18)
 ### Fix
 * Auto release test ([`8fa2ba6`](https://github.com/Bluetooth-Devices/bthome-ble/commit/8fa2ba6831e793652d0658292730942345585bf5))
