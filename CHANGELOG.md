@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.1 (2022-08-21)
+### Fix
+* Remove double mac from name ([`eb77ad8`](https://github.com/Bluetooth-Devices/bthome-ble/commit/eb77ad8d947d53bfc585515cc512d088913f69e1))
+
 ## v0.3.0 (2022-08-19)
 ### Feature
 * Add encryption support ([`e299228`](https://github.com/Bluetooth-Devices/bthome-ble/commit/e299228e02313c154027bdef017a64db5d7fbe4c))
