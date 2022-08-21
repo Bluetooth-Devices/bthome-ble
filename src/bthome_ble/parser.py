@@ -27,10 +27,7 @@ _LOGGER = logging.getLogger(__name__)
 
 def short_address(address: str) -> str:
     """Convert a Bluetooth address to a short address"""
-    results = address.replace("-", ":").split(":")
-    if len(results[-1]) == 2:
-        return f"{results[-2].upper()}{results[-1].upper()}"
-    return results[-1].upper()
+    return address.replace("-", "").replace(":", "")[-6:].upper()
 
 
 class EncryptionScheme(Enum):
@@ -165,9 +162,14 @@ class BThomeBluetoothDeviceData(BluetoothData):
             self.mac_known = True
         source_mac = bytes.fromhex(mac_readable.replace(":", ""))
 
-        identifier = service_info.address
-        self.set_title(f"{name} ({identifier})")
-        self.set_device_name(f"{name} ({identifier})")
+        identifier = short_address(service_info.address)
+        if name[-6:] == identifier:
+            # Remove the identifier if it is already in the local name.
+            name = name[:-6]
+            if name[-1:] in ("_", " "):
+                name = name[:-1]
+        self.set_device_name(f"{name} {identifier}")
+        self.set_title(f"{name} {identifier}")
 
         uuid16 = service_info.service_uuids
         if uuid16 == ["0000181c-0000-1000-8000-00805f9b34fb"]:
