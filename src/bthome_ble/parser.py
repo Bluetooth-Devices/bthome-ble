@@ -143,8 +143,6 @@ class BThomeBluetoothDeviceData(BluetoothData):
     def _start_update(self, service_info: BluetoothServiceInfo) -> None:
         """Update from BLE advertisement data."""
         _LOGGER.debug("Parsing BThome BLE advertisement data: %s", service_info)
-        self.set_device_manufacturer("Home Assistant")
-        self.set_device_type("BThome sensor")
         for uuid, data in service_info.service_data.items():
             if self._parse_bthome(service_info, service_info.name, data):
                 self.last_service_info = service_info
@@ -170,6 +168,8 @@ class BThomeBluetoothDeviceData(BluetoothData):
                 name = name[:-1]
         self.set_device_name(f"{name} {identifier}")
         self.set_title(f"{name} {identifier}")
+        self.set_device_manufacturer("Home Assistant")
+        self.set_device_type("BThome sensor")
 
         uuid16 = service_info.service_uuids
         if uuid16 == ["0000181c-0000-1000-8000-00805f9b34fb"]:
