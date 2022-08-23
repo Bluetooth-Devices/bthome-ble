@@ -151,15 +151,6 @@ class BThomeBluetoothDeviceData(BluetoothData):
         self, service_info: BluetoothServiceInfo, name: str, data: bytes
     ) -> bool:
         """Parser for BThome sensors"""
-        mac_readable = service_info.address
-        if len(mac_readable) != 17 and mac_readable[2] != ":":
-            # On macOS, we get a UUID, which is useless for BThome sensors
-            self.mac_known = False
-            return False
-        else:
-            self.mac_known = True
-        source_mac = bytes.fromhex(mac_readable.replace(":", ""))
-
         identifier = short_address(service_info.address)
         if name[-6:] == identifier:
             # Remove the identifier if it is already in the local name.
@@ -182,6 +173,16 @@ class BThomeBluetoothDeviceData(BluetoothData):
             # Encrypted BThome BLE format
             self.encryption_scheme = EncryptionScheme.BTHOME_BINDKEY
             self.set_device_sw_version("BThome BLE (encrypted)")
+
+            mac_readable = service_info.address
+            if len(mac_readable) != 17 and mac_readable[2] != ":":
+                # On macOS, we get a UUID, which is useless for BThome sensors
+                self.mac_known = False
+                return False
+            else:
+                self.mac_known = True
+            source_mac = bytes.fromhex(mac_readable.replace(":", ""))
+
             try:
                 payload = self._decrypt_bthome(data, source_mac)
             except (ValueError, TypeError):
