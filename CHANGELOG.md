@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.4 (2022-08-23)
+### Fix
+* Length check ([`9817c84`](https://github.com/Bluetooth-Devices/bthome-ble/commit/9817c84f78993c743c354a09789354c6fa600a18))
+
 ## v0.3.3 (2022-08-23)
 ### Fix
 * Minor change to force a new release ([`a55133a`](https://github.com/Bluetooth-Devices/bthome-ble/commit/a55133a243c3b40b4a1a330a70f4aa8930d5dc8a))
