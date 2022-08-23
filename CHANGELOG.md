@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.3 (2022-08-23)
+### Fix
+* Minor change to force a new release ([`a55133a`](https://github.com/Bluetooth-Devices/bthome-ble/commit/a55133a243c3b40b4a1a330a70f4aa8930d5dc8a))
+
 ## v0.3.2 (2022-08-21)
 ### Fix
 * Supported sensor fix ([`0bc45bf`](https://github.com/Bluetooth-Devices/bthome-ble/commit/0bc45bf822da65d705823daff57881c917b9c8fc))
