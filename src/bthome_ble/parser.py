@@ -40,12 +40,12 @@ class EncryptionScheme(Enum):
 
 
 def to_mac(addr: bytes) -> str:
-    """Return formatted MAC address"""
+    """Return formatted MAC address."""
     return ":".join(f"{i:02X}" for i in addr)
 
 
 def parse_uint(data_obj: bytes, factor: float = 1.0) -> float:
-    """convert bytes (as unsigned integer) and factor to float"""
+    """Convert bytes (as unsigned integer) and factor to float."""
     decimal_places = -int(f"{factor:e}".split("e")[-1])
     return round(
         int.from_bytes(data_obj, "little", signed=False) * factor, decimal_places
@@ -53,7 +53,7 @@ def parse_uint(data_obj: bytes, factor: float = 1.0) -> float:
 
 
 def parse_int(data_obj: bytes, factor: float = 1.0) -> float:
-    """convert bytes (as signed integer) and factor to float"""
+    """Convert bytes (as signed integer) and factor to float."""
     decimal_places = -int(f"{factor:e}".split("e")[-1])
     return round(
         int.from_bytes(data_obj, "little", signed=True) * factor, decimal_places
@@ -61,7 +61,7 @@ def parse_int(data_obj: bytes, factor: float = 1.0) -> float:
 
 
 def parse_float(data_obj: bytes, factor: float = 1.0) -> float | None:
-    """convert bytes (as float) and factor to float"""
+    """Convert bytes (as float) and factor to float."""
     decimal_places = -int(f"{factor:e}".split("e")[-1])
     if len(data_obj) == 2:
         [val] = struct.unpack("e", data_obj)
@@ -76,12 +76,12 @@ def parse_float(data_obj: bytes, factor: float = 1.0) -> float | None:
 
 
 def parse_string(data_obj: bytes) -> str:
-    """convert bytes to string"""
+    """Convert bytes to string."""
     return data_obj.decode("UTF-8")
 
 
 def parse_mac(data_obj: bytes) -> bytes | None:
-    """convert bytes to mac"""
+    """Convert bytes to mac."""
     if len(data_obj) == 6:
         return data_obj[::-1]
     else:
