@@ -193,11 +193,10 @@ class BThomeBluetoothDeviceData(BluetoothData):
             return False
 
         payload_length = len(payload)
-        payload_start = 0
         next_start = 0
         result = False
 
-        while payload_length >= payload_start + 1:
+        while payload_length >= next_start + 1:
             payload_start = next_start
 
             obj_control_byte = payload[payload_start]
