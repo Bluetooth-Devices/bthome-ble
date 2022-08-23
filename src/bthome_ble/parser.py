@@ -193,71 +193,78 @@ class BThomeBluetoothDeviceData(BluetoothData):
             return False
 
         payload_length = len(payload)
-        payload_start = 0
+        next_start = 0
         result = False
 
-        while payload_length >= payload_start + 1:
-            meas_float = None
-            meas_str = None
+        while payload_length >= next_start + 1:
+            payload_start = next_start
 
             obj_control_byte = payload[payload_start]
             obj_data_length = (obj_control_byte >> 0) & 31  # 5 bits (0-4)
             obj_data_format = (obj_control_byte >> 5) & 7  # 3 bits (5-7)
             obj_meas_type = payload[payload_start + 1]
             next_start = payload_start + 1 + obj_data_length
+
             if payload_length < next_start:
                 _LOGGER.debug("Invalid payload data length, payload: %s", payload.hex())
                 break
 
-            if obj_data_length != 0:
-                if obj_data_format <= 3:
-                    if obj_meas_type in MEAS_TYPES:
-                        next_payload = payload_start + 2
-                        meas_data = payload[next_payload:next_start]
-                        meas_type = MEAS_TYPES[obj_meas_type]
-                        meas_format = meas_type.meas_format
-                        meas_factor = meas_type.factor
+            if obj_data_length == 0:
+                continue
 
-                        if obj_data_format == 0:
-                            meas_float = parse_uint(meas_data, meas_factor)
-                        elif obj_data_format == 1:
-                            meas_float = parse_int(meas_data, meas_factor)
-                        elif obj_data_format == 2:
-                            meas_float = parse_float(meas_data, meas_factor)
-                        elif obj_data_format == 3:
-                            meas_str = parse_string(meas_data)
+            if obj_data_format == 4:
+                # Using a different MAC address than the source mac address
+                # is not supported yet
+                mac_start = payload_start + 1
+                data_mac = parse_mac(payload[mac_start:next_start])
+                if data_mac:
+                    bthome_ble_mac = data_mac  # noqa: F841
+                continue
 
-                        if meas_float:
-                            self.update_predefined_sensor(meas_format, meas_float)
-                            result = True
-                        elif meas_str:
-                            _LOGGER.debug(
-                                "String data type not supported yet! Adv: %s",
-                                data.hex(),
-                            )
-                        else:
-                            _LOGGER.debug(
-                                "UNKNOWN dataobject in BThome BLE payload! Adv: %s",
-                                data.hex(),
-                            )
-                    else:
-                        _LOGGER.debug(
-                            "UNKNOWN measurement type in BThome BLE payload! Adv: %s",
-                            data.hex(),
-                        )
-                elif obj_data_format == 4:
-                    # Using a different MAC address than the source mac address
-                    # is not supported yet
-                    mac_start = payload_start + 1
-                    data_mac = parse_mac(payload[mac_start:next_start])
-                    if data_mac:
-                        bthome_ble_mac = data_mac  # noqa: F841
-                else:
-                    _LOGGER.error(
-                        "UNKNOWN dataobject in BThome BLE payload! Adv: %s",
-                        data.hex(),
-                    )
-            payload_start = next_start
+            elif obj_data_format > 4:
+                _LOGGER.error(
+                    "UNKNOWN dataobject in BThome BLE payload! Adv: %s",
+                    data.hex(),
+                )
+                continue
+
+            if obj_meas_type not in MEAS_TYPES:
+                _LOGGER.debug(
+                    "UNKNOWN measurement type in BThome BLE payload! Adv: %s",
+                    data.hex(),
+                )
+                continue
+
+            next_payload = payload_start + 2
+            meas_data = payload[next_payload:next_start]
+            meas_type = MEAS_TYPES[obj_meas_type]
+            meas_format = meas_type.meas_format
+            meas_factor = meas_type.factor
+            meas_float = None
+            meas_str = None
+
+            if obj_data_format == 0:
+                meas_float = parse_uint(meas_data, meas_factor)
+            elif obj_data_format == 1:
+                meas_float = parse_int(meas_data, meas_factor)
+            elif obj_data_format == 2:
+                meas_float = parse_float(meas_data, meas_factor)
+            elif obj_data_format == 3:
+                meas_str = parse_string(meas_data)
+
+            if meas_float is not None:
+                self.update_predefined_sensor(meas_format, meas_float)
+                result = True
+            elif meas_str is not None:
+                _LOGGER.debug(
+                    "String data type not supported yet! Adv: %s",
+                    data.hex(),
+                )
+            else:
+                _LOGGER.debug(
+                    "UNKNOWN dataobject in BThome BLE payload! Adv: %s",
+                    data.hex(),
+                )
 
         if not result:
             return False
