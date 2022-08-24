@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.5 (2022-08-24)
+### Fix
+* Workaround for empty service_uuids ([`2cab081`](https://github.com/Bluetooth-Devices/bthome-ble/commit/2cab081c591de7807c02424819bfca243d360b69))
+
 ## v0.3.4 (2022-08-23)
 ### Fix
 * Length check ([`9817c84`](https://github.com/Bluetooth-Devices/bthome-ble/commit/9817c84f78993c743c354a09789354c6fa600a18))
