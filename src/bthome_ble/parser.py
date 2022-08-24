@@ -162,7 +162,7 @@ class BThomeBluetoothDeviceData(BluetoothData):
         self.set_device_manufacturer("Home Assistant")
         self.set_device_type("BThome sensor")
 
-        uuid16 = service_info.service_uuids
+        uuid16 = list(service_info.service_data.keys())
         if uuid16 == ["0000181c-0000-1000-8000-00805f9b34fb"]:
             # Non-encrypted BThome BLE format
             self.encryption_scheme = EncryptionScheme.NONE
