@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.6 (2022-08-24)
+### Fix
+* Flake8 error ([`cc9f077`](https://github.com/Bluetooth-Devices/bthome-ble/commit/cc9f077ab9ce3685305a2407b17150a6e7f9bac5))
+* Table format ([`eca5d42`](https://github.com/Bluetooth-Devices/bthome-ble/commit/eca5d42e710c5edadc190f289d88219f43699ee6))
+* Units of voc ([`0f4c773`](https://github.com/Bluetooth-Devices/bthome-ble/commit/0f4c773c02310a3546c2687cf5d18d31677c0549))
+
 ## v0.3.5 (2022-08-24)
 ### Fix
 * Workaround for empty service_uuids ([`2cab081`](https://github.com/Bluetooth-Devices/bthome-ble/commit/2cab081c591de7807c02424819bfca243d360b69))
