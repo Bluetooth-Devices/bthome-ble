@@ -56,7 +56,7 @@ MEAS_TYPES: dict[int, MeasTypes] = {
         factor=1,
     ),
     0x13: MeasTypes(
-        meas_format=SensorLibrary.VOLATILE_ORGANIC_COMPOUNDS__CONCENTRATION_PARTS_PER_MILLION,
+        meas_format=SensorLibrary.VOLATILE_ORGANIC_COMPOUNDS__CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
         factor=1,
     ),
 }

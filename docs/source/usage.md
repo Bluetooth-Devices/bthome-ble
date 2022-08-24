@@ -81,7 +81,7 @@ Let's explain how the last two data packets work. The temperature packet is used
   - The object format (bit 5-7) `001` = 1 = Signed Integer (see table below)
 
 | type | bit 5-7 | format | Data type              |
-| ---- | ------- | ------ | ---------------------- |
+|------|---------|--------|------------------------|
 | `0`  | `000`   | uint   | unsingned integer      |
 | `1`  | `001`   | int    | signed integer         |
 | `2`  | `010`   | float  | float                  |
@@ -97,7 +97,7 @@ Let's explain how the last two data packets work. The temperature packet is used
 At the moment, the following sensors are supported. A preferred data type is given for your convenience, which should give you a short data message and at the same time a sufficient number of digits to display your data with high accuracy in Home Assistant. But you are free to use a different data type. If you want another sensor, let us know by creating a new issue on Github.
 
 | Object id | Property    | Preferred data type | Factor | example          | result       | Unit in HA | Notes   |
-| --------- | ----------- | ------------------- | ------ | ---------------- | ------------ | ---------- | ------- |
+|-----------|-------------|---------------------|--------|------------------|--------------|------------|---------|
 | `0x00`    | packet id   | uint8 (1 byte)      | 1      | `020009`         | 9            |            | [1] [2] |
 | `0x01`    | battery     | uint8 (1 byte)      | 1      | `020161`         | 97           | `%`        |         |
 | `0x02`    | temperature | sint16 (2 bytes)    | 0.01   | `2302CA09`       | 25.06        | `°C`       |         |
@@ -111,8 +111,8 @@ At the moment, the following sensors are supported. A preferred data type is giv
 | `0X0A`    | energy      | uint24 (3 bytes)    | 0.001  | `040A138A14`     | 1346.067     | `kWh`      |         |
 | `0x0B`    | power       | uint24 (3 bytes)    | 0.01   | `040B021B00`     | 69.14        | `W`        |         |
 | `0x0C`    | voltage     | uint16 (2 bytes)    | 0.001  | `030C020C`       | 3.074        | `V`        |         |
-| `0x0D`    | pm2.5       | uint16 (2 bytes)    | 1      | `030D120C`       | 3090         | `kg/m3`    |         |
-| `0x0E`    | pm10        | uint16 (2 bytes)    | 1      | `030E021C`       | 7170         | `kg/m3`    |         |
+| `0x0D`    | pm2.5       | uint16 (2 bytes)    | 1      | `030D120C`       | 3090         | `ug/m3`    |         |
+| `0x0E`    | pm10        | uint16 (2 bytes)    | 1      | `030E021C`       | 7170         | `ug/m3`    |         |
 | `0x0F`    | boolean     | uint8 (1 byte)      | 1      | `020F01`         | 1 (True)     | `True`     | [1]     |
 | `0x10`    | switch      | uint8 (1 byte)      | 1      | `021001`         | 1 (True)     | `on`       | [1]     |
 | `0x11`    | opening     | uint8 (1 byte)      | 1      | `021100`         | 0 (false)    | `closed`   | [1]     |

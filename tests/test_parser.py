@@ -651,7 +651,7 @@ def test_bthome_voc(caplog):
             KEY_VOC: SensorDescription(
                 device_key=KEY_VOC,
                 device_class=DeviceClass.VOLATILE_ORGANIC_COMPOUNDS,
-                native_unit_of_measurement=Units.CONCENTRATION_PARTS_PER_MILLION,
+                native_unit_of_measurement=Units.CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
             ),
             KEY_SIGNAL_STRENGTH: SensorDescription(
                 device_key=KEY_SIGNAL_STRENGTH,
