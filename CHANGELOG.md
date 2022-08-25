@@ -2,6 +2,11 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.7 (2022-08-25)
+### Fix
+* Code format ([`f5c531f`](https://github.com/Bluetooth-Devices/bthome-ble/commit/f5c531f73ea4be7dd749f0301bb1e486a0493106))
+* Use short address from data tools ([`722a97f`](https://github.com/Bluetooth-Devices/bthome-ble/commit/722a97f513b7c6db63173433dea629ba59445fda))
+
 ## v0.3.6 (2022-08-24)
 ### Fix
 * Flake8 error ([`cc9f077`](https://github.com/Bluetooth-Devices/bthome-ble/commit/cc9f077ab9ce3685305a2407b17150a6e7f9bac5))
