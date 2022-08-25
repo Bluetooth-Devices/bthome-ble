@@ -16,8 +16,8 @@ import sys
 from enum import Enum
 from typing import Any
 
-from bluetooth_sensor_state_data import BluetoothData
 from bluetooth_data_tools import short_address
+from bluetooth_sensor_state_data import BluetoothData
 from Cryptodome.Cipher import AES
 from home_assistant_bluetooth import BluetoothServiceInfo
 
@@ -150,7 +150,9 @@ class BThomeBluetoothDeviceData(BluetoothData):
         identifier = short_address(service_info.address)
 
         # Remove identifier from ATC sensors.
-        atc_identifier = service_info.address.replace("-", "").replace(":", "")[-6:].upper()
+        atc_identifier = (
+            service_info.address.replace("-", "").replace(":", "")[-6:].upper()
+        )
         if name[-6:] == atc_identifier:
             name = name[:-6]
             if name[-1:] in ("_", " "):
