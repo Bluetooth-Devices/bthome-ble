@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.8 (2022-08-25)
+### Fix
+* Failing reauth ([`7b3b0d2`](https://github.com/Bluetooth-Devices/bthome-ble/commit/7b3b0d2c66546c1b2d55d42ec95d94a0d7117ab5))
+
 ## v0.3.7 (2022-08-25)
 ### Fix
 * Code format ([`f5c531f`](https://github.com/Bluetooth-Devices/bthome-ble/commit/f5c531f73ea4be7dd749f0301bb1e486a0493106))
