@@ -17,17 +17,13 @@ from enum import Enum
 from typing import Any
 
 from bluetooth_sensor_state_data import BluetoothData
+from bluetooth_data_tools import short_address
 from Cryptodome.Cipher import AES
 from home_assistant_bluetooth import BluetoothServiceInfo
 
 from .const import MEAS_TYPES
 
 _LOGGER = logging.getLogger(__name__)
-
-
-def short_address(address: str) -> str:
-    """Convert a Bluetooth address to a short address"""
-    return address.replace("-", "").replace(":", "")[-6:].upper()
 
 
 class EncryptionScheme(Enum):
@@ -152,8 +148,10 @@ class BThomeBluetoothDeviceData(BluetoothData):
     ) -> bool:
         """Parser for BThome sensors"""
         identifier = short_address(service_info.address)
-        if name[-6:] == identifier:
-            # Remove the identifier if it is already in the local name.
+
+        # Remove identifier from ATC sensors.
+        atc_identifier = service_info.address.replace("-", "").replace(":", "")[-6:].upper()
+        if name[-6:] == atc_identifier:
             name = name[:-6]
             if name[-1:] in ("_", " "):
                 name = name[:-1]
