@@ -186,7 +186,7 @@ class BThomeBluetoothDeviceData(BluetoothData):
             try:
                 payload = self._decrypt_bthome(data, source_mac)
             except (ValueError, TypeError):
-                return False
+                return True
 
             packet_id = parse_uint(data[-8:-4])  # noqa: F841
         else:
