@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.4.0 (2022-08-26)
+### Feature
+* Get manufacturer from name ([`1e66c90`](https://github.com/Bluetooth-Devices/bthome-ble/commit/1e66c90cbe884852dab74c57708ba702ecafc736))
+
 ## v0.3.8 (2022-08-25)
 ### Fix
 * Failing reauth ([`7b3b0d2`](https://github.com/Bluetooth-Devices/bthome-ble/commit/7b3b0d2c66546c1b2d55d42ec95d94a0d7117ab5))
