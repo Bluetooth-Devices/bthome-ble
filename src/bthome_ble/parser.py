@@ -157,9 +157,18 @@ class BThomeBluetoothDeviceData(BluetoothData):
             name = name[:-6]
             if name[-1:] in ("_", " "):
                 name = name[:-1]
+
+        # Try to get manufacturer
+        if name.startswith(("ATC", "LYWSD03MMC")):
+            manufacturer = "Xiaomi"
+        else:
+            manufacturer = None
+
+        if manufacturer:
+            self.set_device_manufacturer(manufacturer)
+
         self.set_device_name(f"{name} {identifier}")
         self.set_title(f"{name} {identifier}")
-        self.set_device_manufacturer("Home Assistant")
         self.set_device_type("BThome sensor")
 
         uuid16 = list(service_info.service_data.keys())
