@@ -446,9 +446,7 @@ def test_bthome_mass_kilograms(caplog):
             ),
         },
         entity_values={
-            KEY_MASS: SensorValue(
-                device_key=KEY_MASS, name="Mass", native_value=80.3
-            ),
+            KEY_MASS: SensorValue(device_key=KEY_MASS, name="Mass", native_value=80.3),
             KEY_SIGNAL_STRENGTH: SensorValue(
                 device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
             ),
@@ -488,9 +486,7 @@ def test_bthome_mass_pounds(caplog):
             ),
         },
         entity_values={
-            KEY_MASS: SensorValue(
-                device_key=KEY_MASS, name="Mass", native_value=74.86
-            ),
+            KEY_MASS: SensorValue(device_key=KEY_MASS, name="Mass", native_value=74.86),
             KEY_SIGNAL_STRENGTH: SensorValue(
                 device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
             ),
@@ -572,9 +568,7 @@ def test_bthome_count(caplog):
             ),
         },
         entity_values={
-            KEY_COUNT: SensorValue(
-                device_key=KEY_COUNT, name="Count", native_value=96
-            ),
+            KEY_COUNT: SensorValue(device_key=KEY_COUNT, name="Count", native_value=96),
             KEY_SIGNAL_STRENGTH: SensorValue(
                 device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
             ),
