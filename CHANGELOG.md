@@ -2,6 +2,15 @@
 
 <!--next-version-placeholder-->
 
+## v0.5.0 (2022-08-28)
+### Feature
+* Add new sensor types ([`15ac53a`](https://github.com/Bluetooth-Devices/bthome-ble/commit/15ac53af864ba3446973a4518f6dd30509bc1347))
+
+### Fix
+* Add test for b-parasite ([`ecbb823`](https://github.com/Bluetooth-Devices/bthome-ble/commit/ecbb823ce604903a391df8c1e3a4f4d1558abc74))
+* Bump sensor-state-data ([`e3e21af`](https://github.com/Bluetooth-Devices/bthome-ble/commit/e3e21af1a7df36891aa504891afdab9caef82b06))
+* Lint errors ([`8c3697e`](https://github.com/Bluetooth-Devices/bthome-ble/commit/8c3697e479f20ce41763fbd32c9872af6974d990))
+
 ## v0.4.0 (2022-08-26)
 ### Feature
 * Get manufacturer from name ([`1e66c90`](https://github.com/Bluetooth-Devices/bthome-ble/commit/1e66c90cbe884852dab74c57708ba702ecafc736))
