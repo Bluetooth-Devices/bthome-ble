@@ -837,19 +837,19 @@ def test_bthome_voc(caplog):
 
 
 def test_bthome_moisture(caplog):
-    """Test BThome parser for Moisture reading without encryption."""
+    """Test BThome parser for moisture reading from b-parasite sensor."""
     data_string = b"\x03\x14\x02\x0c"
     advertisement = bytes_to_service_info(
-        data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
+        data_string, local_name="prst", address="A4:C1:38:8D:18:B2"
     )
 
     device = BThomeBluetoothDeviceData()
     assert device.update(advertisement) == SensorUpdate(
-        title="TEST DEVICE 18B2",
+        title="prst 18B2",
         devices={
             None: SensorDeviceInfo(
-                name="TEST DEVICE 18B2",
-                manufacturer=None,
+                name="prst 18B2",
+                manufacturer="b-parasite",
                 model="BThome sensor",
                 sw_version="BThome BLE",
                 hw_version=None,
