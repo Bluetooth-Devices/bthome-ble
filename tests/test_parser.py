@@ -14,19 +14,23 @@ from sensor_state_data import (
 
 from bthome_ble.parser import BThomeBluetoothDeviceData, EncryptionScheme
 
-KEY_TEMPERATURE = DeviceKey(key="temperature", device_id=None)
-KEY_HUMIDITY = DeviceKey(key="humidity", device_id=None)
 KEY_BATTERY = DeviceKey(key="battery", device_id=None)
-KEY_PRESSURE = DeviceKey(key="pressure", device_id=None)
-KEY_ILLUMINANCE = DeviceKey(key="illuminance", device_id=None)
+KEY_CO2 = DeviceKey(key="carbon_dioxide", device_id=None)
+KEY_COUNT = DeviceKey(key="count", device_id=None)
+KEY_DEW_POINT = DeviceKey(key="dew_point", device_id=None)
 KEY_ENERGY = DeviceKey(key="energy", device_id=None)
-KEY_POWER = DeviceKey(key="power", device_id=None)
-KEY_VOLTAGE = DeviceKey(key="voltage", device_id=None)
+KEY_HUMIDITY = DeviceKey(key="humidity", device_id=None)
+KEY_ILLUMINANCE = DeviceKey(key="illuminance", device_id=None)
+KEY_MASS = DeviceKey(key="mass", device_id=None)
+KEY_MOISTURE = DeviceKey(key="moisture", device_id=None)
 KEY_PM25 = DeviceKey(key="pm25", device_id=None)
 KEY_PM10 = DeviceKey(key="pm10", device_id=None)
-KEY_CO2 = DeviceKey(key="carbon_dioxide", device_id=None)
-KEY_VOC = DeviceKey(key="volatile_organic_compounds", device_id=None)
+KEY_POWER = DeviceKey(key="power", device_id=None)
+KEY_PRESSURE = DeviceKey(key="pressure", device_id=None)
 KEY_SIGNAL_STRENGTH = DeviceKey(key="signal_strength", device_id=None)
+KEY_TEMPERATURE = DeviceKey(key="temperature", device_id=None)
+KEY_VOC = DeviceKey(key="volatile_organic_compounds", device_id=None)
+KEY_VOLTAGE = DeviceKey(key="voltage", device_id=None)
 
 
 @pytest.fixture(autouse=True)
@@ -410,6 +414,168 @@ def test_bthome_illuminance(caplog):
     )
 
 
+def test_bthome_mass_kilograms(caplog):
+    """Test BThome parser for mass reading in kilograms without encryption."""
+    data_string = b"\x03\x06\x5E\x1F"
+    advertisement = bytes_to_service_info(
+        data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
+    )
+
+    device = BThomeBluetoothDeviceData()
+    assert device.update(advertisement) == SensorUpdate(
+        title="TEST DEVICE 18B2",
+        devices={
+            None: SensorDeviceInfo(
+                name="TEST DEVICE 18B2",
+                manufacturer=None,
+                model="BThome sensor",
+                sw_version="BThome BLE",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            KEY_MASS: SensorDescription(
+                device_key=KEY_MASS,
+                device_class=DeviceClass.MASS,
+                native_unit_of_measurement=Units.MASS_KILOGRAMS,
+            ),
+            KEY_SIGNAL_STRENGTH: SensorDescription(
+                device_key=KEY_SIGNAL_STRENGTH,
+                device_class=DeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
+            KEY_MASS: SensorValue(device_key=KEY_MASS, name="Mass", native_value=80.3),
+            KEY_SIGNAL_STRENGTH: SensorValue(
+                device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+    )
+
+
+def test_bthome_mass_pounds(caplog):
+    """Test BThome parser for mass reading in pounds without encryption."""
+    data_string = b"\x03\x07\x3E\x1d"
+    advertisement = bytes_to_service_info(
+        data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
+    )
+
+    device = BThomeBluetoothDeviceData()
+    assert device.update(advertisement) == SensorUpdate(
+        title="TEST DEVICE 18B2",
+        devices={
+            None: SensorDeviceInfo(
+                name="TEST DEVICE 18B2",
+                manufacturer=None,
+                model="BThome sensor",
+                sw_version="BThome BLE",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            KEY_MASS: SensorDescription(
+                device_key=KEY_MASS,
+                device_class=DeviceClass.MASS,
+                native_unit_of_measurement=Units.MASS_POUNDS,
+            ),
+            KEY_SIGNAL_STRENGTH: SensorDescription(
+                device_key=KEY_SIGNAL_STRENGTH,
+                device_class=DeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
+            KEY_MASS: SensorValue(device_key=KEY_MASS, name="Mass", native_value=74.86),
+            KEY_SIGNAL_STRENGTH: SensorValue(
+                device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+    )
+
+
+def test_bthome_dew_point(caplog):
+    """Test BThome parser for dew point reading without encryption."""
+    data_string = b"\x23\x08\xCA\x06"
+    advertisement = bytes_to_service_info(
+        data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
+    )
+
+    device = BThomeBluetoothDeviceData()
+    assert device.update(advertisement) == SensorUpdate(
+        title="TEST DEVICE 18B2",
+        devices={
+            None: SensorDeviceInfo(
+                name="TEST DEVICE 18B2",
+                manufacturer=None,
+                model="BThome sensor",
+                sw_version="BThome BLE",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            KEY_DEW_POINT: SensorDescription(
+                device_key=KEY_DEW_POINT,
+                device_class=DeviceClass.DEW_POINT,
+                native_unit_of_measurement=Units.TEMP_CELSIUS,
+            ),
+            KEY_SIGNAL_STRENGTH: SensorDescription(
+                device_key=KEY_SIGNAL_STRENGTH,
+                device_class=DeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
+            KEY_DEW_POINT: SensorValue(
+                device_key=KEY_DEW_POINT, name="Dew Point", native_value=17.38
+            ),
+            KEY_SIGNAL_STRENGTH: SensorValue(
+                device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+    )
+
+
+def test_bthome_count(caplog):
+    """Test BThome parser for counter reading without encryption."""
+    data_string = b"\x02\x09\x60"
+    advertisement = bytes_to_service_info(
+        data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
+    )
+
+    device = BThomeBluetoothDeviceData()
+    assert device.update(advertisement) == SensorUpdate(
+        title="TEST DEVICE 18B2",
+        devices={
+            None: SensorDeviceInfo(
+                name="TEST DEVICE 18B2",
+                manufacturer=None,
+                model="BThome sensor",
+                sw_version="BThome BLE",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            KEY_COUNT: SensorDescription(
+                device_key=KEY_COUNT,
+                device_class=DeviceClass.COUNT,
+                native_unit_of_measurement=None,
+            ),
+            KEY_SIGNAL_STRENGTH: SensorDescription(
+                device_key=KEY_SIGNAL_STRENGTH,
+                device_class=DeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
+            KEY_COUNT: SensorValue(device_key=KEY_COUNT, name="Count", native_value=96),
+            KEY_SIGNAL_STRENGTH: SensorValue(
+                device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+    )
+
+
 def test_bthome_energy(caplog):
     """Test BThome parser for energy reading without encryption."""
     data_string = b"\x04\n\x13\x8a\x14"
@@ -662,6 +828,48 @@ def test_bthome_voc(caplog):
         entity_values={
             KEY_VOC: SensorValue(
                 device_key=KEY_VOC, name="Volatile Organic Compounds", native_value=307
+            ),
+            KEY_SIGNAL_STRENGTH: SensorValue(
+                device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+    )
+
+
+def test_bthome_moisture(caplog):
+    """Test BThome parser for moisture reading from b-parasite sensor."""
+    data_string = b"\x03\x14\x02\x0c"
+    advertisement = bytes_to_service_info(
+        data_string, local_name="prst", address="A4:C1:38:8D:18:B2"
+    )
+
+    device = BThomeBluetoothDeviceData()
+    assert device.update(advertisement) == SensorUpdate(
+        title="prst 18B2",
+        devices={
+            None: SensorDeviceInfo(
+                name="prst 18B2",
+                manufacturer="b-parasite",
+                model="BThome sensor",
+                sw_version="BThome BLE",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            KEY_MOISTURE: SensorDescription(
+                device_key=KEY_MOISTURE,
+                device_class=DeviceClass.MOISTURE,
+                native_unit_of_measurement=Units.PERCENTAGE,
+            ),
+            KEY_SIGNAL_STRENGTH: SensorDescription(
+                device_key=KEY_SIGNAL_STRENGTH,
+                device_class=DeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
+            KEY_MOISTURE: SensorValue(
+                device_key=KEY_MOISTURE, name="Moisture", native_value=30.74
             ),
             KEY_SIGNAL_STRENGTH: SensorValue(
                 device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60

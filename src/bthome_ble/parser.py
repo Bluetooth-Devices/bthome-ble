@@ -124,7 +124,7 @@ class BThomeBluetoothDeviceData(BluetoothData):
 
         # Where a device uses encryption we need to know its actual MAC address.
         # As the encryption uses it as part of the nonce.
-        # On macOS we instead only know its CoreBluetooth UUID.
+        # On macOS, we instead only know its CoreBluetooth UUID.
         # It seems its impossible to automatically get that in the general case.
         # So devices do duplicate the MAC in the advertisement, we use that
         # when we can on macOS.
@@ -161,6 +161,8 @@ class BThomeBluetoothDeviceData(BluetoothData):
         # Try to get manufacturer
         if name.startswith(("ATC", "LYWSD03MMC")):
             manufacturer = "Xiaomi"
+        elif name.startswith("prst"):
+            manufacturer = "b-parasite"
         else:
             manufacturer = None
 
