@@ -31,6 +31,22 @@ MEAS_TYPES: dict[int, MeasTypes] = {
         meas_format=SensorLibrary.LIGHT__LIGHT_LUX,
         factor=0.01,
     ),
+    0x06: MeasTypes(
+        meas_format=SensorLibrary.MASS__MASS_KILOGRAMS,
+        factor=0.01,
+    ),
+    0x07: MeasTypes(
+        meas_format=SensorLibrary.MASS__MASS_POUNDS,
+        factor=0.01,
+    ),
+    0x08: MeasTypes(
+        meas_format=SensorLibrary.DEW_POINT__TEMP_CELSIUS,
+        factor=0.01,
+    ),
+    0x09: MeasTypes(
+        meas_format=SensorLibrary.COUNT__NONE,
+        factor=1,
+    ),
     0x0A: MeasTypes(
         meas_format=SensorLibrary.ENERGY__ENERGY_KILO_WATT_HOUR,
         factor=0.001,
@@ -60,5 +76,9 @@ MEAS_TYPES: dict[int, MeasTypes] = {
             SensorLibrary.VOLATILE_ORGANIC_COMPOUNDS__CONCENTRATION_MICROGRAMS_PER_CUBIC_METER
         ),
         factor=1,
+    ),
+    0x14: MeasTypes(
+        meas_format=SensorLibrary.MOISTURE__PERCENTAGE,
+        factor=0.01,
     ),
 }
