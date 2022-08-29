@@ -2,6 +2,11 @@
 
 <!--next-version-placeholder-->
 
+## v0.5.1 (2022-08-29)
+### Fix
+* Fix tests for non standard device classes ([`d48ec31`](https://github.com/Bluetooth-Devices/bthome-ble/commit/d48ec31005c35d8f064bf2717c648b058bb1b468))
+* Use update_sonsor for other device classes ([`eabde87`](https://github.com/Bluetooth-Devices/bthome-ble/commit/eabde8776ac6cdf9e7d1753aa4b2909d769de37d))
+
 ## v0.5.0 (2022-08-28)
 ### Feature
 * Add new sensor types ([`15ac53a`](https://github.com/Bluetooth-Devices/bthome-ble/commit/15ac53af864ba3446973a4518f6dd30509bc1347))

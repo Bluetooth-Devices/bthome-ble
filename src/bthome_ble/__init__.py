@@ -13,7 +13,7 @@ from sensor_state_data import (
 
 from .parser import BThomeBluetoothDeviceData
 
-__version__ = "0.5.0"
+__version__ = "0.5.1"
 
 __all__ = [
     "BThomeBluetoothDeviceData",
