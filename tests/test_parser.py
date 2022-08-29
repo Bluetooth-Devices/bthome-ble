@@ -436,7 +436,7 @@ def test_bthome_mass_kilograms(caplog):
         entity_descriptions={
             KEY_MASS: SensorDescription(
                 device_key=KEY_MASS,
-                device_class=DeviceClass.MASS,
+                device_class=None,
                 native_unit_of_measurement=Units.MASS_KILOGRAMS,
             ),
             KEY_SIGNAL_STRENGTH: SensorDescription(
@@ -476,7 +476,7 @@ def test_bthome_mass_pounds(caplog):
         entity_descriptions={
             KEY_MASS: SensorDescription(
                 device_key=KEY_MASS,
-                device_class=DeviceClass.MASS,
+                device_class=None,
                 native_unit_of_measurement=Units.MASS_POUNDS,
             ),
             KEY_SIGNAL_STRENGTH: SensorDescription(
@@ -516,7 +516,7 @@ def test_bthome_dew_point(caplog):
         entity_descriptions={
             KEY_DEW_POINT: SensorDescription(
                 device_key=KEY_DEW_POINT,
-                device_class=DeviceClass.DEW_POINT,
+                device_class=None,
                 native_unit_of_measurement=Units.TEMP_CELSIUS,
             ),
             KEY_SIGNAL_STRENGTH: SensorDescription(
@@ -558,7 +558,7 @@ def test_bthome_count(caplog):
         entity_descriptions={
             KEY_COUNT: SensorDescription(
                 device_key=KEY_COUNT,
-                device_class=DeviceClass.COUNT,
+                device_class=None,
                 native_unit_of_measurement=None,
             ),
             KEY_SIGNAL_STRENGTH: SensorDescription(
@@ -858,7 +858,7 @@ def test_bthome_moisture(caplog):
         entity_descriptions={
             KEY_MOISTURE: SensorDescription(
                 device_key=KEY_MOISTURE,
-                device_class=DeviceClass.MOISTURE,
+                device_class=None,
                 native_unit_of_measurement=Units.PERCENTAGE,
             ),
             KEY_SIGNAL_STRENGTH: SensorDescription(
