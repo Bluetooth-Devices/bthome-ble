@@ -21,7 +21,7 @@ from bluetooth_sensor_state_data import BluetoothData
 from Cryptodome.Cipher import AES
 from home_assistant_bluetooth import BluetoothServiceInfo
 
-from .const import MEAS_TYPES
+from .const import HA_SUPPORTED_DEVICE_CLASSES, MEAS_TYPES
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -264,7 +264,15 @@ class BThomeBluetoothDeviceData(BluetoothData):
                 meas_str = parse_string(meas_data)
 
             if meas_float is not None:
-                self.update_predefined_sensor(meas_format, meas_float)
+                if meas_format.device_class in HA_SUPPORTED_DEVICE_CLASSES:
+                    self.update_predefined_sensor(meas_format, meas_float)
+                else:
+                    self.update_sensor(
+                        key=meas_format.device_class,
+                        native_unit_of_measurement=meas_format.native_unit_of_measurement,
+                        native_value=meas_float,
+                        device_class=None,
+                    )
                 result = True
             elif meas_str is not None:
                 _LOGGER.debug(
