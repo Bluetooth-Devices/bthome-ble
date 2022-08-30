@@ -163,6 +163,7 @@ class BThomeBluetoothDeviceData(BluetoothData):
             manufacturer = "Xiaomi"
         elif name.startswith("prst"):
             manufacturer = "b-parasite"
+            name = "b-parasite"
         else:
             manufacturer = None
 

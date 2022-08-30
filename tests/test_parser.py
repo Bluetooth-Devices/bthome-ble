@@ -845,10 +845,10 @@ def test_bthome_moisture(caplog):
 
     device = BThomeBluetoothDeviceData()
     assert device.update(advertisement) == SensorUpdate(
-        title="prst 18B2",
+        title="b-parasite 18B2",
         devices={
             None: SensorDeviceInfo(
-                name="prst 18B2",
+                name="b-parasite 18B2",
                 manufacturer="b-parasite",
                 model="BThome sensor",
                 sw_version="BThome BLE",
