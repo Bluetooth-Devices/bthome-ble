@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.5.2 (2022-08-30)
+### Fix
+* Use full name for bparasite ([`bcd07da`](https://github.com/Bluetooth-Devices/bthome-ble/commit/bcd07da262009383f4e67592fec6614937fe847f))
+
 ## v0.5.1 (2022-08-29)
 ### Fix
 * Fix tests for non standard device classes ([`d48ec31`](https://github.com/Bluetooth-Devices/bthome-ble/commit/d48ec31005c35d8f064bf2717c648b058bb1b468))
