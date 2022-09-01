@@ -2,6 +2,14 @@
 
 <!--next-version-placeholder-->
 
+## v1.0.0 (2022-09-01)
+### Feature
+* Change name of bthome with capital h ([`cf3c702`](https://github.com/Bluetooth-Devices/bthome-ble/commit/cf3c702ca4b2e25cc15a74379deeb84a949427d7))
+* Bthome with capital h ([`c307462`](https://github.com/Bluetooth-Devices/bthome-ble/commit/c3074628da771ce78810538e8776797aae4df147))
+
+### Breaking
+* bthome with capital h ([`c307462`](https://github.com/Bluetooth-Devices/bthome-ble/commit/c3074628da771ce78810538e8776797aae4df147))
+
 ## v0.5.2 (2022-08-30)
 ### Fix
 * Use full name for bparasite ([`bcd07da`](https://github.com/Bluetooth-Devices/bthome-ble/commit/bcd07da262009383f4e67592fec6614937fe847f))
