@@ -24,7 +24,7 @@ Look through the GitHub issues for features. Anything tagged with "enhancement" 
 
 ### Write Documentation
 
-BThome BLE could always use more documentation, whether as part of the official BThome BLE docs, in docstrings, or even on the web in blog posts, articles, and such.
+BTHome BLE could always use more documentation, whether as part of the official BTHome BLE docs, in docstrings, or even on the web in blog posts, articles, and such.
 
 ### Submit Feedback
 

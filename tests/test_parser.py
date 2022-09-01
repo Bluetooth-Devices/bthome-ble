@@ -1,4 +1,4 @@
-"""Tests for the parser of BLE advertisements in BThome format."""
+"""Tests for the parser of BLE advertisements in BTHome format."""
 import logging
 from unittest.mock import patch
 
@@ -12,7 +12,7 @@ from sensor_state_data import (
     Units,
 )
 
-from bthome_ble.parser import BThomeBluetoothDeviceData, EncryptionScheme
+from bthome_ble.parser import BTHomeBluetoothDeviceData, EncryptionScheme
 
 KEY_BATTERY = DeviceKey(key="battery", device_id=None)
 KEY_CO2 = DeviceKey(key="carbon_dioxide", device_id=None)
@@ -76,7 +76,7 @@ def bytes_to_encrypted_service_info(
 
 
 def test_can_create():
-    BThomeBluetoothDeviceData()
+    BTHomeBluetoothDeviceData()
 
 
 def test_encryption_key_needed():
@@ -88,7 +88,7 @@ def test_encryption_key_needed():
         address="A4:C1:38:8D:18:B2",
     )
 
-    device = BThomeBluetoothDeviceData()
+    device = BTHomeBluetoothDeviceData()
 
     assert device.supported(advertisement)
     assert device.encryption_scheme == EncryptionScheme.BTHOME_BINDKEY
@@ -104,7 +104,7 @@ def test_encryption_no_key_needed():
         address="A4:C1:38:8D:18:B2",
     )
 
-    device = BThomeBluetoothDeviceData()
+    device = BTHomeBluetoothDeviceData()
 
     assert device.supported(advertisement)
     assert device.encryption_scheme == EncryptionScheme.NONE
@@ -112,7 +112,7 @@ def test_encryption_no_key_needed():
 
 
 def test_bindkey_wrong():
-    """Test BThome parser with wrong encryption key."""
+    """Test BTHome parser with wrong encryption key."""
     bindkey = "814aac74c4f17b6c1581e1ab87816b99"
     data_string = b'\xfb\xa45\xe4\xd3\xc3\x12\xfb\x00\x11"3W\xd9\n\x99'
     advertisement = bytes_to_encrypted_service_info(
@@ -121,7 +121,7 @@ def test_bindkey_wrong():
         address="A4:C1:38:8D:18:B2",
     )
 
-    device = BThomeBluetoothDeviceData(bindkey=bytes.fromhex(bindkey))
+    device = BTHomeBluetoothDeviceData(bindkey=bytes.fromhex(bindkey))
     assert device.supported(advertisement)
     assert not device.bindkey_verified
     assert device.update(advertisement) == SensorUpdate(
@@ -130,8 +130,8 @@ def test_bindkey_wrong():
             None: SensorDeviceInfo(
                 name="ATC 18B2",
                 manufacturer="Xiaomi",
-                model="BThome sensor",
-                sw_version="BThome BLE (encrypted)",
+                model="BTHome sensor",
+                sw_version="BTHome BLE (encrypted)",
                 hw_version=None,
             )
         },
@@ -151,7 +151,7 @@ def test_bindkey_wrong():
 
 
 def test_bindkey_correct():
-    """Test BThome parser with correct encryption key."""
+    """Test BTHome parser with correct encryption key."""
     bindkey = "231d39c1d7cc1ab1aee224cd096db932"
     data_string = b'\xfb\xa45\xe4\xd3\xc3\x12\xfb\x00\x11"3W\xd9\n\x99'
     advertisement = bytes_to_encrypted_service_info(
@@ -160,7 +160,7 @@ def test_bindkey_correct():
         address="54:48:E6:8F:80:A5",
     )
 
-    device = BThomeBluetoothDeviceData(bindkey=bytes.fromhex(bindkey))
+    device = BTHomeBluetoothDeviceData(bindkey=bytes.fromhex(bindkey))
     assert device.supported(advertisement)
     assert device.bindkey_verified
     assert device.update(advertisement) == SensorUpdate(
@@ -169,8 +169,8 @@ def test_bindkey_correct():
             None: SensorDeviceInfo(
                 name="TEST DEVICE 80A5",
                 manufacturer=None,
-                model="BThome sensor",
-                sw_version="BThome BLE (encrypted)",
+                model="BTHome sensor",
+                sw_version="BTHome BLE (encrypted)",
                 hw_version=None,
             )
         },
@@ -206,7 +206,7 @@ def test_bindkey_correct():
 
 
 def test_bindkey_verified_can_be_unset():
-    """Test BThome parser with wrong encryption key."""
+    """Test BTHome parser with wrong encryption key."""
     bindkey = "814aac74c4f17b6c1581e1ab87816b99"
     data_string = b'\xfb\xa45\xe4\xd3\xc3\x12\xfb\x00\x11"3W\xd9\n\x99'
     advertisement = bytes_to_encrypted_service_info(
@@ -215,7 +215,7 @@ def test_bindkey_verified_can_be_unset():
         address="A4:C1:38:8D:18:B2",
     )
 
-    device = BThomeBluetoothDeviceData(bindkey=bytes.fromhex(bindkey))
+    device = BTHomeBluetoothDeviceData(bindkey=bytes.fromhex(bindkey))
     device.bindkey_verified = True
 
     assert device.supported(advertisement)
@@ -223,21 +223,21 @@ def test_bindkey_verified_can_be_unset():
 
 
 def test_bthome_temperature_humidity(caplog):
-    """Test BThome parser for temperature humidity reading without encryption."""
+    """Test BTHome parser for temperature humidity reading without encryption."""
     data_string = b"#\x02\xca\t\x03\x03\xbf\x13"
     advertisement = bytes_to_service_info(
         data_string, local_name="ATC_8D18B2", address="A4:C1:38:8D:18:B2"
     )
 
-    device = BThomeBluetoothDeviceData()
+    device = BTHomeBluetoothDeviceData()
     assert device.update(advertisement) == SensorUpdate(
         title="ATC 18B2",
         devices={
             None: SensorDeviceInfo(
                 name="ATC 18B2",
                 manufacturer="Xiaomi",
-                model="BThome sensor",
-                sw_version="BThome BLE",
+                model="BTHome sensor",
+                sw_version="BTHome BLE",
                 hw_version=None,
             )
         },
@@ -273,21 +273,21 @@ def test_bthome_temperature_humidity(caplog):
 
 
 def test_bthome_temperature_humidity_battery(caplog):
-    """Test BThome parser for temperature humidity battery reading."""
+    """Test BTHome parser for temperature humidity battery reading."""
     data_string = b"\x02\x00\xa8#\x02]\t\x03\x03\xb7\x18\x02\x01]"
     advertisement = bytes_to_service_info(
         data_string, local_name="ATC_8D18B2", address="A4:C1:38:8D:18:B2"
     )
 
-    device = BThomeBluetoothDeviceData()
+    device = BTHomeBluetoothDeviceData()
     assert device.update(advertisement) == SensorUpdate(
         title="ATC 18B2",
         devices={
             None: SensorDeviceInfo(
                 name="ATC 18B2",
                 manufacturer="Xiaomi",
-                model="BThome sensor",
-                sw_version="BThome BLE",
+                model="BTHome sensor",
+                sw_version="BTHome BLE",
                 hw_version=None,
             )
         },
@@ -331,21 +331,21 @@ def test_bthome_temperature_humidity_battery(caplog):
 
 
 def test_bthome_pressure(caplog):
-    """Test BThome parser for pressure reading without encryption."""
+    """Test BTHome parser for pressure reading without encryption."""
     data_string = b"\x02\x00\x0c\x04\x04\x13\x8a\x01"
     advertisement = bytes_to_service_info(
         data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
     )
 
-    device = BThomeBluetoothDeviceData()
+    device = BTHomeBluetoothDeviceData()
     assert device.update(advertisement) == SensorUpdate(
         title="TEST DEVICE 18B2",
         devices={
             None: SensorDeviceInfo(
                 name="TEST DEVICE 18B2",
                 manufacturer=None,
-                model="BThome sensor",
-                sw_version="BThome BLE",
+                model="BTHome sensor",
+                sw_version="BTHome BLE",
                 hw_version=None,
             )
         },
@@ -373,21 +373,21 @@ def test_bthome_pressure(caplog):
 
 
 def test_bthome_illuminance(caplog):
-    """Test BThome parser for illuminance reading without encryption."""
+    """Test BTHome parser for illuminance reading without encryption."""
     data_string = b"\x04\x05\x13\x8a\x14"
     advertisement = bytes_to_service_info(
         data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
     )
 
-    device = BThomeBluetoothDeviceData()
+    device = BTHomeBluetoothDeviceData()
     assert device.update(advertisement) == SensorUpdate(
         title="TEST DEVICE 18B2",
         devices={
             None: SensorDeviceInfo(
                 name="TEST DEVICE 18B2",
                 manufacturer=None,
-                model="BThome sensor",
-                sw_version="BThome BLE",
+                model="BTHome sensor",
+                sw_version="BTHome BLE",
                 hw_version=None,
             )
         },
@@ -415,21 +415,21 @@ def test_bthome_illuminance(caplog):
 
 
 def test_bthome_mass_kilograms(caplog):
-    """Test BThome parser for mass reading in kilograms without encryption."""
+    """Test BTHome parser for mass reading in kilograms without encryption."""
     data_string = b"\x03\x06\x5E\x1F"
     advertisement = bytes_to_service_info(
         data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
     )
 
-    device = BThomeBluetoothDeviceData()
+    device = BTHomeBluetoothDeviceData()
     assert device.update(advertisement) == SensorUpdate(
         title="TEST DEVICE 18B2",
         devices={
             None: SensorDeviceInfo(
                 name="TEST DEVICE 18B2",
                 manufacturer=None,
-                model="BThome sensor",
-                sw_version="BThome BLE",
+                model="BTHome sensor",
+                sw_version="BTHome BLE",
                 hw_version=None,
             )
         },
@@ -455,21 +455,21 @@ def test_bthome_mass_kilograms(caplog):
 
 
 def test_bthome_mass_pounds(caplog):
-    """Test BThome parser for mass reading in pounds without encryption."""
+    """Test BTHome parser for mass reading in pounds without encryption."""
     data_string = b"\x03\x07\x3E\x1d"
     advertisement = bytes_to_service_info(
         data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
     )
 
-    device = BThomeBluetoothDeviceData()
+    device = BTHomeBluetoothDeviceData()
     assert device.update(advertisement) == SensorUpdate(
         title="TEST DEVICE 18B2",
         devices={
             None: SensorDeviceInfo(
                 name="TEST DEVICE 18B2",
                 manufacturer=None,
-                model="BThome sensor",
-                sw_version="BThome BLE",
+                model="BTHome sensor",
+                sw_version="BTHome BLE",
                 hw_version=None,
             )
         },
@@ -495,21 +495,21 @@ def test_bthome_mass_pounds(caplog):
 
 
 def test_bthome_dew_point(caplog):
-    """Test BThome parser for dew point reading without encryption."""
+    """Test BTHome parser for dew point reading without encryption."""
     data_string = b"\x23\x08\xCA\x06"
     advertisement = bytes_to_service_info(
         data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
     )
 
-    device = BThomeBluetoothDeviceData()
+    device = BTHomeBluetoothDeviceData()
     assert device.update(advertisement) == SensorUpdate(
         title="TEST DEVICE 18B2",
         devices={
             None: SensorDeviceInfo(
                 name="TEST DEVICE 18B2",
                 manufacturer=None,
-                model="BThome sensor",
-                sw_version="BThome BLE",
+                model="BTHome sensor",
+                sw_version="BTHome BLE",
                 hw_version=None,
             )
         },
@@ -537,21 +537,21 @@ def test_bthome_dew_point(caplog):
 
 
 def test_bthome_count(caplog):
-    """Test BThome parser for counter reading without encryption."""
+    """Test BTHome parser for counter reading without encryption."""
     data_string = b"\x02\x09\x60"
     advertisement = bytes_to_service_info(
         data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
     )
 
-    device = BThomeBluetoothDeviceData()
+    device = BTHomeBluetoothDeviceData()
     assert device.update(advertisement) == SensorUpdate(
         title="TEST DEVICE 18B2",
         devices={
             None: SensorDeviceInfo(
                 name="TEST DEVICE 18B2",
                 manufacturer=None,
-                model="BThome sensor",
-                sw_version="BThome BLE",
+                model="BTHome sensor",
+                sw_version="BTHome BLE",
                 hw_version=None,
             )
         },
@@ -577,21 +577,21 @@ def test_bthome_count(caplog):
 
 
 def test_bthome_energy(caplog):
-    """Test BThome parser for energy reading without encryption."""
+    """Test BTHome parser for energy reading without encryption."""
     data_string = b"\x04\n\x13\x8a\x14"
     advertisement = bytes_to_service_info(
         data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
     )
 
-    device = BThomeBluetoothDeviceData()
+    device = BTHomeBluetoothDeviceData()
     assert device.update(advertisement) == SensorUpdate(
         title="TEST DEVICE 18B2",
         devices={
             None: SensorDeviceInfo(
                 name="TEST DEVICE 18B2",
                 manufacturer=None,
-                model="BThome sensor",
-                sw_version="BThome BLE",
+                model="BTHome sensor",
+                sw_version="BTHome BLE",
                 hw_version=None,
             )
         },
@@ -619,21 +619,21 @@ def test_bthome_energy(caplog):
 
 
 def test_bthome_power(caplog):
-    """Test BThome parser for power reading without encryption."""
+    """Test BTHome parser for power reading without encryption."""
     data_string = b"\x04\x0b\x02\x1b\x00"
     advertisement = bytes_to_service_info(
         data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
     )
 
-    device = BThomeBluetoothDeviceData()
+    device = BTHomeBluetoothDeviceData()
     assert device.update(advertisement) == SensorUpdate(
         title="TEST DEVICE 18B2",
         devices={
             None: SensorDeviceInfo(
                 name="TEST DEVICE 18B2",
                 manufacturer=None,
-                model="BThome sensor",
-                sw_version="BThome BLE",
+                model="BTHome sensor",
+                sw_version="BTHome BLE",
                 hw_version=None,
             )
         },
@@ -667,15 +667,15 @@ def test_bthome_voltage(caplog):
         data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
     )
 
-    device = BThomeBluetoothDeviceData()
+    device = BTHomeBluetoothDeviceData()
     assert device.update(advertisement) == SensorUpdate(
         title="TEST DEVICE 18B2",
         devices={
             None: SensorDeviceInfo(
                 name="TEST DEVICE 18B2",
                 manufacturer=None,
-                model="BThome sensor",
-                sw_version="BThome BLE",
+                model="BTHome sensor",
+                sw_version="BTHome BLE",
                 hw_version=None,
             )
         },
@@ -703,21 +703,21 @@ def test_bthome_voltage(caplog):
 
 
 def test_bthome_pm(caplog):
-    """Test BThome parser for PM2.5 and PM10 reading without encryption."""
+    """Test BTHome parser for PM2.5 and PM10 reading without encryption."""
     data_string = b"\x03\r\x12\x0c\x03\x0e\x02\x1c"
     advertisement = bytes_to_service_info(
         data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
     )
 
-    device = BThomeBluetoothDeviceData()
+    device = BTHomeBluetoothDeviceData()
     assert device.update(advertisement) == SensorUpdate(
         title="TEST DEVICE 18B2",
         devices={
             None: SensorDeviceInfo(
                 name="TEST DEVICE 18B2",
                 manufacturer=None,
-                model="BThome sensor",
-                sw_version="BThome BLE",
+                model="BTHome sensor",
+                sw_version="BTHome BLE",
                 hw_version=None,
             )
         },
@@ -753,21 +753,21 @@ def test_bthome_pm(caplog):
 
 
 def test_bthome_co2(caplog):
-    """Test BThome parser for CO2 reading without encryption."""
+    """Test BTHome parser for CO2 reading without encryption."""
     data_string = b"\x03\x12\xe2\x04"
     advertisement = bytes_to_service_info(
         data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
     )
 
-    device = BThomeBluetoothDeviceData()
+    device = BTHomeBluetoothDeviceData()
     assert device.update(advertisement) == SensorUpdate(
         title="TEST DEVICE 18B2",
         devices={
             None: SensorDeviceInfo(
                 name="TEST DEVICE 18B2",
                 manufacturer=None,
-                model="BThome sensor",
-                sw_version="BThome BLE",
+                model="BTHome sensor",
+                sw_version="BTHome BLE",
                 hw_version=None,
             )
         },
@@ -795,21 +795,21 @@ def test_bthome_co2(caplog):
 
 
 def test_bthome_voc(caplog):
-    """Test BThome parser for VOC reading without encryption."""
+    """Test BTHome parser for VOC reading without encryption."""
     data_string = b"\x03\x133\x01"
     advertisement = bytes_to_service_info(
         data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
     )
 
-    device = BThomeBluetoothDeviceData()
+    device = BTHomeBluetoothDeviceData()
     assert device.update(advertisement) == SensorUpdate(
         title="TEST DEVICE 18B2",
         devices={
             None: SensorDeviceInfo(
                 name="TEST DEVICE 18B2",
                 manufacturer=None,
-                model="BThome sensor",
-                sw_version="BThome BLE",
+                model="BTHome sensor",
+                sw_version="BTHome BLE",
                 hw_version=None,
             )
         },
@@ -837,21 +837,21 @@ def test_bthome_voc(caplog):
 
 
 def test_bthome_moisture(caplog):
-    """Test BThome parser for moisture reading from b-parasite sensor."""
+    """Test BTHome parser for moisture reading from b-parasite sensor."""
     data_string = b"\x03\x14\x02\x0c"
     advertisement = bytes_to_service_info(
         data_string, local_name="prst", address="A4:C1:38:8D:18:B2"
     )
 
-    device = BThomeBluetoothDeviceData()
+    device = BTHomeBluetoothDeviceData()
     assert device.update(advertisement) == SensorUpdate(
         title="b-parasite 18B2",
         devices={
             None: SensorDeviceInfo(
                 name="b-parasite 18B2",
                 manufacturer="b-parasite",
-                model="BThome sensor",
-                sw_version="BThome BLE",
+                model="BTHome sensor",
+                sw_version="BTHome BLE",
                 hw_version=None,
             )
         },

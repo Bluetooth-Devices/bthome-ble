@@ -1,4 +1,4 @@
-# Welcome to BThome BLE documentation!
+# Welcome to BTHome BLE documentation!
 
 ```{toctree}
 :caption: Installation & Usage
