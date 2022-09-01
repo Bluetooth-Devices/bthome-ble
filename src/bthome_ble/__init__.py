@@ -1,4 +1,4 @@
-"""Parser for BLE advertisements in BThome format."""
+"""Parser for BLE advertisements in BTHome format."""
 from __future__ import annotations
 
 from sensor_state_data import (
@@ -11,12 +11,12 @@ from sensor_state_data import (
     Units,
 )
 
-from .parser import BThomeBluetoothDeviceData
+from .parser import BTHomeBluetoothDeviceData
 
 __version__ = "0.5.2"
 
 __all__ = [
-    "BThomeBluetoothDeviceData",
+    "BTHomeBluetoothDeviceData",
     "SensorDescription",
     "SensorDeviceInfo",
     "DeviceClass",

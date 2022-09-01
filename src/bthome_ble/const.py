@@ -1,4 +1,4 @@
-"""Constants for BThome measurements."""
+"""Constants for BTHome measurements."""
 import dataclasses
 
 from sensor_state_data import SensorLibrary, description

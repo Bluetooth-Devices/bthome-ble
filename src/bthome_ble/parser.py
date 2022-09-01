@@ -1,10 +1,10 @@
-"""Parser for BLE advertisements in BThome format.
+"""Parser for BLE advertisements in BTHome format.
 
 This file is shamelessly copied from the following repository:
 https://github.com/Ernst79/bleparser/blob/ac8757ad64f1fc17674dcd22111e547cdf2f205b/package/bleparser/ha_ble.py
 
-BThome was originally developed as HA BLE for ble_monitor and been renamed to
-BThome for Home Assistant Bluetooth integrations.
+BTHome was originally developed as HA BLE for ble_monitor and has been renamed
+to BTHome for the Home Assistant Bluetooth integration.
 
 MIT License applies.
 """
@@ -66,7 +66,7 @@ def parse_float(data_obj: bytes, factor: float = 1.0) -> float | None:
     elif len(data_obj) == 8:
         [val] = struct.unpack("d", data_obj)
     else:
-        _LOGGER.error("only 2, 4 or 8 byte long floats are supported in BThome BLE")
+        _LOGGER.error("only 2, 4 or 8 byte long floats are supported in BTHome BLE")
         return None
     return round(val * factor, decimal_places)
 
@@ -85,8 +85,8 @@ def parse_mac(data_obj: bytes) -> bytes | None:
         return None
 
 
-class BThomeBluetoothDeviceData(BluetoothData):
-    """Date for BThome Bluetooth devices."""
+class BTHomeBluetoothDeviceData(BluetoothData):
+    """Date for BTHome Bluetooth devices."""
 
     def __init__(self, bindkey: bytes | None = None) -> None:
         super().__init__()
@@ -138,7 +138,7 @@ class BThomeBluetoothDeviceData(BluetoothData):
 
     def _start_update(self, service_info: BluetoothServiceInfo) -> None:
         """Update from BLE advertisement data."""
-        _LOGGER.debug("Parsing BThome BLE advertisement data: %s", service_info)
+        _LOGGER.debug("Parsing BTHome BLE advertisement data: %s", service_info)
         for uuid, data in service_info.service_data.items():
             if self._parse_bthome(service_info, service_info.name, data):
                 self.last_service_info = service_info
@@ -146,7 +146,7 @@ class BThomeBluetoothDeviceData(BluetoothData):
     def _parse_bthome(
         self, service_info: BluetoothServiceInfo, name: str, data: bytes
     ) -> bool:
-        """Parser for BThome sensors"""
+        """Parser for BTHome sensors"""
         identifier = short_address(service_info.address)
 
         # Remove identifier from ATC sensors.
@@ -172,23 +172,23 @@ class BThomeBluetoothDeviceData(BluetoothData):
 
         self.set_device_name(f"{name} {identifier}")
         self.set_title(f"{name} {identifier}")
-        self.set_device_type("BThome sensor")
+        self.set_device_type("BTHome sensor")
 
         uuid16 = list(service_info.service_data.keys())
         if uuid16 == ["0000181c-0000-1000-8000-00805f9b34fb"]:
-            # Non-encrypted BThome BLE format
+            # Non-encrypted BTHome BLE format
             self.encryption_scheme = EncryptionScheme.NONE
-            self.set_device_sw_version("BThome BLE")
+            self.set_device_sw_version("BTHome BLE")
             payload = data
             packet_id = None  # noqa: F841
         elif uuid16 == ["0000181e-0000-1000-8000-00805f9b34fb"]:
-            # Encrypted BThome BLE format
+            # Encrypted BTHome BLE format
             self.encryption_scheme = EncryptionScheme.BTHOME_BINDKEY
-            self.set_device_sw_version("BThome BLE (encrypted)")
+            self.set_device_sw_version("BTHome BLE (encrypted)")
 
             mac_readable = service_info.address
             if len(mac_readable) != 17 and mac_readable[2] != ":":
-                # On macOS, we get a UUID, which is useless for BThome sensors
+                # On macOS, we get a UUID, which is useless for BTHome sensors
                 self.mac_known = False
                 return False
             else:
@@ -235,14 +235,14 @@ class BThomeBluetoothDeviceData(BluetoothData):
 
             elif obj_data_format > 4:
                 _LOGGER.error(
-                    "UNKNOWN dataobject in BThome BLE payload! Adv: %s",
+                    "UNKNOWN dataobject in BTHome BLE payload! Adv: %s",
                     data.hex(),
                 )
                 continue
 
             if obj_meas_type not in MEAS_TYPES:
                 _LOGGER.debug(
-                    "UNKNOWN measurement type in BThome BLE payload! Adv: %s",
+                    "UNKNOWN measurement type in BTHome BLE payload! Adv: %s",
                     data.hex(),
                 )
                 continue
@@ -267,12 +267,17 @@ class BThomeBluetoothDeviceData(BluetoothData):
             if meas_float is not None:
                 if meas_format.device_class in HA_SUPPORTED_DEVICE_CLASSES:
                     self.update_predefined_sensor(meas_format, meas_float)
-                else:
+                elif meas_format.device_class:
                     self.update_sensor(
                         key=meas_format.device_class,
                         native_unit_of_measurement=meas_format.native_unit_of_measurement,
                         native_value=meas_float,
                         device_class=None,
+                    )
+                else:
+                    _LOGGER.debug(
+                        "UNKNOWN dataobject in BTHome BLE payload! Adv: %s",
+                        data.hex(),
                     )
                 result = True
             elif meas_str is not None:
@@ -282,7 +287,7 @@ class BThomeBluetoothDeviceData(BluetoothData):
                 )
             else:
                 _LOGGER.debug(
-                    "UNKNOWN dataobject in BThome BLE payload! Adv: %s",
+                    "UNKNOWN dataobject in BTHome BLE payload! Adv: %s",
                     data.hex(),
                 )
 
@@ -292,7 +297,7 @@ class BThomeBluetoothDeviceData(BluetoothData):
         return True
 
     def _decrypt_bthome(self, data: bytes, bthome_mac: bytes) -> bytes:
-        """Decrypt encrypted BThome BLE advertisements"""
+        """Decrypt encrypted BTHome BLE advertisements"""
         if not self.bindkey:
             self.bindkey_verified = False
             _LOGGER.debug("Encryption key not set and adv is encrypted")

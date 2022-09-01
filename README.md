@@ -1,4 +1,4 @@
-# BThome BLE
+# BTHome BLE
 
 <p align="center">
   <a href="https://github.com/bluetooth-devices/bthome-ble/actions?query=workflow%3ACI">
@@ -30,7 +30,7 @@
   <img src="https://img.shields.io/pypi/l/bthome-ble.svg?style=flat-square" alt="License">
 </p>
 
-BLE parser for sensors that support the BThome BLE format.
+BLE parser for sensors that support the BTHome BLE format.
 
 ## Installation
 
@@ -40,7 +40,7 @@ Install this via pip (or your favourite package manager):
 
 ## BThome BLE format
 
-More detailed information about the BThome BLE format can be found on the [usage page](https://github.com/Bluetooth-Devices/bthome-ble/blob/main/docs/source/usage.md)
+More detailed information about the BTHome BLE format can be found on the [usage page](https://github.com/Bluetooth-Devices/bthome-ble/blob/main/docs/source/usage.md)
 
 ## Contributors ✨
 

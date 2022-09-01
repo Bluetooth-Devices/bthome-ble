@@ -17,7 +17,7 @@ from typing import Any, List
 
 # -- Project information -----------------------------------------------------
 
-project = "BThome BLE"
+project = "BTHome BLE"
 copyright = "2022, E. Klamer"
 author = "E. Klamer"
 
