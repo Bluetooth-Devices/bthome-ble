@@ -3,8 +3,8 @@
 This file is shamelessly copied from the following repository:
 https://github.com/Ernst79/bleparser/blob/ac8757ad64f1fc17674dcd22111e547cdf2f205b/package/bleparser/ha_ble.py
 
-BTHome was originally developed as HA BLE for ble_monitor and been renamed to
-BTHome for Home Assistant Bluetooth integrations.
+BTHome was originally developed as HA BLE for ble_monitor and has been renamed
+to BTHome for Home Assistant Bluetooth integrations.
 
 MIT License applies.
 """
