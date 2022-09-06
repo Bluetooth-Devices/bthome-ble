@@ -2,6 +2,14 @@
 
 <!--next-version-placeholder-->
 
+## v1.1.0 (2022-09-06)
+### Feature
+* Binary sensor support ([`35ec5e1`](https://github.com/Bluetooth-Devices/bthome-ble/commit/35ec5e1d328038b328c4b793e9fe70c354d731dd))
+
+### Fix
+* Fix tests ([`ffce92d`](https://github.com/Bluetooth-Devices/bthome-ble/commit/ffce92d599d1831ae241e10bddb874b5d5761a15))
+* Fix flake8 tests ([`b428339`](https://github.com/Bluetooth-Devices/bthome-ble/commit/b428339e38f28caf17adc02b48a9585f05b629d1))
+
 ## v1.0.0 (2022-09-01)
 ### Feature
 * Change name of bthome with capital h ([`cf3c702`](https://github.com/Bluetooth-Devices/bthome-ble/commit/cf3c702ca4b2e25cc15a74379deeb84a949427d7))
