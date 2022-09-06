@@ -20,7 +20,10 @@ from bluetooth_data_tools import short_address
 from bluetooth_sensor_state_data import BluetoothData
 from Cryptodome.Cipher import AES
 from home_assistant_bluetooth import BluetoothServiceInfo
-from sensor_state_data.description import BaseBinarySensorDescription, BaseSensorDescription
+from sensor_state_data.description import (
+    BaseBinarySensorDescription,
+    BaseSensorDescription
+)
 
 from .const import HA_BINARY_SENSOR_DEVICE_CLASSES, HA_SENSOR_DEVICE_CLASSES, MEAS_TYPES
 
@@ -271,8 +274,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                     if meas_format.device_class in HA_SENSOR_DEVICE_CLASSES:
                         # Update sensors with a supported HA device class
                         self.update_predefined_sensor(
-                            base_description=meas_format,
-                            native_value=value
+                            base_description=meas_format, native_value=value
                         )
                     elif meas_format.device_class:
                         # Update sensors without a supported HA device class
@@ -293,7 +295,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                         # Update binary sensors with a supported HA device class
                         self.update_predefined_binary_sensor(
                             device_class=meas_format.device_class,
-                            native_value=bool(value)
+                            native_value=bool(value),
                         )
                     elif meas_format.device_class:
                         # Update binary sensors without a supported HA device class or without a device class

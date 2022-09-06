@@ -7,7 +7,9 @@ from sensor_state_data import BinarySensorDeviceClass, SensorLibrary, descriptio
 
 @dataclasses.dataclass
 class MeasTypes:
-    meas_format: Union[description.BaseSensorDescription, description.BaseBinarySensorDescription]
+    meas_format: Union[
+        description.BaseSensorDescription, description.BaseBinarySensorDescription
+    ]
     factor: float = 1
 
 

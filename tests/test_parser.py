@@ -3,7 +3,7 @@ import logging
 from unittest.mock import patch
 
 import pytest
-from bluetooth_sensor_state_data import BluetoothServiceInfo, DeviceClass ,SensorUpdate
+from bluetooth_sensor_state_data import BluetoothServiceInfo, DeviceClass, SensorUpdate
 from sensor_state_data import (
     BinarySensorDescription,
     BinarySensorDeviceClass,
