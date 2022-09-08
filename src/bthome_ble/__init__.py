@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from sensor_state_data import (
+    BinarySensorDeviceClass,
     DeviceClass,
     DeviceKey,
     SensorDescription,
@@ -17,12 +18,12 @@ __version__ = "1.1.0"
 
 __all__ = [
     "BTHomeBluetoothDeviceData",
-    "SensorDescription",
-    "SensorDeviceInfo",
+    "BinarySensorDeviceClass",
     "DeviceClass",
     "DeviceKey",
-    "SensorUpdate",
+    "SensorDescription",
     "SensorDeviceInfo",
+    "SensorUpdate",
     "SensorValue",
     "Units",
 ]
