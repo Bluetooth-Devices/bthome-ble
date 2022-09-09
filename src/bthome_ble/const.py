@@ -4,6 +4,88 @@ from typing import Union
 
 from sensor_state_data import BinarySensorDeviceClass, SensorLibrary, description
 
+# Sensors with device classes that are available in Home Assistant
+HOME_ASSISTANT_SENSOR_DEVICE_CLASSES = [
+    "apparent_power",
+    "aqi",
+    "battery",
+    "carbon_monoxide",
+    "carbon_dioxide",
+    "current",
+    "date",
+    "duration",
+    "energy",
+    "frequency",
+    "gas",
+    "humidity",
+    "illuminance",
+    "moisture",
+    "monetary",
+    "nitrogen_dioxide",
+    "nitrogen_monoxide",
+    "nitrous_oxide",
+    "ozone",
+    "pm1",
+    "pm10",
+    "pm25",
+    "power_factor",
+    "power",
+    "pressure",
+    "reactive_power",
+    "signal_strength",
+    "sulphur_dioxide",
+    "temperature",
+    "timestamp",
+    "volatile_organic_compounds",
+    "voltage",
+]
+
+# Additional BTHome sensors with device classes that
+# are not available in Home Assistant
+BTHOME_ADDITIONAL_SENSOR_DEVICE_CLASSES = [
+    "mass",
+    "dew_point",
+    "count",
+]
+
+# Binary sensors with device classes that are available in Home Assistant
+HOME_ASSISTANT_BINARY_SENSOR_DEVICE_CLASSES = [
+    "battery",
+    "battery_charging",
+    "carbon_monoxide",
+    "cold",
+    "connectivity",
+    "door",
+    "garage_door",
+    "gas",
+    "heat",
+    "light",
+    "lock",
+    "moisture",
+    "motion",
+    "moving",
+    "occupancy",
+    "opening",
+    "plug",
+    "power",
+    "presence",
+    "problem",
+    "running",
+    "safety",
+    "smoke",
+    "sound",
+    "tamper",
+    "update",
+    "vibration",
+    "window",
+]
+
+# Additional BTHome binary sensors with device classes that
+# are not available in Home Assistant
+BTHOME_ADDITIONAL_BINARY_SENSOR_DEVICE_CLASSES = [
+    "generic",
+]
+
 
 @dataclasses.dataclass
 class MeasTypes:
@@ -230,71 +312,3 @@ MEAS_TYPES: dict[int, MeasTypes] = {
         )
     ),
 }
-
-
-# Sensors with device classes that are available in Home Assistant
-HA_SENSOR_DEVICE_CLASSES = [
-    "apparent_power",
-    "aqi",
-    "battery",
-    "carbon_monoxide",
-    "carbon_dioxide",
-    "current",
-    "date",
-    "duration",
-    "energy",
-    "frequency",
-    "gas",
-    "humidity",
-    "illuminance",
-    "monetary",
-    "nitrogen_dioxide",
-    "nitrogen_monoxide",
-    "nitrous_oxide",
-    "ozone",
-    "pm1",
-    "pm10",
-    "pm25",
-    "power_factor",
-    "power",
-    "pressure",
-    "reactive_power",
-    "signal_strength",
-    "sulphur_dioxide",
-    "temperature",
-    "timestamp",
-    "volatile_organic_compounds",
-    "voltage",
-]
-
-# Binary sensors with device classes that are available in Home Assistant
-HA_BINARY_SENSOR_DEVICE_CLASSES = [
-    "battery",
-    "battery_charging",
-    "carbon_monoxide",
-    "cold",
-    "connectivity",
-    "door",
-    "garage_door",
-    "gas",
-    "heat",
-    "light",
-    "lock",
-    "moisture",
-    "motion",
-    "moving",
-    "occupancy",
-    "opening",
-    "plug",
-    "power",
-    "presence",
-    "problem",
-    "running",
-    "safety",
-    "smoke",
-    "sound",
-    "tamper",
-    "update",
-    "vibration",
-    "window",
-]
