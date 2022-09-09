@@ -3,7 +3,6 @@ import dataclasses
 from typing import Union
 
 from sensor_state_data import (
-    BaseDeviceClass,
     BinarySensorDeviceClass,
     SensorLibrary,
     description,
