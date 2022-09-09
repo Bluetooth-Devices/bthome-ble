@@ -1002,7 +1002,7 @@ def test_bthome_moisture(caplog):
         entity_descriptions={
             KEY_MOISTURE: SensorDescription(
                 device_key=KEY_MOISTURE,
-                device_class=None,
+                device_class=DeviceClass.MOISTURE,
                 native_unit_of_measurement=Units.PERCENTAGE,
             ),
             KEY_SIGNAL_STRENGTH: SensorDescription(
