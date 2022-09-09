@@ -2,11 +2,7 @@
 import dataclasses
 from typing import Union
 
-from sensor_state_data import (
-    BinarySensorDeviceClass,
-    SensorLibrary,
-    description,
-)
+from sensor_state_data import BinarySensorDeviceClass, SensorLibrary, description
 
 # Sensors with device classes that are available in Home Assistant
 HOME_ASSISTANT_SENSOR_DEVICE_CLASSES = [
