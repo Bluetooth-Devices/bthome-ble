@@ -2,6 +2,16 @@
 
 <!--next-version-placeholder-->
 
+## v1.2.0 (2022-09-09)
+### Feature
+* Add binary sensors ([`c83d0da`](https://github.com/Bluetooth-Devices/bthome-ble/commit/c83d0dab1aa44730976c0185c73d928a72a01b75))
+
+### Fix
+* Flake8 error ([`4ed3312`](https://github.com/Bluetooth-Devices/bthome-ble/commit/4ed3312453c35d1911bb463a2c0b35310626e84f))
+* Update poetry lock file ([`477f974`](https://github.com/Bluetooth-Devices/bthome-ble/commit/477f974aba5ef9d469975473902994d01ed00181))
+* Remove unused import ([`44f171a`](https://github.com/Bluetooth-Devices/bthome-ble/commit/44f171aad9375877dfba4f55d6f6f2ede12ccdad))
+* Mypy error ([`716f626`](https://github.com/Bluetooth-Devices/bthome-ble/commit/716f626729080c451c24dd7da242d97709d620a7))
+
 ## v1.1.1 (2022-09-08)
 ### Fix
 * Add binary sensor device class ([`d48783e`](https://github.com/Bluetooth-Devices/bthome-ble/commit/d48783e1a7c3a3a719fc7dca9f08feb034660507))
