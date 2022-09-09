@@ -26,29 +26,12 @@ from sensor_state_data.description import (
 )
 
 from .const import (
-    BTHomeAdditionalBinarySensorDeviceClass,
-    BTHomeAdditionalSensorDeviceClass,
-    HomeAssistantBinarySensorDeviceClass,
-    HomeAssistantSensorDeviceClass,
+    BTHOME_ADDITIONAL_BINARY_SENSOR_DEVICE_CLASSES,
+    BTHOME_ADDITIONAL_SENSOR_DEVICE_CLASSES,
+    HOME_ASSISTANT_BINARY_SENSOR_DEVICE_CLASSES,
+    HOME_ASSISTANT_SENSOR_DEVICE_CLASSES,
     MEAS_TYPES,
 )
-
-HOME_ASSISTANT_BINARY_SENSOR_DEVICE_CLASS = [
-    i for i in HomeAssistantBinarySensorDeviceClass
-]
-HOME_ASSISTANT_SENSOR_DEVICE_CLASS = [i for i in HomeAssistantSensorDeviceClass]
-BTHOME_ADD_BINARY_SENSOR_DEVICE_CLASS = [
-    i for i in BTHomeAdditionalBinarySensorDeviceClass
-]
-BTHOME_ADD_SENSOR_DEVICE_CLASS = [i for i in BTHomeAdditionalSensorDeviceClass]
-BTHOME_BINARY_SENSOR_DEVICE_CLASS = [
-    *HOME_ASSISTANT_BINARY_SENSOR_DEVICE_CLASS,
-    *BTHOME_ADD_BINARY_SENSOR_DEVICE_CLASS,
-]
-BTHOME_SENSOR_DEVICE_CLASS = [
-    *HOME_ASSISTANT_SENSOR_DEVICE_CLASS,
-    *BTHOME_ADD_SENSOR_DEVICE_CLASS,
-]
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -297,16 +280,19 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                     if meas_format.device_class:
                         if (
                             meas_format.device_class
-                            in HOME_ASSISTANT_SENSOR_DEVICE_CLASS
+                            in HOME_ASSISTANT_SENSOR_DEVICE_CLASSES
                         ):
                             # Update sensors with a supported HA device class
                             self.update_predefined_sensor(
                                 base_description=meas_format, native_value=value
                             )
-                        elif meas_format.device_class:
+                        elif (
+                            meas_format.device_class
+                            in BTHOME_ADDITIONAL_SENSOR_DEVICE_CLASSES
+                        ):
                             # Update sensors without a supported HA device class
                             self.update_sensor(
-                                key=meas_format.device_class,
+                                key=meas_format.device_class.value,
                                 native_unit_of_measurement=meas_format.native_unit_of_measurement,
                                 native_value=value,
                                 device_class=None,
@@ -321,7 +307,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                     if meas_format.device_class:
                         if (
                             meas_format.device_class
-                            in HOME_ASSISTANT_BINARY_SENSOR_DEVICE_CLASS
+                            in HOME_ASSISTANT_BINARY_SENSOR_DEVICE_CLASSES
                         ):
                             # Update binary sensors with a supported HA device class
                             self.update_predefined_binary_sensor(
@@ -330,7 +316,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                             )
                         elif (
                             meas_format.device_class
-                            in BTHOME_ADD_BINARY_SENSOR_DEVICE_CLASS
+                            in BTHOME_ADDITIONAL_BINARY_SENSOR_DEVICE_CLASSES
                         ):
                             # Update binary sensors without a supported HA device class
                             self.update_binary_sensor(

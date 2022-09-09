@@ -3,11 +3,93 @@ import dataclasses
 from typing import Union
 
 from sensor_state_data import (
-    BinarySensorDeviceClass,
     BaseDeviceClass,
+    BinarySensorDeviceClass,
     SensorLibrary,
     description,
 )
+
+# Sensors with device classes that are available in Home Assistant
+HOME_ASSISTANT_SENSOR_DEVICE_CLASSES = [
+    "apparent_power",
+    "aqi",
+    "battery",
+    "carbon_monoxide",
+    "carbon_dioxide",
+    "current",
+    "date",
+    "duration",
+    "energy",
+    "frequency",
+    "gas",
+    "humidity",
+    "illuminance",
+    "moisture",
+    "monetary",
+    "nitrogen_dioxide",
+    "nitrogen_monoxide",
+    "nitrous_oxide",
+    "ozone",
+    "pm1",
+    "pm10",
+    "pm25",
+    "power_factor",
+    "power",
+    "pressure",
+    "reactive_power",
+    "signal_strength",
+    "sulphur_dioxide",
+    "temperature",
+    "timestamp",
+    "volatile_organic_compounds",
+    "voltage",
+]
+
+# Additional BTHome sensors with device classes that
+# are not available in Home Assistant
+BTHOME_ADDITIONAL_SENSOR_DEVICE_CLASSES = [
+    "mass",
+    "dew_point",
+    "count",
+]
+
+# Binary sensors with device classes that are available in Home Assistant
+HOME_ASSISTANT_BINARY_SENSOR_DEVICE_CLASSES = [
+    "battery",
+    "battery_charging",
+    "carbon_monoxide",
+    "cold",
+    "connectivity",
+    "door",
+    "garage_door",
+    "gas",
+    "heat",
+    "light",
+    "lock",
+    "moisture",
+    "motion",
+    "moving",
+    "occupancy",
+    "opening",
+    "plug",
+    "power",
+    "presence",
+    "problem",
+    "running",
+    "safety",
+    "smoke",
+    "sound",
+    "tamper",
+    "update",
+    "vibration",
+    "window",
+]
+
+# Additional BTHome binary sensors with device classes that
+# are not available in Home Assistant
+BTHOME_ADDITIONAL_BINARY_SENSOR_DEVICE_CLASSES = [
+    "generic",
+]
 
 
 @dataclasses.dataclass
@@ -235,211 +317,3 @@ MEAS_TYPES: dict[int, MeasTypes] = {
         )
     ),
 }
-
-
-class HomeAssistantSensorDeviceClass(BaseDeviceClass):
-    """Device class for sensors supported in Home Assistant."""
-
-    # apparent power (VA)
-    APPARENT_POWER = "apparent_power"
-
-    # Air Quality Index
-    AQI = "aqi"
-
-    # % of battery that is left
-    BATTERY = "battery"
-
-    # ppm (parts per million) Carbon Monoxide gas concentration
-    CO = "carbon_monoxide"
-
-    # ppm (parts per million) Carbon Dioxide gas concentration
-    CO2 = "carbon_dioxide"
-
-    # current (A)
-    CURRENT = "current"
-
-    # date (ISO8601)
-    DATE = "date"
-
-    # fixed duration (TIME_DAYS, TIME_HOURS, TIME_MINUTES, TIME_SECONDS)
-    DURATION = "duration"
-
-    # energy (Wh, kWh, MWh)
-    ENERGY = "energy"
-
-    # frequency (Hz, kHz, MHz, GHz)
-    FREQUENCY = "frequency"
-
-    # gas (m³ or ft³)
-    GAS = "gas"
-
-    # Relative humidity (%)
-    HUMIDITY = "humidity"
-
-    # current light level (lx/lm)
-    ILLUMINANCE = "illuminance"
-
-    # moisture (%)
-    MOISTURE = "moisture"
-
-    # Amount of money (currency)
-    MONETARY = "monetary"
-
-    # Amount of NO2 (µg/m³)
-    NITROGEN_DIOXIDE = "nitrogen_dioxide"
-
-    # Amount of NO (µg/m³)
-    NITROGEN_MONOXIDE = "nitrogen_monoxide"
-
-    # Amount of N2O  (µg/m³)
-    NITROUS_OXIDE = "nitrous_oxide"
-
-    # Amount of O3 (µg/m³)
-    OZONE = "ozone"
-
-    # Particulate matter <= 0.1 μm (µg/m³)
-    PM1 = "pm1"
-
-    # Particulate matter <= 10 μm (µg/m³)
-    PM10 = "pm10"
-
-    # Particulate matter <= 2.5 μm (µg/m³)
-    PM25 = "pm25"
-
-    # power factor (%)
-    POWER_FACTOR = "power_factor"
-
-    # power (W/kW)
-    POWER = "power"
-
-    # pressure (hPa/mbar)
-    PRESSURE = "pressure"
-
-    # reactive power (var)
-    REACTIVE_POWER = "reactive_power"
-
-    # signal strength (dB/dBm)
-    SIGNAL_STRENGTH = "signal_strength"
-
-    # Amount of SO2 (µg/m³)
-    SULPHUR_DIOXIDE = "sulphur_dioxide"
-
-    # temperature (C/F)
-    TEMPERATURE = "temperature"
-
-    # timestamp (ISO8601)
-    TIMESTAMP = "timestamp"
-
-    # Amount of VOC (µg/m³)
-    VOLATILE_ORGANIC_COMPOUNDS = "volatile_organic_compounds"
-
-    # voltage (V)
-    VOLTAGE = "voltage"
-
-
-class BTHomeAdditionalSensorDeviceClass(BaseDeviceClass):
-    """Device class for sensors supported in BTHome but not available in Home Assistant."""
-
-    # Mass
-    MASS = "mass"
-
-    # Dew Point
-    DEW_POINT = "dew_point"
-
-    # Count
-    COUNT = "count"
-
-
-class HomeAssistantBinarySensorDeviceClass(BaseDeviceClass):
-    """Device class for binary sensors supported in Home Assistant."""
-
-    # On means low, Off means normal
-    BATTERY = "battery"
-
-    # On means charging, Off means not charging
-    BATTERY_CHARGING = "battery_charging"
-
-    # On means carbon monoxide detected, Off means no carbon monoxide (clear)
-    CO = "carbon_monoxide"
-
-    # On means cold, Off means normal
-    COLD = "cold"
-
-    # On means connected, Off means disconnected
-    CONNECTIVITY = "connectivity"
-
-    # On means open, Off means closed
-    DOOR = "door"
-
-    # On means open, Off means closed
-    GARAGE_DOOR = "garage_door"
-
-    # On means gas detected, Off means no gas (clear)
-    GAS = "gas"
-
-    # On means hot, Off means normal
-    HEAT = "heat"
-
-    # On means light detected, Off means no light
-    LIGHT = "light"
-
-    # On means open (unlocked), Off means closed (locked)
-    LOCK = "lock"
-
-    # On means wet, Off means dry
-    MOISTURE = "moisture"
-
-    # On means motion detected, Off means no motion (clear)
-    MOTION = "motion"
-
-    # On means moving, Off means not moving (stopped)
-    MOVING = "moving"
-
-    # On means occupied, Off means not occupied (clear)
-    OCCUPANCY = "occupancy"
-
-    # On means open, Off means closed
-    OPENING = "opening"
-
-    # On means plugged in, Off means unplugged
-    PLUG = "plug"
-
-    # On means power detected, Off means no power
-    POWER = "power"
-
-    # On means home, Off means away
-    PRESENCE = "presence"
-
-    # On means problem detected, Off means no problem (OK)
-    PROBLEM = "problem"
-
-    # On means running, Off means not running
-    RUNNING = "running"
-
-    # On means unsafe, Off means safe
-    SAFETY = "safety"
-
-    # On means smoke detected, Off means no smoke (clear)
-    SMOKE = "smoke"
-
-    # On means sound detected, Off means no sound (clear)
-    SOUND = "sound"
-
-    # On means tampering detected, Off means no tampering (clear)
-    TAMPER = "tamper"
-
-    # On means update available, Off means up-to-date
-    UPDATE = "update"
-
-    # On means vibration detected, Off means no vibration
-    VIBRATION = "vibration"
-
-    # On means open, Off means closed
-    WINDOW = "window"
-
-
-class BTHomeAdditionalBinarySensorDeviceClass(BaseDeviceClass):
-    """Device class for binary sensors supported in BTHome but not available in Home Assistant."""
-
-    # On means On, Off means Off
-    GENERIC = "generic"
