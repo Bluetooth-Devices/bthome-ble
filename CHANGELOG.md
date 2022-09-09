@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v1.1.1 (2022-09-08)
+### Fix
+* Add binary sensor device class ([`d48783e`](https://github.com/Bluetooth-Devices/bthome-ble/commit/d48783e1a7c3a3a719fc7dca9f08feb034660507))
+
 ## v1.1.0 (2022-09-06)
 ### Feature
 * Binary sensor support ([`35ec5e1`](https://github.com/Bluetooth-Devices/bthome-ble/commit/35ec5e1d328038b328c4b793e9fe70c354d731dd))
