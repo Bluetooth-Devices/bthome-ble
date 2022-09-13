@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v1.2.1 (2022-09-13)
+### Fix
+* Remove empty line ([`5f7ba24`](https://github.com/Bluetooth-Devices/bthome-ble/commit/5f7ba2438f4a8e6bde341b74668514906364d070))
+* Sort import order ([`ba5afd1`](https://github.com/Bluetooth-Devices/bthome-ble/commit/ba5afd11bea7678f0a9af50ad9c4a08a0800b62c))
+* Always use bthome device classes ([`15fa937`](https://github.com/Bluetooth-Devices/bthome-ble/commit/15fa93718d7b506cc25e80831f7612423bd13306))
+
 ## v1.2.0 (2022-09-09)
 ### Feature
 * Add binary sensors ([`c83d0da`](https://github.com/Bluetooth-Devices/bthome-ble/commit/c83d0dab1aa44730976c0185c73d928a72a01b75))
