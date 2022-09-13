@@ -3,11 +3,12 @@ import logging
 from unittest.mock import patch
 
 import pytest
-from bluetooth_sensor_state_data import BluetoothServiceInfo, DeviceClass, SensorUpdate
+from bluetooth_sensor_state_data import BluetoothServiceInfo, SensorUpdate
 from sensor_state_data import (
     BinarySensorDescription,
     BinarySensorDeviceClass,
     BinarySensorValue,
+    SensorDeviceClass,
     DeviceKey,
     SensorDescription,
     SensorDeviceInfo,
@@ -144,7 +145,7 @@ def test_bindkey_wrong():
         entity_descriptions={
             KEY_SIGNAL_STRENGTH: SensorDescription(
                 device_key=KEY_SIGNAL_STRENGTH,
-                device_class=DeviceClass.SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
                 native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
             ),
         },
@@ -183,17 +184,17 @@ def test_bindkey_correct():
         entity_descriptions={
             KEY_TEMPERATURE: SensorDescription(
                 device_key=KEY_TEMPERATURE,
-                device_class=DeviceClass.TEMPERATURE,
+                device_class=SensorDeviceClass.TEMPERATURE,
                 native_unit_of_measurement=Units.TEMP_CELSIUS,
             ),
             KEY_HUMIDITY: SensorDescription(
                 device_key=KEY_HUMIDITY,
-                device_class=DeviceClass.HUMIDITY,
+                device_class=SensorDeviceClass.HUMIDITY,
                 native_unit_of_measurement=Units.PERCENTAGE,
             ),
             KEY_SIGNAL_STRENGTH: SensorDescription(
                 device_key=KEY_SIGNAL_STRENGTH,
-                device_class=DeviceClass.SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
                 native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
             ),
         },
@@ -250,17 +251,17 @@ def test_bthome_temperature_humidity(caplog):
         entity_descriptions={
             KEY_TEMPERATURE: SensorDescription(
                 device_key=KEY_TEMPERATURE,
-                device_class=DeviceClass.TEMPERATURE,
+                device_class=SensorDeviceClass.TEMPERATURE,
                 native_unit_of_measurement=Units.TEMP_CELSIUS,
             ),
             KEY_HUMIDITY: SensorDescription(
                 device_key=KEY_HUMIDITY,
-                device_class=DeviceClass.HUMIDITY,
+                device_class=SensorDeviceClass.HUMIDITY,
                 native_unit_of_measurement=Units.PERCENTAGE,
             ),
             KEY_SIGNAL_STRENGTH: SensorDescription(
                 device_key=KEY_SIGNAL_STRENGTH,
-                device_class=DeviceClass.SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
                 native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
             ),
         },
@@ -300,22 +301,22 @@ def test_bthome_temperature_humidity_battery(caplog):
         entity_descriptions={
             KEY_TEMPERATURE: SensorDescription(
                 device_key=KEY_TEMPERATURE,
-                device_class=DeviceClass.TEMPERATURE,
+                device_class=SensorDeviceClass.TEMPERATURE,
                 native_unit_of_measurement=Units.TEMP_CELSIUS,
             ),
             KEY_HUMIDITY: SensorDescription(
                 device_key=KEY_HUMIDITY,
-                device_class=DeviceClass.HUMIDITY,
+                device_class=SensorDeviceClass.HUMIDITY,
                 native_unit_of_measurement=Units.PERCENTAGE,
             ),
             KEY_BATTERY: SensorDescription(
                 device_key=KEY_BATTERY,
-                device_class=DeviceClass.BATTERY,
+                device_class=SensorDeviceClass.BATTERY,
                 native_unit_of_measurement=Units.PERCENTAGE,
             ),
             KEY_SIGNAL_STRENGTH: SensorDescription(
                 device_key=KEY_SIGNAL_STRENGTH,
-                device_class=DeviceClass.SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
                 native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
             ),
         },
@@ -358,12 +359,12 @@ def test_bthome_pressure(caplog):
         entity_descriptions={
             KEY_PRESSURE: SensorDescription(
                 device_key=KEY_PRESSURE,
-                device_class=DeviceClass.PRESSURE,
+                device_class=SensorDeviceClass.PRESSURE,
                 native_unit_of_measurement=Units.PRESSURE_MBAR,
             ),
             KEY_SIGNAL_STRENGTH: SensorDescription(
                 device_key=KEY_SIGNAL_STRENGTH,
-                device_class=DeviceClass.SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
                 native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
             ),
         },
@@ -400,12 +401,12 @@ def test_bthome_illuminance(caplog):
         entity_descriptions={
             KEY_ILLUMINANCE: SensorDescription(
                 device_key=KEY_ILLUMINANCE,
-                device_class=DeviceClass.ILLUMINANCE,
+                device_class=SensorDeviceClass.ILLUMINANCE,
                 native_unit_of_measurement=Units.LIGHT_LUX,
             ),
             KEY_SIGNAL_STRENGTH: SensorDescription(
                 device_key=KEY_SIGNAL_STRENGTH,
-                device_class=DeviceClass.SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
                 native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
             ),
         },
@@ -442,12 +443,12 @@ def test_bthome_mass_kilograms(caplog):
         entity_descriptions={
             KEY_MASS: SensorDescription(
                 device_key=KEY_MASS,
-                device_class=None,
+                device_class=SensorDeviceClass.MASS,
                 native_unit_of_measurement=Units.MASS_KILOGRAMS,
             ),
             KEY_SIGNAL_STRENGTH: SensorDescription(
                 device_key=KEY_SIGNAL_STRENGTH,
-                device_class=DeviceClass.SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
                 native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
             ),
         },
@@ -482,12 +483,12 @@ def test_bthome_mass_pounds(caplog):
         entity_descriptions={
             KEY_MASS: SensorDescription(
                 device_key=KEY_MASS,
-                device_class=None,
+                device_class=SensorDeviceClass.MASS,
                 native_unit_of_measurement=Units.MASS_POUNDS,
             ),
             KEY_SIGNAL_STRENGTH: SensorDescription(
                 device_key=KEY_SIGNAL_STRENGTH,
-                device_class=DeviceClass.SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
                 native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
             ),
         },
@@ -522,12 +523,12 @@ def test_bthome_dew_point(caplog):
         entity_descriptions={
             KEY_DEW_POINT: SensorDescription(
                 device_key=KEY_DEW_POINT,
-                device_class=None,
+                device_class=SensorDeviceClass.DEW_POINT,
                 native_unit_of_measurement=Units.TEMP_CELSIUS,
             ),
             KEY_SIGNAL_STRENGTH: SensorDescription(
                 device_key=KEY_SIGNAL_STRENGTH,
-                device_class=DeviceClass.SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
                 native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
             ),
         },
@@ -564,12 +565,12 @@ def test_bthome_count(caplog):
         entity_descriptions={
             KEY_COUNT: SensorDescription(
                 device_key=KEY_COUNT,
-                device_class=None,
+                device_class=SensorDeviceClass.COUNT,
                 native_unit_of_measurement=None,
             ),
             KEY_SIGNAL_STRENGTH: SensorDescription(
                 device_key=KEY_SIGNAL_STRENGTH,
-                device_class=DeviceClass.SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
                 native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
             ),
         },
@@ -604,12 +605,12 @@ def test_bthome_energy(caplog):
         entity_descriptions={
             KEY_ENERGY: SensorDescription(
                 device_key=KEY_ENERGY,
-                device_class=DeviceClass.ENERGY,
+                device_class=SensorDeviceClass.ENERGY,
                 native_unit_of_measurement=Units.ENERGY_KILO_WATT_HOUR,
             ),
             KEY_SIGNAL_STRENGTH: SensorDescription(
                 device_key=KEY_SIGNAL_STRENGTH,
-                device_class=DeviceClass.SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
                 native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
             ),
         },
@@ -646,12 +647,12 @@ def test_bthome_power(caplog):
         entity_descriptions={
             KEY_POWER: SensorDescription(
                 device_key=KEY_POWER,
-                device_class=DeviceClass.POWER,
+                device_class=SensorDeviceClass.POWER,
                 native_unit_of_measurement=Units.POWER_WATT,
             ),
             KEY_SIGNAL_STRENGTH: SensorDescription(
                 device_key=KEY_SIGNAL_STRENGTH,
-                device_class=DeviceClass.SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
                 native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
             ),
         },
@@ -688,12 +689,12 @@ def test_bthome_voltage(caplog):
         entity_descriptions={
             KEY_VOLTAGE: SensorDescription(
                 device_key=KEY_VOLTAGE,
-                device_class=DeviceClass.VOLTAGE,
+                device_class=SensorDeviceClass.VOLTAGE,
                 native_unit_of_measurement=Units.ELECTRIC_POTENTIAL_VOLT,
             ),
             KEY_SIGNAL_STRENGTH: SensorDescription(
                 device_key=KEY_SIGNAL_STRENGTH,
-                device_class=DeviceClass.SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
                 native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
             ),
         },
@@ -731,7 +732,7 @@ def test_bthome_binary_sensor(caplog):
         entity_descriptions={
             KEY_SIGNAL_STRENGTH: SensorDescription(
                 device_key=KEY_SIGNAL_STRENGTH,
-                device_class=DeviceClass.SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
                 native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
             ),
         },
@@ -743,7 +744,7 @@ def test_bthome_binary_sensor(caplog):
         binary_entity_descriptions={
             KEY_BINARY_GENERIC: BinarySensorDescription(
                 device_key=KEY_BINARY_GENERIC,
-                device_class=None,
+                device_class=BinarySensorDeviceClass.GENERIC,
             ),
         },
         binary_entity_values={
@@ -777,7 +778,7 @@ def test_bthome_binary_sensor_power(caplog):
         entity_descriptions={
             KEY_SIGNAL_STRENGTH: SensorDescription(
                 device_key=KEY_SIGNAL_STRENGTH,
-                device_class=DeviceClass.SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
                 native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
             ),
         },
@@ -823,7 +824,7 @@ def test_bthome_binary_sensor_opening(caplog):
         entity_descriptions={
             KEY_SIGNAL_STRENGTH: SensorDescription(
                 device_key=KEY_SIGNAL_STRENGTH,
-                device_class=DeviceClass.SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
                 native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
             ),
         },
@@ -868,21 +869,21 @@ def test_bthome_pm(caplog):
         entity_descriptions={
             KEY_PM25: SensorDescription(
                 device_key=KEY_PM25,
-                device_class=DeviceClass.PM25,
+                device_class=SensorDeviceClass.PM25,
                 native_unit_of_measurement=(
                     Units.CONCENTRATION_MICROGRAMS_PER_CUBIC_METER
                 ),
             ),
             KEY_PM10: SensorDescription(
                 device_key=KEY_PM10,
-                device_class=DeviceClass.PM10,
+                device_class=SensorDeviceClass.PM10,
                 native_unit_of_measurement=(
                     Units.CONCENTRATION_MICROGRAMS_PER_CUBIC_METER
                 ),
             ),
             KEY_SIGNAL_STRENGTH: SensorDescription(
                 device_key=KEY_SIGNAL_STRENGTH,
-                device_class=DeviceClass.SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
                 native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
             ),
         },
@@ -918,12 +919,12 @@ def test_bthome_co2(caplog):
         entity_descriptions={
             KEY_CO2: SensorDescription(
                 device_key=KEY_CO2,
-                device_class=DeviceClass.CO2,
+                device_class=SensorDeviceClass.CO2,
                 native_unit_of_measurement=Units.CONCENTRATION_PARTS_PER_MILLION,
             ),
             KEY_SIGNAL_STRENGTH: SensorDescription(
                 device_key=KEY_SIGNAL_STRENGTH,
-                device_class=DeviceClass.SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
                 native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
             ),
         },
@@ -960,12 +961,12 @@ def test_bthome_voc(caplog):
         entity_descriptions={
             KEY_VOC: SensorDescription(
                 device_key=KEY_VOC,
-                device_class=DeviceClass.VOLATILE_ORGANIC_COMPOUNDS,
+                device_class=SensorDeviceClass.VOLATILE_ORGANIC_COMPOUNDS,
                 native_unit_of_measurement=Units.CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
             ),
             KEY_SIGNAL_STRENGTH: SensorDescription(
                 device_key=KEY_SIGNAL_STRENGTH,
-                device_class=DeviceClass.SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
                 native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
             ),
         },
@@ -1002,12 +1003,12 @@ def test_bthome_moisture(caplog):
         entity_descriptions={
             KEY_MOISTURE: SensorDescription(
                 device_key=KEY_MOISTURE,
-                device_class=DeviceClass.MOISTURE,
+                device_class=SensorDeviceClass.MOISTURE,
                 native_unit_of_measurement=Units.PERCENTAGE,
             ),
             KEY_SIGNAL_STRENGTH: SensorDescription(
                 device_key=KEY_SIGNAL_STRENGTH,
-                device_class=DeviceClass.SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
                 native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
             ),
         },
