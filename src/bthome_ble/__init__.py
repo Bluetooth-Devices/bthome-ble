@@ -2,44 +2,28 @@
 from __future__ import annotations
 
 from sensor_state_data import (
+    BinarySensorDeviceClass,
     DeviceClass,
     DeviceKey,
     SensorDescription,
+    SensorDeviceClass,
     SensorDeviceInfo,
     SensorUpdate,
     SensorValue,
     Units,
 )
 
-from .const import (
-    BTHOME_ADDITIONAL_BINARY_SENSOR_DEVICE_CLASSES,
-    BTHOME_ADDITIONAL_SENSOR_DEVICE_CLASSES,
-    HOME_ASSISTANT_BINARY_SENSOR_DEVICE_CLASSES,
-    HOME_ASSISTANT_SENSOR_DEVICE_CLASSES,
-)
 from .parser import BTHomeBluetoothDeviceData
-
-BTHOME_SENSORS = (
-    HOME_ASSISTANT_SENSOR_DEVICE_CLASSES + BTHOME_ADDITIONAL_SENSOR_DEVICE_CLASSES
-)
-BTHOME_BINARY_SENSORS = (
-    HOME_ASSISTANT_BINARY_SENSOR_DEVICE_CLASSES
-    + BTHOME_ADDITIONAL_BINARY_SENSOR_DEVICE_CLASSES
-)
 
 __version__ = "1.2.0"
 
 __all__ = [
-    "BTHOME_ADDITIONAL_BINARY_SENSOR_DEVICE_CLASSES",
-    "BTHOME_ADDITIONAL_SENSOR_DEVICE_CLASSES",
-    "BTHOME_BINARY_SENSORS",
-    "BTHOME_SENSORS",
-    "HOME_ASSISTANT_BINARY_SENSOR_DEVICE_CLASSES",
-    "HOME_ASSISTANT_SENSOR_DEVICE_CLASSES",
+    "BinarySensorDeviceClass",
     "BTHomeBluetoothDeviceData",
     "DeviceClass",
     "DeviceKey",
     "SensorDescription",
+    "SensorDeviceClass",
     "SensorDeviceInfo",
     "SensorUpdate",
     "SensorValue",

@@ -26,8 +26,6 @@ from sensor_state_data.description import (
 )
 
 from .const import (
-    BTHOME_ADDITIONAL_BINARY_SENSOR_DEVICE_CLASSES,
-    BTHOME_ADDITIONAL_SENSOR_DEVICE_CLASSES,
     HOME_ASSISTANT_BINARY_SENSOR_DEVICE_CLASSES,
     HOME_ASSISTANT_SENSOR_DEVICE_CLASSES,
     MEAS_TYPES,
@@ -286,21 +284,13 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                             self.update_predefined_sensor(
                                 base_description=meas_format, native_value=value
                             )
-                        elif (
-                            meas_format.device_class
-                            in BTHOME_ADDITIONAL_SENSOR_DEVICE_CLASSES
-                        ):
+                        else:
                             # Update sensors without a supported HA device class
                             self.update_sensor(
-                                key=meas_format.device_class.value,
+                                key=meas_format.device_class,
                                 native_unit_of_measurement=meas_format.native_unit_of_measurement,
                                 native_value=value,
-                                device_class=None,
-                            )
-                        else:
-                            _LOGGER.debug(
-                                "Unknown data object in BTHome BLE sensor payload! Adv: %s",
-                                data.hex(),
+                                device_class=meas_format.device_class,
                             )
                 elif type(meas_format) == BaseBinarySensorDescription:
                     # update binary sensors
@@ -314,20 +304,12 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                                 device_class=meas_format.device_class,
                                 native_value=bool(value),
                             )
-                        elif (
-                            meas_format.device_class
-                            in BTHOME_ADDITIONAL_BINARY_SENSOR_DEVICE_CLASSES
-                        ):
+                        else:
                             # Update binary sensors without a supported HA device class
                             self.update_binary_sensor(
                                 key=meas_format.device_class,
                                 native_value=bool(value),
-                                device_class=None,
-                            )
-                        else:
-                            _LOGGER.debug(
-                                "Unknown data object in BTHome BLE binary sensor payload! Adv: %s",
-                                data.hex(),
+                                device_class=meas_format.device_class,
                             )
                 result = True
             elif meas_str is not None:
