@@ -75,7 +75,6 @@ HOME_ASSISTANT_BINARY_SENSOR_DEVICE_CLASSES = [
     "smoke",
     "sound",
     "tamper",
-    "update",
     "vibration",
     "window",
 ]
@@ -298,15 +297,10 @@ MEAS_TYPES: dict[int, MeasTypes] = {
     ),
     0x2C: MeasTypes(
         meas_format=description.BaseBinarySensorDescription(
-            device_class=BinarySensorDeviceClass.UPDATE,
-        )
-    ),
-    0x2D: MeasTypes(
-        meas_format=description.BaseBinarySensorDescription(
             device_class=BinarySensorDeviceClass.VIBRATION,
         )
     ),
-    0x2E: MeasTypes(
+    0x2D: MeasTypes(
         meas_format=description.BaseBinarySensorDescription(
             device_class=BinarySensorDeviceClass.WINDOW,
         )
