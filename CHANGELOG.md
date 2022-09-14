@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v1.2.2 (2022-09-14)
+### Fix
+* Remove update binary sensor ([`e529f89`](https://github.com/Bluetooth-Devices/bthome-ble/commit/e529f899eb7b9f38b65c36f5cc46d3df41e91f75))
+
 ## v1.2.1 (2022-09-13)
 ### Fix
 * Remove empty line ([`5f7ba24`](https://github.com/Bluetooth-Devices/bthome-ble/commit/5f7ba2438f4a8e6bde341b74668514906364d070))
