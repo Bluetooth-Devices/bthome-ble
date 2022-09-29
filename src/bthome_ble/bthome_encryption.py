@@ -40,9 +40,7 @@ def decrypt_payload(
     return parse_value(data=data)
 
 
-def decrypt_aes_ccm(
-    key: bytes, mac: bytes, data: bytes
-) -> dict[str, float] | None:
+def decrypt_aes_ccm(key: bytes, mac: bytes, data: bytes) -> dict[str, float] | None:
     """Decrypt AES CCM."""
     print("MAC:", mac.hex())
     print("Bindkey:", key.hex())
