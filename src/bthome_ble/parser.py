@@ -25,11 +25,7 @@ from sensor_state_data.description import (
     BaseSensorDescription,
 )
 
-from .const import (
-    HOME_ASSISTANT_BINARY_SENSOR_DEVICE_CLASSES,
-    HOME_ASSISTANT_SENSOR_DEVICE_CLASSES,
-    MEAS_TYPES,
-)
+from .const import MEAS_TYPES
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -273,44 +269,19 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                 meas_str = parse_string(meas_data)
 
             if value is not None:
-                if type(meas_format) == BaseSensorDescription:
-                    # Update sensors
-                    if meas_format.device_class:
-                        if (
-                            meas_format.device_class
-                            in HOME_ASSISTANT_SENSOR_DEVICE_CLASSES
-                        ):
-                            # Update sensors with a supported HA device class
-                            self.update_predefined_sensor(
-                                base_description=meas_format, native_value=value
-                            )
-                        else:
-                            # Update sensors without a supported HA device class
-                            self.update_sensor(
-                                key=meas_format.device_class,
-                                native_unit_of_measurement=meas_format.native_unit_of_measurement,
-                                native_value=value,
-                                device_class=meas_format.device_class,
-                            )
-                elif type(meas_format) == BaseBinarySensorDescription:
-                    # update binary sensors
-                    if meas_format.device_class:
-                        if (
-                            meas_format.device_class
-                            in HOME_ASSISTANT_BINARY_SENSOR_DEVICE_CLASSES
-                        ):
-                            # Update binary sensors with a supported HA device class
-                            self.update_predefined_binary_sensor(
-                                device_class=meas_format.device_class,
-                                native_value=bool(value),
-                            )
-                        else:
-                            # Update binary sensors without a supported HA device class
-                            self.update_binary_sensor(
-                                key=meas_format.device_class,
-                                native_value=bool(value),
-                                device_class=meas_format.device_class,
-                            )
+                if type(meas_format) == BaseSensorDescription and meas_format.device_class:
+                    self.update_sensor(
+                        key=str(meas_format.device_class),
+                        native_unit_of_measurement=meas_format.native_unit_of_measurement,
+                        native_value=value,
+                        device_class=meas_format.device_class,
+                    )
+                elif type(meas_format) == BaseBinarySensorDescription and meas_format.device_class:
+                    self.update_binary_sensor(
+                        key=str(meas_format.device_class),
+                        device_class=meas_format.device_class,
+                        native_value=bool(value),
+                    )
                 result = True
             elif meas_str is not None:
                 _LOGGER.debug(
