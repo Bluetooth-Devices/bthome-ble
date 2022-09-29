@@ -6,7 +6,7 @@ import binascii
 from Cryptodome.Cipher import AES
 
 
-def parse_value(data: bytes) -> dict:
+def parse_value(data: bytes) -> dict[str, float]:
     """Parse decrypted payload to readable BTHome data"""
     vlength = len(data)
     if vlength >= 3:
@@ -20,7 +20,7 @@ def parse_value(data: bytes) -> dict:
 
 def decrypt_payload(
     payload: bytes, mic: bytes, key: bytes, nonce: bytes
-) -> dict | None:
+) -> dict[str, float] | None:
     """Decrypt payload."""
     print("Nonce:", nonce.hex())
     print("CryptData:", payload.hex())
@@ -40,7 +40,9 @@ def decrypt_payload(
     return parse_value(data=data)
 
 
-def decrypt_aes_ccm(key: bytes, mac: bytes, data: bytes) -> dict | None:
+def decrypt_aes_ccm(
+    key: bytes, mac: bytes, data: bytes
+) -> dict[str, float] | None:
     """Decrypt AES CCM."""
     print("MAC:", mac.hex())
     print("Bindkey:", key.hex())
@@ -78,7 +80,7 @@ def encrypt_payload(
 # =============================
 # main()
 # =============================
-def main():
+def main() -> None:
     """Example to encrypt and decrypt BTHome payload."""
     print()
     print("====== Test encode -----------------------------------------")
