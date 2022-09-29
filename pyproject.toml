@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "bthome-ble"
-version = "1.2.2"
+version = "1.2.3"
 description = "BThome BLE support"
 authors = ["Ernst Klamer <e.klamer@gmail.com>"]
 license = "MIT"

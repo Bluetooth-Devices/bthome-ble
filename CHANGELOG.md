@@ -2,6 +2,17 @@
 
 <!--next-version-placeholder-->
 
+## v1.2.3 (2022-09-29)
+### Fix
+* Add missing comma ([`0f889e6`](https://github.com/Bluetooth-Devices/bthome-ble/commit/0f889e62b83247e7d0bb6f7edfeb695691a5f782))
+* Remove unused imports ([`8f45606`](https://github.com/Bluetooth-Devices/bthome-ble/commit/8f45606d106f7cd43a1875c8d36226ab73745ede))
+* Add test for encryption example ([`c323a31`](https://github.com/Bluetooth-Devices/bthome-ble/commit/c323a31355592947f4c00cb0b6061f175f3a0686))
+* Fix formatting issues ([`47017b6`](https://github.com/Bluetooth-Devices/bthome-ble/commit/47017b6ed584a49a4ee2aa85ee678f3de2cd120b))
+* Fix annotation ([`1bc8f72`](https://github.com/Bluetooth-Devices/bthome-ble/commit/1bc8f72de8d807c333dc8ba767c5a0c2043dc4b1))
+* Fix formatting issues ([`801679e`](https://github.com/Bluetooth-Devices/bthome-ble/commit/801679eda2524f01d48e76cab6bf5310ade682ec))
+* Remove use of predefined sensor wrapper ([`377adaa`](https://github.com/Bluetooth-Devices/bthome-ble/commit/377adaa576b03a76340570729dfd4ac2bf019b36))
+* Remove unused lists ([`fd08fae`](https://github.com/Bluetooth-Devices/bthome-ble/commit/fd08faee434bc3b66aec241627407edc3eab4d80))
+
 ## v1.2.2 (2022-09-14)
 ### Fix
 * Remove update binary sensor ([`e529f89`](https://github.com/Bluetooth-Devices/bthome-ble/commit/e529f899eb7b9f38b65c36f5cc46d3df41e91f75))
