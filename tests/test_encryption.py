@@ -17,5 +17,5 @@ def test_encryption_example():
     )
     assert decrypt_aes_ccm(key=bindkey, mac=mac, data=payload) == {
         "humidity": 50.55,
-        "temperature": 25.06
+        "temperature": 25.06,
     }
