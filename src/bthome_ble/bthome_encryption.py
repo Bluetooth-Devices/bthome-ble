@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import binascii
+
 from Cryptodome.Cipher import AES
 
 
@@ -17,7 +18,9 @@ def parse_value(data: bytes) -> dict:
     return {}
 
 
-def decrypt_payload(payload: bytes, mic: bytes, key: bytes, nonce: bytes) -> dict | None:
+def decrypt_payload(
+    payload: bytes, mic: bytes, key: bytes, nonce: bytes
+) -> dict | None:
     """Decrypt payload."""
     print("Nonce:", nonce.hex())
     print("CryptData:", payload.hex())
@@ -43,7 +46,7 @@ def decrypt_aes_ccm(key: bytes, mac: bytes, data: bytes) -> dict | None:
     print("Bindkey:", key.hex())
     adslength = len(data)
     if adslength > 15 and data[0] == 0x1E and data[1] == 0x18:
-        pkt = data[:data[0] + 1]
+        pkt = data[: data[0] + 1]
         uuid = pkt[0:2]
         encrypted_data = pkt[2:-8]
         count_id = pkt[-8:-4]
@@ -56,7 +59,9 @@ def decrypt_aes_ccm(key: bytes, mac: bytes, data: bytes) -> dict | None:
     return None
 
 
-def encrypt_payload(data: bytes, mac: bytes, uuid16: bytes, count_id: bytes, key: bytes) -> bytes:
+def encrypt_payload(
+    data: bytes, mac: bytes, uuid16: bytes, count_id: bytes, key: bytes
+) -> bytes:
     """Encrypt payload."""
     nonce = b"".join([mac, uuid16, count_id])  # 6+2+4 = 12 bytes
     cipher = AES.new(key, AES.MODE_CCM, nonce=nonce, mac_len=4)
@@ -77,15 +82,15 @@ def main():
     """Example to encrypt and decrypt BTHome payload."""
     print()
     print("====== Test encode -----------------------------------------")
-    data = bytes(bytearray.fromhex('2302CA090303BF13'))  # BTHome data (not encrypted)
+    data = bytes(bytearray.fromhex("2302CA090303BF13"))  # BTHome data (not encrypted)
     parse_value(data)  # Print temperature and humidity
 
     print()
     print("Preparing data for encryption")
-    count_id = bytes(bytearray.fromhex('00112233'))  # count id (change every message)
-    mac = binascii.unhexlify('5448E68F80A5')  # MAC
+    count_id = bytes(bytearray.fromhex("00112233"))  # count id (change every message)
+    mac = binascii.unhexlify("5448E68F80A5")  # MAC
     uuid16 = b"\x1E\x18"
-    bindkey = binascii.unhexlify('231d39c1d7cc1ab1aee224cd096db932')
+    bindkey = binascii.unhexlify("231d39c1d7cc1ab1aee224cd096db932")
 
     payload = encrypt_payload(
         data=data, mac=mac, uuid16=uuid16, count_id=count_id, key=bindkey
@@ -97,5 +102,5 @@ def main():
     decrypt_aes_ccm(key=bindkey, mac=mac, data=payload)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
