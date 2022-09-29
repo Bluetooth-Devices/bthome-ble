@@ -1,11 +1,8 @@
 """Tests for the parser of BLE advertisements in BTHome format."""
-import logging
-from unittest.mock import patch
-
 import binascii
-import pytest
 
-from bthome_ble.bthome_encryption import decrypt_aes_ccm, encrypt_payload, parse_value
+from bthome_ble.bthome_encryption import decrypt_aes_ccm, encrypt_payload
+
 
 def test_encryption_example():
     """Test BTHome encryption example."""
@@ -19,6 +16,6 @@ def test_encryption_example():
         data=data, mac=mac, uuid16=uuid16, count_id=count_id, key=bindkey
     )
     assert decrypt_aes_ccm(key=bindkey, mac=mac, data=payload) == {
-        'humidity': 50.55,
-        'temperature': 25.06
+        "humidity": 50.55,
+        "temperature": 25.06
     }
