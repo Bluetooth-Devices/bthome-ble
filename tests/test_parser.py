@@ -9,6 +9,7 @@ from sensor_state_data import (
     BinarySensorDeviceClass,
     BinarySensorValue,
     DeviceKey,
+    Event,
     SensorDescription,
     SensorDeviceClass,
     SensorDeviceInfo,
@@ -23,6 +24,7 @@ KEY_BINARY_GENERIC = DeviceKey(key="generic", device_id=None)
 KEY_BINARY_OPENING = DeviceKey(key="opening", device_id=None)
 KEY_BINARY_POWER = DeviceKey(key="power", device_id=None)
 KEY_CO2 = DeviceKey(key="carbon_dioxide", device_id=None)
+KEY_DIMMER = DeviceKey(key="dimmer", device_id=None)
 KEY_COUNT = DeviceKey(key="count", device_id=None)
 KEY_DEW_POINT = DeviceKey(key="dew_point", device_id=None)
 KEY_ENERGY = DeviceKey(key="energy", device_id=None)
@@ -35,6 +37,7 @@ KEY_PM10 = DeviceKey(key="pm10", device_id=None)
 KEY_POWER = DeviceKey(key="power", device_id=None)
 KEY_PRESSURE = DeviceKey(key="pressure", device_id=None)
 KEY_SIGNAL_STRENGTH = DeviceKey(key="signal_strength", device_id=None)
+KEY_SWITCH = DeviceKey(key="switch", device_id=None)
 KEY_TEMPERATURE = DeviceKey(key="temperature", device_id=None)
 KEY_VOC = DeviceKey(key="volatile_organic_compounds", device_id=None)
 KEY_VOLTAGE = DeviceKey(key="voltage", device_id=None)
@@ -281,7 +284,7 @@ def test_bthome_temperature_humidity(caplog):
 
 def test_bthome_temperature_humidity_battery(caplog):
     """Test BTHome parser for temperature humidity battery reading."""
-    data_string = b"\x02\x00\xa8#\x02]\t\x03\x03\xb7\x18\x02\x01]"
+    data_string = b"#\x02]\t\x03\x03\xb7\x18\x02\x01]"
     advertisement = bytes_to_service_info(
         data_string, local_name="ATC_8D18B2", address="A4:C1:38:8D:18:B2"
     )
@@ -339,7 +342,7 @@ def test_bthome_temperature_humidity_battery(caplog):
 
 def test_bthome_pressure(caplog):
     """Test BTHome parser for pressure reading without encryption."""
-    data_string = b"\x02\x00\x0c\x04\x04\x13\x8a\x01"
+    data_string = b"\x04\x04\x13\x8a\x01"
     advertisement = bytes_to_service_info(
         data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
     )
@@ -1018,6 +1021,86 @@ def test_bthome_moisture(caplog):
             ),
             KEY_SIGNAL_STRENGTH: SensorValue(
                 device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+    )
+
+
+def test_bthome_event_switch_single_press(caplog):
+    """Test BTHome parser for an event of a single press of a switch without encryption."""
+    data_string = b"\x02\x3B\x05"
+    advertisement = bytes_to_service_info(
+        data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
+    )
+
+    device = BTHomeBluetoothDeviceData()
+
+    assert device.update(advertisement) == SensorUpdate(
+        title="TEST DEVICE 18B2",
+        devices={
+            None: SensorDeviceInfo(
+                name="TEST DEVICE 18B2",
+                manufacturer=None,
+                model="BTHome sensor",
+                sw_version="BTHome BLE",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            KEY_SIGNAL_STRENGTH: SensorDescription(
+                device_key=KEY_SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
+            KEY_SIGNAL_STRENGTH: SensorValue(
+                device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+        events={
+            KEY_SWITCH: Event(
+                device_key=KEY_SWITCH, name="Switch", event_type="single_press", event_subtype=None,
+            ),
+        },
+    )
+
+
+def test_bthome_event_dimmer_rotate_left_3_steps(caplog):
+    """Test BTHome parser for an event rotating a dimmer 3 steps left without encryption."""
+    data_string = b"\x03\x3C\x0C\x03"
+    advertisement = bytes_to_service_info(
+        data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
+    )
+
+    device = BTHomeBluetoothDeviceData()
+
+    assert device.update(advertisement) == SensorUpdate(
+        title="TEST DEVICE 18B2",
+        devices={
+            None: SensorDeviceInfo(
+                name="TEST DEVICE 18B2",
+                manufacturer=None,
+                model="BTHome sensor",
+                sw_version="BTHome BLE",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            KEY_SIGNAL_STRENGTH: SensorDescription(
+                device_key=KEY_SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
+            KEY_SIGNAL_STRENGTH: SensorValue(
+                device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+        events={
+            KEY_DIMMER: Event(
+                device_key=KEY_DIMMER, name="Dimmer", event_type="rotate_left", event_subtype="3",
             ),
         },
     )
