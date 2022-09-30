@@ -26,7 +26,7 @@ from sensor_state_data.description import (
 )
 
 from .const import MEAS_TYPES
-from .event import EVENT_TYPES, EventTypes, EventDeviceKeys
+from .event import EVENT_TYPES, EventDeviceKeys
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -92,7 +92,8 @@ def parse_mac(data_obj: bytes) -> bytes | None:
 
 def parse_event_subtype(event_type: str, data_obj: bytes) -> str | None:
     """Convert bytes to a sub event for devices."""
-    if event_type in [EventTypes.ROTATE_LEFT, EventTypes.ROTATE_RIGHT]:
+    if event_type in ["rotate_left", "rotate_right"]:
+        # number of steps for rotating a dimmer
         return str(int.from_bytes(data_obj, "little", signed=True))
     else:
         return None
