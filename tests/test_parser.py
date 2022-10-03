@@ -1060,7 +1060,10 @@ def test_bthome_event_switch_single_press(caplog):
         },
         events={
             KEY_SWITCH: Event(
-                device_key=KEY_SWITCH, name="Switch", event_type="single_press", event_subtype=None,
+                device_key=KEY_SWITCH,
+                name="Switch",
+                event_type="single_press",
+                event_properties=None,
             ),
         },
     )
@@ -1100,7 +1103,10 @@ def test_bthome_event_dimmer_rotate_left_3_steps(caplog):
         },
         events={
             KEY_DIMMER: Event(
-                device_key=KEY_DIMMER, name="Dimmer", event_type="rotate_left", event_subtype="3",
+                device_key=KEY_DIMMER,
+                name="Dimmer",
+                event_type="rotate_left",
+                event_properties={"steps": 3},
             ),
         },
     )

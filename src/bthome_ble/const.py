@@ -236,13 +236,7 @@ MEAS_TYPES: dict[int, MeasTypes] = {
         meas_format=SensorLibrary.MOISTURE__PERCENTAGE,
         factor=1,
     ),
-    0x3A: MeasTypes(
-        meas_format=EventDeviceKeys.BUTTON
-    ),
-    0x3B: MeasTypes(
-        meas_format=EventDeviceKeys.SWITCH,
-    ),
-    0x3C: MeasTypes(
-        meas_format=EventDeviceKeys.DIMMER,
-    ),
+    0x3A: MeasTypes(meas_format=EventDeviceKeys.BUTTON),
+    0x3B: MeasTypes(meas_format=EventDeviceKeys.SWITCH),
+    0x3C: MeasTypes(meas_format=EventDeviceKeys.DIMMER),
 }

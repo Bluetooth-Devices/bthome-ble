@@ -26,7 +26,7 @@ from sensor_state_data.description import (
 )
 
 from .const import MEAS_TYPES
-from .event import EVENT_TYPES, EventTypes, EventDeviceKeys
+from .event import EVENT_TYPES, EventDeviceKeys
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -90,10 +90,13 @@ def parse_mac(data_obj: bytes) -> bytes | None:
         return None
 
 
-def parse_event_subtype(event_type: str, data_obj: bytes) -> str | None:
-    """Convert bytes to a sub event for devices."""
-    if event_type in [EventTypes.ROTATE_LEFT, EventTypes.ROTATE_RIGHT]:
-        return str(int.from_bytes(data_obj, "little", signed=True))
+def parse_event_properties(
+    event_type: str, data_obj: bytes
+) -> dict[str, str | int | float] | None:
+    """Convert bytes to event properties."""
+    if event_type in ["rotate_left", "rotate_right"]:
+        # number of steps for rotating a dimmer
+        return {"steps": int.from_bytes(data_obj, "little", signed=True)}
     else:
         return None
 
@@ -300,13 +303,15 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                     )
                 elif type(meas_format) == EventDeviceKeys:
                     event_type = EVENT_TYPES[meas_data[0]]
-                    event_subtype = None
+                    event_properties = None
                     if len(meas_data) >= 2:
-                        event_subtype = parse_event_subtype(event_type, meas_data[1:])
+                        event_properties = parse_event_properties(
+                            event_type, meas_data[1:]
+                        )
                     self.fire_event(
                         key=str(meas_format),
                         event_type=event_type,
-                        event_subtype=event_subtype,
+                        event_properties=event_properties,
                     )
                 result = True
             elif meas_str is not None:
