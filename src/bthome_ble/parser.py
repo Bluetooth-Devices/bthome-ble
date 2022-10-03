@@ -26,6 +26,7 @@ from sensor_state_data.description import (
 )
 
 from .const import MEAS_TYPES
+from .event import EVENT_TYPES, EventDeviceKeys
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -86,6 +87,17 @@ def parse_mac(data_obj: bytes) -> bytes | None:
         return data_obj[::-1]
     else:
         _LOGGER.error("MAC address has to be 6 bytes long")
+        return None
+
+
+def parse_event_properties(
+    event_type: str, data_obj: bytes
+) -> dict[str, str | int | float] | None:
+    """Convert bytes to event properties."""
+    if event_type in ["rotate_left", "rotate_right"]:
+        # number of steps for rotating a dimmer
+        return {"steps": int.from_bytes(data_obj, "little", signed=True)}
+    else:
         return None
 
 
@@ -246,7 +258,8 @@ class BTHomeBluetoothDeviceData(BluetoothData):
 
             if obj_meas_type not in MEAS_TYPES:
                 _LOGGER.debug(
-                    "UNKNOWN measurement type in BTHome BLE payload! Adv: %s",
+                    "UNKNOWN measurement type %s in BTHome BLE payload! Adv: %s",
+                    obj_meas_type,
                     data.hex(),
                 )
                 continue
@@ -287,6 +300,18 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                         key=str(meas_format.device_class),
                         device_class=meas_format.device_class,
                         native_value=bool(value),
+                    )
+                elif type(meas_format) == EventDeviceKeys:
+                    event_type = EVENT_TYPES[meas_data[0]]
+                    event_properties = None
+                    if len(meas_data) >= 2:
+                        event_properties = parse_event_properties(
+                            event_type, meas_data[1:]
+                        )
+                    self.fire_event(
+                        key=str(meas_format),
+                        event_type=event_type,
+                        event_properties=event_properties,
                     )
                 result = True
             elif meas_str is not None:

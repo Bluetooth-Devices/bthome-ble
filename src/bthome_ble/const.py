@@ -4,11 +4,15 @@ from typing import Union
 
 from sensor_state_data import BinarySensorDeviceClass, SensorLibrary, description
 
+from .event import EventDeviceKeys
+
 
 @dataclasses.dataclass
 class MeasTypes:
     meas_format: Union[
-        description.BaseSensorDescription, description.BaseBinarySensorDescription
+        EventDeviceKeys,
+        description.BaseBinarySensorDescription,
+        description.BaseSensorDescription,
     ]
     factor: float = 1
 
@@ -224,4 +228,15 @@ MEAS_TYPES: dict[int, MeasTypes] = {
             device_class=BinarySensorDeviceClass.WINDOW,
         )
     ),
+    0x2E: MeasTypes(
+        meas_format=SensorLibrary.HUMIDITY__PERCENTAGE,
+        factor=1,
+    ),
+    0x2F: MeasTypes(
+        meas_format=SensorLibrary.MOISTURE__PERCENTAGE,
+        factor=1,
+    ),
+    0x3A: MeasTypes(meas_format=EventDeviceKeys.BUTTON),
+    0x3B: MeasTypes(meas_format=EventDeviceKeys.SWITCH),
+    0x3C: MeasTypes(meas_format=EventDeviceKeys.DIMMER),
 }
