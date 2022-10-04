@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v1.3.0 (2022-10-04)
+### Feature
+* Force new release adding events ([`8ae802a`](https://github.com/Bluetooth-Devices/bthome-ble/commit/8ae802a6a34eb9419504347a5a498bf9617063d1))
+
 ## v1.2.3 (2022-09-29)
 ### Fix
 * Add missing comma ([`0f889e6`](https://github.com/Bluetooth-Devices/bthome-ble/commit/0f889e62b83247e7d0bb6f7edfeb695691a5f782))
