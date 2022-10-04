@@ -1070,7 +1070,7 @@ def test_bthome_event_switch_single_press(caplog):
 
 
 def test_bthome_event_dimmer_rotate_left_3_steps(caplog):
-    """Test BTHome parser for an event rotating a dimmer 3 steps left without encryption."""
+    """Test BTHome parser for an event rotating a dimmer 3 steps left."""
     data_string = b"\x03\x3C\x0C\x03"
     advertisement = bytes_to_service_info(
         data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
