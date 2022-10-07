@@ -1,4 +1,4 @@
-"""Tests for the parser of BLE advertisements in BTHome format."""
+"""Tests for the parser of BLE advertisements in BTHome V1 format."""
 import logging
 from unittest.mock import patch
 
@@ -141,7 +141,7 @@ def test_bindkey_wrong():
                 name="ATC 18B2",
                 manufacturer="Xiaomi",
                 model="BTHome sensor",
-                sw_version="BTHome BLE (encrypted)",
+                sw_version="BTHome BLE v1 (encrypted)",
                 hw_version=None,
             )
         },
@@ -180,7 +180,7 @@ def test_bindkey_correct():
                 name="TEST DEVICE 80A5",
                 manufacturer=None,
                 model="BTHome sensor",
-                sw_version="BTHome BLE (encrypted)",
+                sw_version="BTHome BLE v1 (encrypted)",
                 hw_version=None,
             )
         },
@@ -247,7 +247,7 @@ def test_bthome_temperature_humidity(caplog):
                 name="ATC 18B2",
                 manufacturer="Xiaomi",
                 model="BTHome sensor",
-                sw_version="BTHome BLE",
+                sw_version="BTHome BLE v1",
                 hw_version=None,
             )
         },
@@ -297,7 +297,7 @@ def test_bthome_temperature_humidity_battery(caplog):
                 name="ATC 18B2",
                 manufacturer="Xiaomi",
                 model="BTHome sensor",
-                sw_version="BTHome BLE",
+                sw_version="BTHome BLE v1",
                 hw_version=None,
             )
         },
@@ -355,7 +355,7 @@ def test_bthome_pressure(caplog):
                 name="TEST DEVICE 18B2",
                 manufacturer=None,
                 model="BTHome sensor",
-                sw_version="BTHome BLE",
+                sw_version="BTHome BLE v1",
                 hw_version=None,
             )
         },
@@ -397,7 +397,7 @@ def test_bthome_illuminance(caplog):
                 name="TEST DEVICE 18B2",
                 manufacturer=None,
                 model="BTHome sensor",
-                sw_version="BTHome BLE",
+                sw_version="BTHome BLE v1",
                 hw_version=None,
             )
         },
@@ -439,7 +439,7 @@ def test_bthome_mass_kilograms(caplog):
                 name="TEST DEVICE 18B2",
                 manufacturer=None,
                 model="BTHome sensor",
-                sw_version="BTHome BLE",
+                sw_version="BTHome BLE v1",
                 hw_version=None,
             )
         },
@@ -479,7 +479,7 @@ def test_bthome_mass_pounds(caplog):
                 name="TEST DEVICE 18B2",
                 manufacturer=None,
                 model="BTHome sensor",
-                sw_version="BTHome BLE",
+                sw_version="BTHome BLE v1",
                 hw_version=None,
             )
         },
@@ -519,7 +519,7 @@ def test_bthome_dew_point(caplog):
                 name="TEST DEVICE 18B2",
                 manufacturer=None,
                 model="BTHome sensor",
-                sw_version="BTHome BLE",
+                sw_version="BTHome BLE v1",
                 hw_version=None,
             )
         },
@@ -561,7 +561,7 @@ def test_bthome_count(caplog):
                 name="TEST DEVICE 18B2",
                 manufacturer=None,
                 model="BTHome sensor",
-                sw_version="BTHome BLE",
+                sw_version="BTHome BLE v1",
                 hw_version=None,
             )
         },
@@ -601,7 +601,7 @@ def test_bthome_energy(caplog):
                 name="TEST DEVICE 18B2",
                 manufacturer=None,
                 model="BTHome sensor",
-                sw_version="BTHome BLE",
+                sw_version="BTHome BLE v1",
                 hw_version=None,
             )
         },
@@ -643,7 +643,7 @@ def test_bthome_power(caplog):
                 name="TEST DEVICE 18B2",
                 manufacturer=None,
                 model="BTHome sensor",
-                sw_version="BTHome BLE",
+                sw_version="BTHome BLE v1",
                 hw_version=None,
             )
         },
@@ -685,7 +685,7 @@ def test_bthome_voltage(caplog):
                 name="TEST DEVICE 18B2",
                 manufacturer=None,
                 model="BTHome sensor",
-                sw_version="BTHome BLE",
+                sw_version="BTHome BLE v1",
                 hw_version=None,
             )
         },
@@ -728,7 +728,7 @@ def test_bthome_binary_sensor(caplog):
                 name="TEST DEVICE 18B2",
                 manufacturer=None,
                 model="BTHome sensor",
-                sw_version="BTHome BLE",
+                sw_version="BTHome BLE v1",
                 hw_version=None,
             )
         },
@@ -774,7 +774,7 @@ def test_bthome_binary_sensor_power(caplog):
                 name="TEST DEVICE 18B2",
                 manufacturer=None,
                 model="BTHome sensor",
-                sw_version="BTHome BLE",
+                sw_version="BTHome BLE v1",
                 hw_version=None,
             )
         },
@@ -820,7 +820,7 @@ def test_bthome_binary_sensor_opening(caplog):
                 name="TEST DEVICE 18B2",
                 manufacturer=None,
                 model="BTHome sensor",
-                sw_version="BTHome BLE",
+                sw_version="BTHome BLE v1",
                 hw_version=None,
             )
         },
@@ -865,7 +865,7 @@ def test_bthome_pm(caplog):
                 name="TEST DEVICE 18B2",
                 manufacturer=None,
                 model="BTHome sensor",
-                sw_version="BTHome BLE",
+                sw_version="BTHome BLE v1",
                 hw_version=None,
             )
         },
@@ -915,7 +915,7 @@ def test_bthome_co2(caplog):
                 name="TEST DEVICE 18B2",
                 manufacturer=None,
                 model="BTHome sensor",
-                sw_version="BTHome BLE",
+                sw_version="BTHome BLE v1",
                 hw_version=None,
             )
         },
@@ -957,7 +957,7 @@ def test_bthome_voc(caplog):
                 name="TEST DEVICE 18B2",
                 manufacturer=None,
                 model="BTHome sensor",
-                sw_version="BTHome BLE",
+                sw_version="BTHome BLE v1",
                 hw_version=None,
             )
         },
@@ -999,7 +999,7 @@ def test_bthome_moisture(caplog):
                 name="b-parasite 18B2",
                 manufacturer="b-parasite",
                 model="BTHome sensor",
-                sw_version="BTHome BLE",
+                sw_version="BTHome BLE v1",
                 hw_version=None,
             )
         },
@@ -1042,7 +1042,7 @@ def test_bthome_event_switch_single_press(caplog):
                 name="TEST DEVICE 18B2",
                 manufacturer=None,
                 model="BTHome sensor",
-                sw_version="BTHome BLE",
+                sw_version="BTHome BLE v1",
                 hw_version=None,
             )
         },
@@ -1085,7 +1085,7 @@ def test_bthome_event_dimmer_rotate_left_3_steps(caplog):
                 name="TEST DEVICE 18B2",
                 manufacturer=None,
                 model="BTHome sensor",
-                sw_version="BTHome BLE",
+                sw_version="BTHome BLE v1",
                 hw_version=None,
             )
         },
