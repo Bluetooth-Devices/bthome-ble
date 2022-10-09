@@ -82,15 +82,6 @@ def parse_string(data_obj: bytes) -> str:
     return data_obj.decode("UTF-8")
 
 
-def parse_mac(data_obj: bytes) -> bytes | None:
-    """Convert bytes to mac."""
-    if len(data_obj) == 6:
-        return data_obj[::-1]
-    else:
-        _LOGGER.error("MAC address has to be 6 bytes long")
-        return None
-
-
 def parse_event_properties(
     event_type: str, data_obj: bytes
 ) -> dict[str, str | int | float | None] | None:
@@ -245,6 +236,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         else:
             self.encryption_scheme = EncryptionScheme.NONE
 
+        # Check BTHome version
         sw_version = (adv_info >> 5) & 7  # 3 bits (5-7)
 
         if sw_version == 2:
@@ -291,6 +283,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                 self.mac_known = True
             source_mac = bytes.fromhex(mac_readable.replace(":", ""))
 
+            # Decode encrypted payload
             try:
                 payload = self._decrypt_bthome(payload, source_mac)
             except (ValueError, TypeError):
@@ -300,39 +293,25 @@ class BTHomeBluetoothDeviceData(BluetoothData):
 
     def _parse_payload(self, payload: bytes) -> bool:
         payload_length = len(payload)
-        next_start = 0
+        next_obj_start = 0
         result = False
 
-        while payload_length >= next_start + 1:
-            payload_start = next_start
+        while payload_length >= next_obj_start + 1:
+            obj_start = next_obj_start
 
-            obj_control_byte = payload[payload_start]
+            obj_control_byte = payload[obj_start]
+            obj_meas_type = payload[obj_start + 1]
             obj_data_length = (obj_control_byte >> 0) & 31  # 5 bits (0-4)
             obj_data_format = (obj_control_byte >> 5) & 7  # 3 bits (5-7)
-            obj_meas_type = payload[payload_start + 1]
-            next_start = payload_start + 1 + obj_data_length
 
-            if payload_length < next_start:
+            obj_end = obj_start + obj_data_length
+            next_obj_start = obj_end + 1
+
+            if payload_length < next_obj_start:
                 _LOGGER.debug("Invalid payload data length, payload: %s", payload.hex())
                 break
 
             if obj_data_length == 0:
-                continue
-
-            if obj_data_format == 4:
-                # Using a different MAC address than the source mac address
-                # is not supported yet
-                mac_start = payload_start + 1
-                data_mac = parse_mac(payload[mac_start:next_start])
-                if data_mac:
-                    bthome_ble_mac = data_mac  # noqa: F841
-                continue
-
-            elif obj_data_format > 4:
-                _LOGGER.error(
-                    "UNKNOWN dataobject in BTHome BLE payload! Adv: %s",
-                    payload.hex(),
-                )
                 continue
 
             if obj_meas_type not in MEAS_TYPES:
@@ -343,13 +322,12 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                 )
                 continue
 
-            next_payload = payload_start + 2
-            meas_data = payload[next_payload:next_start]
+            meas_data_start = obj_start + 2
+            meas_data = payload[meas_data_start:next_obj_start]
             meas_type = MEAS_TYPES[obj_meas_type]
             meas_format = meas_type.meas_format
             meas_factor = meas_type.factor
-            value = None
-            meas_str = None
+            value: None | str | int | float
 
             if obj_data_format == 0:
                 value = parse_uint(meas_data, meas_factor)
@@ -358,7 +336,13 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             elif obj_data_format == 2:
                 value = parse_float(meas_data, meas_factor)
             elif obj_data_format == 3:
-                meas_str = parse_string(meas_data)
+                value = parse_string(meas_data)
+            else:
+                _LOGGER.error(
+                    "UNKNOWN dataobject in BTHome BLE payload! Adv: %s",
+                    payload.hex(),
+                )
+                continue
 
             if value is not None:
                 if (
@@ -393,11 +377,6 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                         event_properties=event_properties,
                     )
                 result = True
-            elif meas_str is not None:
-                _LOGGER.debug(
-                    "String data type not supported yet! Adv: %s",
-                    payload.hex(),
-                )
             else:
                 _LOGGER.debug(
                     "UNKNOWN dataobject in BTHome BLE payload! Adv: %s",
