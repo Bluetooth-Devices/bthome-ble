@@ -170,9 +170,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             service_info.address.replace("-", "").replace(":", "")[-6:].upper()
         )
         if name[-6:] == atc_identifier:
-            name = name[:-6]
-            if name[-1:] in ("_", " "):
-                name = name[:-1]
+            name = name[:-6].rstrip(" _")
 
         # Try to get manufacturer
         if name.startswith(("ATC", "LYWSD03MMC")):
@@ -235,9 +233,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             service_info.address.replace("-", "").replace(":", "")[-6:].upper()
         )
         if name[-6:] == atc_identifier:
-            name = name[:-6]
-            if name[-1:] in ("_", " "):
-                name = name[:-1]
+            name = name[:-6].rstrip(" _")
 
         adv_info = data[0]
 
