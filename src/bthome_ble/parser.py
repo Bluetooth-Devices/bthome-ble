@@ -26,7 +26,6 @@ from sensor_state_data.description import (
 )
 
 from .const import MEAS_TYPES
-from .devices import DEVICE_TYPES
 from .event import EVENT_TYPES, EventDeviceKeys
 
 _LOGGER = logging.getLogger(__name__)
@@ -171,9 +170,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             service_info.address.replace("-", "").replace(":", "")[-6:].upper()
         )
         if name[-6:] == atc_identifier:
-            name = name[:-6]
-            if name[-1:] in ("_", " "):
-                name = name[:-1]
+            name = name[:-6].rstrip(" _")
 
         # Try to get manufacturer
         if name.startswith(("ATC", "LYWSD03MMC")):
@@ -228,17 +225,27 @@ class BTHomeBluetoothDeviceData(BluetoothData):
     ) -> bool:
         """Parser for BTHome sensors version V2"""
         identifier = short_address(service_info.address)
+        if name == service_info.address:
+            name = "BTHome sensor"
+
+        # Remove identifier from ATC sensors name.
+        atc_identifier = (
+            service_info.address.replace("-", "").replace(":", "")[-6:].upper()
+        )
+        if name[-6:] == atc_identifier:
+            name = name[:-6].rstrip(" _")
+
         adv_info = data[0]
 
         # Determine if encryption is used
-        if adv_info & (1 << 0) == 1:
+        encryption = adv_info & (1 << 0)  # bit 0
+        if encryption == 1:
             self.encryption_scheme = EncryptionScheme.BTHOME_BINDKEY
         else:
             self.encryption_scheme = EncryptionScheme.NONE
 
         # Check BTHome version
         sw_version = (adv_info >> 5) & 7  # 3 bits (5-7)
-
         if sw_version == 2:
             if self.encryption_scheme == EncryptionScheme.BTHOME_BINDKEY:
                 self.set_device_sw_version(f"BTHome BLE v{sw_version} (encrypted)")
@@ -252,26 +259,37 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             )
             return False
 
-        # Determine device information (predefined or from local name)
-        if adv_info & (1 << 1) == 2:
-            # Use predefined device information from devices.py
-            device_type = int.from_bytes(data[1:3], "little", signed=False)
-            if device_type in DEVICE_TYPES:
-                device_info = DEVICE_TYPES[device_type]
-            else:
-                _LOGGER.error("Unknown device type found with id: %s", device_type)
-                return False
-            self.set_device_name(f"{device_info.name} {identifier}")
-            self.set_title(f"{device_info.name} {identifier}")
-            self.set_device_type(device_info.model)
-            self.set_device_manufacturer(device_info.manufacturer)
-            payload = data[3:]
+        # Try to get manufacturer based on the name
+        if name.startswith(("ATC", "LYWSD03MMC")):
+            manufacturer = "Xiaomi"
+        elif name.startswith("prst"):
+            manufacturer = "b-parasite"
+            name = "b-parasite"
+        else:
+            manufacturer = None
+
+        if manufacturer:
+            self.set_device_manufacturer(manufacturer)
+
+        # Get device information
+        device_info_available = adv_info & (1 << 1)  # bit 1
+        if device_info_available == 2:
+            # ToDo: read GATT characteristics to get device information
+            _LOGGER.debug(
+                "Reading device info from GATT characteristics is not implemented yet."
+                "Using device info based on the name"
+            )
+            # For now, we use the information from the name and identifier
+            self.set_device_name(f"{name} {identifier}")
+            self.set_title(f"{name} {identifier}")
+            self.set_device_type("BTHome sensor")
         else:
             # Get device information from local name and identifier
             self.set_device_name(f"{name} {identifier}")
             self.set_title(f"{name} {identifier}")
             self.set_device_type("BTHome sensor")
-            payload = data[1:]
+
+        payload = data[1:]
 
         if self.encryption_scheme == EncryptionScheme.BTHOME_BINDKEY:
             mac_readable = service_info.address
