@@ -307,6 +307,10 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             obj_meas_type = payload[obj_start + 1]
 
             if obj_data_length == 0:
+                _LOGGER.debug(
+                    "Invalid payload data length found with length 0, payload: %s",
+                    payload.hex(),
+                )
                 continue
 
             if payload_length < next_obj_start:
@@ -327,10 +331,13 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             )
 
         # Get a list of measurement types that are included more than once.
-        meas_list = []
+        seen_meas_types = set()
+        dup_meas_types = set()
         for meas in measurements:
-            meas_list.append(meas["measurement type"])
-        dup_meas_types = {x for x in meas_list if meas_list.count(x) > 1}
+            if meas["measurement type"] in seen_meas_types:
+                dup_meas_types.add(meas["measurement type"])
+            else:
+                seen_meas_types.add(meas["measurement type"])
 
         # Parse each object into readable information
         for meas in measurements:
@@ -344,11 +351,8 @@ class BTHomeBluetoothDeviceData(BluetoothData):
 
             if meas["measurement type"] in dup_meas_types:
                 # Add a device_id for advertisements with multiple measurements of the same type
-                if meas["measurement type"] not in device_id_dict:
-                    device_id_counter = 1
-                else:
-                    device_id_counter = device_id_dict[meas["measurement type"]] + 1
-                device_id_dict.update({meas["measurement type"]: device_id_counter})
+                device_id_counter = device_id_dict.get(meas["measurement type"], 0) + 1
+                device_id_dict[meas["measurement type"]] = device_id_counter
                 device_id = str(device_id_counter)
             else:
                 device_id = None
