@@ -474,7 +474,7 @@ def test_bthome_illuminance(caplog):
 
 def test_bthome_mass_kilograms(caplog):
     """Test BTHome parser for mass reading in kilograms without encryption."""
-    data_string = b"\x40\x03\x06\x5E\x1F"
+    data_string = b"\x42\x03\x06\x5E\x1F"
     advertisement = bytes_to_service_info(
         data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
     )
