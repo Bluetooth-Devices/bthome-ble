@@ -1169,3 +1169,153 @@ def test_bthome_event_dimmer_rotate_left_3_steps(caplog):
             ),
         },
     )
+
+
+def test_bthome_double_temperature(caplog):
+    """Test BTHome parser for double temperature reading without encryption."""
+    data_string = b"B\x01\x00#\x02\xca\t#\x02\xcf\t"
+    advertisement = bytes_to_service_info(
+        data_string, local_name="A4:C1:38:8D:18:B2", address="A4:C1:38:8D:18:B2"
+    )
+
+    device = BTHomeBluetoothDeviceData()
+    assert device.update(advertisement) == SensorUpdate(
+        title="ATC Temperature/Humidity Sensor 18B2",
+        devices={
+            None: SensorDeviceInfo(
+                name="ATC Temperature/Humidity Sensor 18B2",
+                manufacturer="pvvx",
+                model="LYWSD03MMC",
+                sw_version="BTHome BLE v2",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            DeviceKey(key="temperature", device_id="1"): SensorDescription(
+                device_key=DeviceKey(key="temperature", device_id="1"),
+                device_class=SensorDeviceClass.TEMPERATURE,
+                native_unit_of_measurement=Units.TEMP_CELSIUS,
+            ),
+            DeviceKey(key="temperature", device_id="2"): SensorDescription(
+                device_key=DeviceKey(key="temperature", device_id="2"),
+                device_class=SensorDeviceClass.TEMPERATURE,
+                native_unit_of_measurement=Units.TEMP_CELSIUS,
+            ),
+            KEY_SIGNAL_STRENGTH: SensorDescription(
+                device_key=KEY_SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
+            DeviceKey(key="temperature", device_id="1"): SensorValue(
+                device_key=DeviceKey(key="temperature", device_id="1"),
+                name="Temperature",
+                native_value=25.06,
+            ),
+            DeviceKey(key="temperature", device_id="2"): SensorValue(
+                device_key=DeviceKey(key="temperature", device_id="2"),
+                name="Temperature",
+                native_value=25.11,
+            ),
+            KEY_SIGNAL_STRENGTH: SensorValue(
+                device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+    )
+
+
+def test_bthome_tripple_temperature_double_humidity_battery(caplog):
+    """
+    Test BTHome parser for triple temperature, double humidity and
+    single battery reading without encryption.
+    """
+    data_string = (
+        b"B\x01\x00#\x02\xca\t#\x02\xcf\t#\x02"
+        b"\xcf\x08\x03\x03\xb7\x18\x03\x03\xb7\x17\x02\x01]"
+    )
+    advertisement = bytes_to_service_info(
+        data_string, local_name="A4:C1:38:8D:18:B2", address="A4:C1:38:8D:18:B2"
+    )
+
+    device = BTHomeBluetoothDeviceData()
+    assert device.update(advertisement) == SensorUpdate(
+        title="ATC Temperature/Humidity Sensor 18B2",
+        devices={
+            None: SensorDeviceInfo(
+                name="ATC Temperature/Humidity Sensor 18B2",
+                manufacturer="pvvx",
+                model="LYWSD03MMC",
+                sw_version="BTHome BLE v2",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            DeviceKey(key="temperature", device_id="1"): SensorDescription(
+                device_key=DeviceKey(key="temperature", device_id="1"),
+                device_class=SensorDeviceClass.TEMPERATURE,
+                native_unit_of_measurement=Units.TEMP_CELSIUS,
+            ),
+            DeviceKey(key="temperature", device_id="2"): SensorDescription(
+                device_key=DeviceKey(key="temperature", device_id="2"),
+                device_class=SensorDeviceClass.TEMPERATURE,
+                native_unit_of_measurement=Units.TEMP_CELSIUS,
+            ),
+            DeviceKey(key="temperature", device_id="3"): SensorDescription(
+                device_key=DeviceKey(key="temperature", device_id="3"),
+                device_class=SensorDeviceClass.TEMPERATURE,
+                native_unit_of_measurement=Units.TEMP_CELSIUS,
+            ),
+            DeviceKey(key="humidity", device_id="1"): SensorDescription(
+                device_key=DeviceKey(key="humidity", device_id="1"),
+                device_class=SensorDeviceClass.HUMIDITY,
+                native_unit_of_measurement=Units.PERCENTAGE,
+            ),
+            DeviceKey(key="humidity", device_id="2"): SensorDescription(
+                device_key=DeviceKey(key="humidity", device_id="2"),
+                device_class=SensorDeviceClass.HUMIDITY,
+                native_unit_of_measurement=Units.PERCENTAGE,
+            ),
+            KEY_BATTERY: SensorDescription(
+                device_key=KEY_BATTERY,
+                device_class=SensorDeviceClass.BATTERY,
+                native_unit_of_measurement=Units.PERCENTAGE,
+            ),
+            KEY_SIGNAL_STRENGTH: SensorDescription(
+                device_key=KEY_SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
+            DeviceKey(key="temperature", device_id="1"): SensorValue(
+                device_key=DeviceKey(key="temperature", device_id="1"),
+                name="Temperature",
+                native_value=25.06,
+            ),
+            DeviceKey(key="temperature", device_id="2"): SensorValue(
+                device_key=DeviceKey(key="temperature", device_id="2"),
+                name="Temperature",
+                native_value=25.11,
+            ),
+            DeviceKey(key="temperature", device_id="3"): SensorValue(
+                device_key=DeviceKey(key="temperature", device_id="3"),
+                name="Temperature",
+                native_value=22.55,
+            ),
+            DeviceKey(key="humidity", device_id="1"): SensorValue(
+                device_key=DeviceKey(key="humidity", device_id="1"),
+                name="Humidity",
+                native_value=63.27,
+            ),
+            DeviceKey(key="humidity", device_id="2"): SensorValue(
+                device_key=DeviceKey(key="humidity", device_id="2"),
+                name="Humidity",
+                native_value=60.71,
+            ),
+            KEY_BATTERY: SensorValue(KEY_BATTERY, name="Battery", native_value=93),
+            KEY_SIGNAL_STRENGTH: SensorValue(
+                device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+    )

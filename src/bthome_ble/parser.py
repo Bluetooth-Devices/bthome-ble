@@ -295,48 +295,81 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         payload_length = len(payload)
         next_obj_start = 0
         result = False
+        measurements: list[dict[str, Any]] = []
+        device_id_dict: dict[int, int] = {}
 
+        # Create a list with all individual objects
         while payload_length >= next_obj_start + 1:
             obj_start = next_obj_start
-
             obj_control_byte = payload[obj_start]
-            obj_meas_type = payload[obj_start + 1]
             obj_data_length = (obj_control_byte >> 0) & 31  # 5 bits (0-4)
             obj_data_format = (obj_control_byte >> 5) & 7  # 3 bits (5-7)
+            obj_meas_type = payload[obj_start + 1]
 
-            obj_end = obj_start + obj_data_length
-            next_obj_start = obj_end + 1
+            if obj_data_length == 0:
+                _LOGGER.debug(
+                    "Invalid payload data length found with length 0, payload: %s",
+                    payload.hex(),
+                )
+                continue
 
             if payload_length < next_obj_start:
                 _LOGGER.debug("Invalid payload data length, payload: %s", payload.hex())
                 break
 
-            if obj_data_length == 0:
-                continue
+            obj_data_start = obj_start + 2
+            obj_end = obj_start + obj_data_length
+            next_obj_start = obj_end + 1
+            measurements.append(
+                {
+                    "data format": obj_data_format,
+                    "data length": obj_data_length,
+                    "measurement type": obj_meas_type,
+                    "measurement data": payload[obj_data_start:next_obj_start],
+                    "device id": None,
+                }
+            )
 
-            if obj_meas_type not in MEAS_TYPES:
+        # Get a list of measurement types that are included more than once.
+        seen_meas_types = set()
+        dup_meas_types = set()
+        for meas in measurements:
+            if meas["measurement type"] in seen_meas_types:
+                dup_meas_types.add(meas["measurement type"])
+            else:
+                seen_meas_types.add(meas["measurement type"])
+
+        # Parse each object into readable information
+        for meas in measurements:
+            if meas["measurement type"] not in MEAS_TYPES:
                 _LOGGER.debug(
                     "UNKNOWN measurement type %s in BTHome BLE payload! Adv: %s",
-                    obj_meas_type,
+                    meas["measurement type"],
                     payload.hex(),
                 )
                 continue
 
-            meas_data_start = obj_start + 2
-            meas_data = payload[meas_data_start:next_obj_start]
-            meas_type = MEAS_TYPES[obj_meas_type]
+            if meas["measurement type"] in dup_meas_types:
+                # Add a device_id for advertisements with multiple measurements of the same type
+                device_id_counter = device_id_dict.get(meas["measurement type"], 0) + 1
+                device_id_dict[meas["measurement type"]] = device_id_counter
+                device_id = str(device_id_counter)
+            else:
+                device_id = None
+
+            meas_type = MEAS_TYPES[meas["measurement type"]]
             meas_format = meas_type.meas_format
             meas_factor = meas_type.factor
             value: None | str | int | float
 
-            if obj_data_format == 0:
-                value = parse_uint(meas_data, meas_factor)
-            elif obj_data_format == 1:
-                value = parse_int(meas_data, meas_factor)
-            elif obj_data_format == 2:
-                value = parse_float(meas_data, meas_factor)
-            elif obj_data_format == 3:
-                value = parse_string(meas_data)
+            if meas["data format"] == 0:
+                value = parse_uint(meas["measurement data"], meas_factor)
+            elif meas["data format"] == 1:
+                value = parse_int(meas["measurement data"], meas_factor)
+            elif meas["data format"] == 2:
+                value = parse_float(meas["measurement data"], meas_factor)
+            elif meas["data format"] == 3:
+                value = parse_string(meas["measurement data"])
             else:
                 _LOGGER.error(
                     "UNKNOWN dataobject in BTHome BLE payload! Adv: %s",
@@ -354,6 +387,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                         native_unit_of_measurement=meas_format.native_unit_of_measurement,
                         native_value=value,
                         device_class=meas_format.device_class,
+                        device_id=device_id,
                     )
                 elif (
                     type(meas_format) == BaseBinarySensorDescription
@@ -363,18 +397,20 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                         key=str(meas_format.device_class),
                         device_class=meas_format.device_class,
                         native_value=bool(value),
+                        device_id=device_id,
                     )
                 elif type(meas_format) == EventDeviceKeys:
-                    event_type = EVENT_TYPES[meas_data[0]]
+                    event_type = EVENT_TYPES[meas["measurement data"][0]]
                     event_properties = None
-                    if len(meas_data) >= 2:
+                    if len(meas["measurement data"]) >= 2:
                         event_properties = parse_event_properties(
-                            event_type, meas_data[1:]
+                            event_type, meas["measurement data"][1:]
                         )
                     self.fire_event(
                         key=str(meas_format),
                         event_type=event_type,
                         event_properties=event_properties,
+                        device_id=device_id,
                     )
                 result = True
             else:
