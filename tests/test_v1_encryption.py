@@ -1,11 +1,11 @@
-"""Tests for the parser of BLE advertisements in BTHome format."""
+"""Tests for the parser of BLE advertisements in BTHome V1 format."""
 import binascii
 
-from bthome_ble.bthome_encryption import decrypt_aes_ccm, encrypt_payload
+from bthome_ble.bthome_v1_encryption import decrypt_aes_ccm, encrypt_payload
 
 
 def test_encryption_example():
-    """Test BTHome encryption example."""
+    """Test BTHome V1 encryption example."""
     data = bytes(bytearray.fromhex("2302CA090303BF13"))  # BTHome data (not encrypted)
     count_id = bytes(bytearray.fromhex("00112233"))  # count id (change every message)
     mac = binascii.unhexlify("5448E68F80A5")  # MAC

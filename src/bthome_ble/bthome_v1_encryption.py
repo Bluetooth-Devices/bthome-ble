@@ -1,4 +1,4 @@
-"""Example showing encoding and decoding of BTHome advertisement"""
+"""Example showing encoding and decoding of BTHome v1 advertisement"""
 from __future__ import annotations
 
 import binascii

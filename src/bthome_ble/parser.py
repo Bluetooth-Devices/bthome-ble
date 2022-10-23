@@ -164,6 +164,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
     ) -> bool:
         """Parser for BTHome sensors version V1"""
         identifier = short_address(service_info.address)
+        sw_version = 1
 
         # Remove identifier from ATC sensors.
         atc_identifier = (
@@ -210,7 +211,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             source_mac = bytes.fromhex(mac_readable.replace(":", ""))
 
             try:
-                payload = self._decrypt_bthome(data, source_mac)
+                payload = self._decrypt_bthome(data, source_mac, sw_version)
             except (ValueError, TypeError):
                 return True
 
@@ -218,7 +219,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         else:
             return False
 
-        return self._parse_payload(payload)
+        return self._parse_payload(payload, sw_version)
 
     def _parse_bthome_v2(
         self, service_info: BluetoothServiceInfo, name: str, data: bytes
@@ -271,23 +272,10 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         if manufacturer:
             self.set_device_manufacturer(manufacturer)
 
-        # Get device information
-        device_info_available = adv_info & (1 << 1)  # bit 1
-        if device_info_available == 2:
-            # ToDo: read GATT characteristics to get device information
-            _LOGGER.debug(
-                "Reading device info from GATT characteristics is not implemented yet."
-                "Using device info based on the name"
-            )
-            # For now, we use the information from the name and identifier
-            self.set_device_name(f"{name} {identifier}")
-            self.set_title(f"{name} {identifier}")
-            self.set_device_type("BTHome sensor")
-        else:
-            # Get device information from local name and identifier
-            self.set_device_name(f"{name} {identifier}")
-            self.set_title(f"{name} {identifier}")
-            self.set_device_type("BTHome sensor")
+        # Get device information from local name and identifier
+        self.set_device_name(f"{name} {identifier}")
+        self.set_title(f"{name} {identifier}")
+        self.set_device_type("BTHome sensor")
 
         payload = data[1:]
 
@@ -303,26 +291,39 @@ class BTHomeBluetoothDeviceData(BluetoothData):
 
             # Decode encrypted payload
             try:
-                payload = self._decrypt_bthome(payload, source_mac)
+                payload = self._decrypt_bthome(payload, source_mac, sw_version)
             except (ValueError, TypeError):
                 return True
 
-        return self._parse_payload(payload)
+        return self._parse_payload(payload, sw_version)
 
-    def _parse_payload(self, payload: bytes) -> bool:
+    def _parse_payload(self, payload: bytes, sw_version: int) -> bool:
         payload_length = len(payload)
         next_obj_start = 0
         result = False
         measurements: list[dict[str, Any]] = []
         device_id_dict: dict[int, int] = {}
+        obj_data_format: str | int
 
         # Create a list with all individual objects
         while payload_length >= next_obj_start + 1:
             obj_start = next_obj_start
-            obj_control_byte = payload[obj_start]
-            obj_data_length = (obj_control_byte >> 0) & 31  # 5 bits (0-4)
-            obj_data_format = (obj_control_byte >> 5) & 7  # 3 bits (5-7)
-            obj_meas_type = payload[obj_start + 1]
+
+            if sw_version == 1:
+                # BTHome V1
+                obj_meas_type = payload[obj_start + 1]
+                obj_control_byte = payload[obj_start]
+                obj_data_length = (obj_control_byte >> 0) & 31  # 5 bits (0-4)
+                obj_data_format = (obj_control_byte >> 5) & 7  # 3 bits (5-7)
+                obj_data_start = obj_start + 2
+                next_obj_start = obj_start + obj_data_length + 1
+            else:
+                # BTHome V2
+                obj_meas_type = payload[obj_start]
+                obj_data_length = MEAS_TYPES[obj_meas_type].data_length
+                obj_data_format = MEAS_TYPES[obj_meas_type].data_format
+                obj_data_start = obj_start + 1
+                next_obj_start = obj_start + obj_data_length + 1
 
             if obj_data_length == 0:
                 _LOGGER.debug(
@@ -334,10 +335,6 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             if payload_length < next_obj_start:
                 _LOGGER.debug("Invalid payload data length, payload: %s", payload.hex())
                 break
-
-            obj_data_start = obj_start + 2
-            obj_end = obj_start + obj_data_length
-            next_obj_start = obj_end + 1
             measurements.append(
                 {
                     "data format": obj_data_format,
@@ -380,13 +377,13 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             meas_factor = meas_type.factor
             value: None | str | int | float
 
-            if meas["data format"] == 0:
+            if meas["data format"] == 0 or meas["data format"] == "uint":
                 value = parse_uint(meas["measurement data"], meas_factor)
-            elif meas["data format"] == 1:
+            elif meas["data format"] == 1 or meas["data format"] == "int":
                 value = parse_int(meas["measurement data"], meas_factor)
-            elif meas["data format"] == 2:
+            elif meas["data format"] == 2 or meas["data format"] == "float":
                 value = parse_float(meas["measurement data"], meas_factor)
-            elif meas["data format"] == 3:
+            elif meas["data format"] == 3 or meas["data format"] == "str":
                 value = parse_string(meas["measurement data"])
             else:
                 _LOGGER.error(
@@ -442,7 +439,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
 
         return True
 
-    def _decrypt_bthome(self, data: bytes, bthome_mac: bytes) -> bytes:
+    def _decrypt_bthome(self, data: bytes, bthome_mac: bytes, sw_version: int) -> bytes:
         """Decrypt encrypted BTHome BLE advertisements"""
         if not self.bindkey:
             self.bindkey_verified = False
@@ -455,17 +452,21 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             raise ValueError
 
         # check for minimum length of encrypted advertisement
-        if len(data) < 15:
+        if len(data) < (15 if sw_version == 1 else 14):
             _LOGGER.debug("Invalid data length (for decryption), adv: %s", data.hex())
             raise ValueError
 
         # prepare the data for decryption
-        uuid = b"\x1e\x18"
+        if sw_version == 1:
+            uuid = b"\x1e\x18"
+        else:
+            uuid = b"\xd2\xfc\x41"
+        print(data.hex())
         encrypted_payload = data[:-8]
         count_id = data[-8:-4]
         mic = data[-4:]
 
-        # nonce: mac [6], uuid16 [2], count_id [4] (6+2+4 = 12 bytes)
+        # nonce: mac [6], uuid16 [2 (v1) or 3 (v2)], count_id [4]
         nonce = b"".join([bthome_mac, uuid, count_id])
         cipher = AES.new(self.bindkey, AES.MODE_CCM, nonce=nonce, mac_len=4)
         cipher.update(b"\x11")
