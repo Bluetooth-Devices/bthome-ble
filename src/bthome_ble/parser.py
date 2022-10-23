@@ -270,24 +270,9 @@ class BTHomeBluetoothDeviceData(BluetoothData):
 
         if manufacturer:
             self.set_device_manufacturer(manufacturer)
-
-        # Get device information
-        device_info_available = adv_info & (1 << 1)  # bit 1
-        if device_info_available == 2:
-            # ToDo: read GATT characteristics to get device information
-            _LOGGER.debug(
-                "Reading device info from GATT characteristics is not implemented yet."
-                "Using device info based on the name"
-            )
-            # For now, we use the information from the name and identifier
-            self.set_device_name(f"{name} {identifier}")
-            self.set_title(f"{name} {identifier}")
-            self.set_device_type("BTHome sensor")
-        else:
-            # Get device information from local name and identifier
-            self.set_device_name(f"{name} {identifier}")
-            self.set_title(f"{name} {identifier}")
-            self.set_device_type("BTHome sensor")
+        self.set_device_name(f"{name} {identifier}")
+        self.set_title(f"{name} {identifier}")
+        self.set_device_type("BTHome sensor")
 
         payload = data[1:]
 
