@@ -76,7 +76,9 @@ def test_can_create():
 
 def test_encryption_key_needed():
     """Test that we can detect that an encryption key is needed."""
-    data_string = b'\x41\xfb\xa45\xe4\xd3\xc3\x12\xfb\x00\x11"3W\xd9\n\x99'
+    data_string = (
+        b"\x41\xd2\xfc\xef\xe5\x2e\xb2\x12\xd6\x00\x11\x22\x33\xbc\x38\xc9\x66"
+    )
     advertisement = bytes_to_service_info(
         payload=data_string,
         local_name="ATC_8D18B2",
@@ -92,7 +94,7 @@ def test_encryption_key_needed():
 
 def test_encryption_no_key_needed():
     """Test that we can detect that no encryption key is needed."""
-    data_string = b"\x40\x02\x00\x0c\x04\x04\x13\x8a\x01"
+    data_string = b"\x40\x04\x13\x8a\x01"
     advertisement = bytes_to_service_info(
         payload=data_string,
         local_name="ATC_8D18B2",
@@ -111,7 +113,7 @@ def test_mac_as_name():
     A sensor without a name gets its MAC address as name from BluetoothServiceInfo.
     Test that this sensor has BTHome sensor + identifier as its name.
     """
-    data_string = b"\x40\x02\x00\x0c\x04\x04\x13\x8a\x01"
+    data_string = b"\x40\x04\x13\x8a\x01"
     advertisement = bytes_to_service_info(
         payload=data_string,
         local_name="A4:C1:38:8D:18:B2",
@@ -172,7 +174,9 @@ def test_has_incorrect_version():
 def test_bindkey_wrong():
     """Test BTHome parser with wrong encryption key."""
     bindkey = "814aac74c4f17b6c1581e1ab87816b99"
-    data_string = b'\x41\xfb\xa45\xe4\xd3\xc3\x12\xfb\x00\x11"3W\xd9\n\x99'
+    data_string = (
+        b"\x41\xd2\xfc\xef\xe5\x2e\xb2\x12\xd6\x00\x11\x22\x33\xbc\x38\xc9\x66"
+    )
     advertisement = bytes_to_service_info(
         data_string,
         local_name="Test Sensor",
@@ -211,7 +215,7 @@ def test_bindkey_wrong():
 def test_bindkey_correct():
     """Test BTHome parser with correct encryption key."""
     bindkey = "231d39c1d7cc1ab1aee224cd096db932"
-    data_string = b'\x41\xfb\xa45\xe4\xd3\xc3\x12\xfb\x00\x11"3W\xd9\n\x99'
+    data_string = b"\x41\xa4\x72\x66\xc9\x5f\x73\x00\x11\x22\x33\xb7\xce\xd8\xe5"
     advertisement = bytes_to_service_info(
         data_string,
         local_name="TEST DEVICE",
@@ -282,7 +286,7 @@ def test_bindkey_verified_can_be_unset():
 
 def test_bthome_temperature_humidity(caplog):
     """Test BTHome parser for temperature humidity reading without encryption."""
-    data_string = b"\x40#\x02\xca\t\x03\x03\xbf\x13"
+    data_string = b"\x40\x02\xca\x09\x03\xbf\x13"
     advertisement = bytes_to_service_info(
         data_string, local_name="ATC_8D18B2", address="A4:C1:38:8D:18:B2"
     )
@@ -332,7 +336,7 @@ def test_bthome_temperature_humidity(caplog):
 
 def test_bthome_temperature_humidity_battery(caplog):
     """Test BTHome parser for temperature humidity battery reading."""
-    data_string = b"\x40#\x02]\t\x03\x03\xb7\x18\x02\x01]"
+    data_string = b"\x40\x02\x5d\x09\x03\xb7\x18\x01\x5d"
     advertisement = bytes_to_service_info(
         data_string, local_name="ATC_8D18B2", address="A4:C1:38:8D:18:B2"
     )
@@ -390,7 +394,7 @@ def test_bthome_temperature_humidity_battery(caplog):
 
 def test_bthome_pressure(caplog):
     """Test BTHome parser for pressure reading without encryption."""
-    data_string = b"\x40\x04\x04\x13\x8a\x01"
+    data_string = b"\x40\x04\x13\x8a\x01"
     advertisement = bytes_to_service_info(
         data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
     )
@@ -432,7 +436,7 @@ def test_bthome_pressure(caplog):
 
 def test_bthome_illuminance(caplog):
     """Test BTHome parser for illuminance reading without encryption."""
-    data_string = b"\x40\x04\x05\x13\x8a\x14"
+    data_string = b"\x40\x05\x13\x8a\x14"
     advertisement = bytes_to_service_info(
         data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
     )
@@ -474,7 +478,7 @@ def test_bthome_illuminance(caplog):
 
 def test_bthome_mass_kilograms(caplog):
     """Test BTHome parser for mass reading in kilograms without encryption."""
-    data_string = b"\x42\x03\x06\x5E\x1F"
+    data_string = b"\x40\x06\x5E\x1F"
     advertisement = bytes_to_service_info(
         data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
     )
@@ -514,7 +518,7 @@ def test_bthome_mass_kilograms(caplog):
 
 def test_bthome_mass_pounds(caplog):
     """Test BTHome parser for mass reading in pounds without encryption."""
-    data_string = b"\x40\x03\x07\x3E\x1d"
+    data_string = b"\x40\x07\x3E\x1d"
     advertisement = bytes_to_service_info(
         data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
     )
@@ -554,7 +558,7 @@ def test_bthome_mass_pounds(caplog):
 
 def test_bthome_dew_point(caplog):
     """Test BTHome parser for dew point reading without encryption."""
-    data_string = b"\x40\x23\x08\xCA\x06"
+    data_string = b"\x40\x08\xCA\x06"
     advertisement = bytes_to_service_info(
         data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
     )
@@ -596,7 +600,7 @@ def test_bthome_dew_point(caplog):
 
 def test_bthome_count(caplog):
     """Test BTHome parser for counter reading without encryption."""
-    data_string = b"\x40\x02\x09\x60"
+    data_string = b"\x40\x09\x60"
     advertisement = bytes_to_service_info(
         data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
     )
@@ -636,7 +640,7 @@ def test_bthome_count(caplog):
 
 def test_bthome_energy(caplog):
     """Test BTHome parser for energy reading without encryption."""
-    data_string = b"\x40\x04\n\x13\x8a\x14"
+    data_string = b"\x40\x0a\x13\x8a\x14"
     advertisement = bytes_to_service_info(
         data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
     )
@@ -678,7 +682,7 @@ def test_bthome_energy(caplog):
 
 def test_bthome_power(caplog):
     """Test BTHome parser for power reading without encryption."""
-    data_string = b"\x40\x04\x0b\x02\x1b\x00"
+    data_string = b"\x40\x0b\x02\x1b\x00"
     advertisement = bytes_to_service_info(
         data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
     )
@@ -720,7 +724,7 @@ def test_bthome_power(caplog):
 
 def test_bthome_voltage(caplog):
     """Test BThome parser for voltage reading without encryption."""
-    data_string = b"\x40\x03\x0c\x02\x0c"
+    data_string = b"\x40\x0c\x02\x0c"
     advertisement = bytes_to_service_info(
         data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
     )
@@ -762,7 +766,7 @@ def test_bthome_voltage(caplog):
 
 def test_bthome_binary_sensor(caplog):
     """Test BTHome parser for binary sensor without device class, without encryption."""
-    data_string = b"\x40\x02\x0F\x01"
+    data_string = b"\x40\x0F\x01"
     advertisement = bytes_to_service_info(
         data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
     )
@@ -808,7 +812,7 @@ def test_bthome_binary_sensor(caplog):
 
 def test_bthome_binary_sensor_power(caplog):
     """Test BTHome parser for binary sensor power without encryption."""
-    data_string = b"\x40\x02\x10\x01"
+    data_string = b"\x40\x10\x01"
     advertisement = bytes_to_service_info(
         data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
     )
@@ -854,7 +858,7 @@ def test_bthome_binary_sensor_power(caplog):
 
 def test_bthome_binary_sensor_opening(caplog):
     """Test BTHome parser for binary sensor opening without encryption."""
-    data_string = b"\x40\x02\x11\x00"
+    data_string = b"\x40\x11\x00"
     advertisement = bytes_to_service_info(
         data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
     )
@@ -900,7 +904,7 @@ def test_bthome_binary_sensor_opening(caplog):
 
 def test_bthome_pm(caplog):
     """Test BTHome parser for PM2.5 and PM10 reading without encryption."""
-    data_string = b"\x40\x03\r\x12\x0c\x03\x0e\x02\x1c"
+    data_string = b"\x40\x0d\x12\x0c\x0e\x02\x1c"
     advertisement = bytes_to_service_info(
         data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
     )
@@ -950,7 +954,7 @@ def test_bthome_pm(caplog):
 
 def test_bthome_co2(caplog):
     """Test BTHome parser for CO2 reading without encryption."""
-    data_string = b"\x40\x03\x12\xe2\x04"
+    data_string = b"\x40\x12\xe2\x04"
     advertisement = bytes_to_service_info(
         data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
     )
@@ -992,7 +996,7 @@ def test_bthome_co2(caplog):
 
 def test_bthome_voc(caplog):
     """Test BTHome parser for VOC reading without encryption."""
-    data_string = b"\x40\x03\x133\x01"
+    data_string = b"\x40\x133\x01"
     advertisement = bytes_to_service_info(
         data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
     )
@@ -1034,7 +1038,7 @@ def test_bthome_voc(caplog):
 
 def test_bthome_moisture(caplog):
     """Test BTHome parser for moisture reading from b-parasite sensor."""
-    data_string = b"\x40\x03\x14\x02\x0c"
+    data_string = b"\x40\x14\x02\x0c"
     advertisement = bytes_to_service_info(
         data_string, local_name="prst", address="A4:C1:38:8D:18:B2"
     )
@@ -1076,7 +1080,7 @@ def test_bthome_moisture(caplog):
 
 def test_bthome_event_switch_single_press(caplog):
     """Test BTHome parser for an event of a single press of a switch without encryption."""
-    data_string = b"\x40\x02\x3B\x05"
+    data_string = b"\x40\x3B\x05"
     advertisement = bytes_to_service_info(
         data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
     )
@@ -1119,7 +1123,7 @@ def test_bthome_event_switch_single_press(caplog):
 
 def test_bthome_event_dimmer_rotate_left_3_steps(caplog):
     """Test BTHome parser for an event rotating a dimmer 3 steps left."""
-    data_string = b"\x40\x03\x3C\x0C\x03"
+    data_string = b"\x40\x3C\x0C\x03"
     advertisement = bytes_to_service_info(
         data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
     )
@@ -1162,7 +1166,7 @@ def test_bthome_event_dimmer_rotate_left_3_steps(caplog):
 
 def test_bthome_double_temperature(caplog):
     """Test BTHome parser for double temperature reading without encryption."""
-    data_string = b"\x40#\x02\xca\t#\x02\xcf\t"
+    data_string = b"\x40\x02\xca\x09\x02\xcf\x09"
     advertisement = bytes_to_service_info(
         data_string, local_name="A4:C1:38:8D:18:B2", address="A4:C1:38:8D:18:B2"
     )
@@ -1220,8 +1224,7 @@ def test_bthome_tripple_temperature_double_humidity_battery(caplog):
     single battery reading without encryption.
     """
     data_string = (
-        b"\x40#\x02\xca\t#\x02\xcf\t#\x02"
-        b"\xcf\x08\x03\x03\xb7\x18\x03\x03\xb7\x17\x02\x01]"
+        b"\x40\x02\xca\x09\x02\xcf\x09\x02\xcf\x08\x03\xb7\x18\x03\xb7\x17\x01\x5d"
     )
     advertisement = bytes_to_service_info(
         data_string, local_name="A4:C1:38:8D:18:B2", address="A4:C1:38:8D:18:B2"
