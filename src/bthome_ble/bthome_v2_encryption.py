@@ -96,7 +96,7 @@ def main() -> None:
     count_id = bytes(bytearray.fromhex("00112233"))  # count id (change every message)
     mac = binascii.unhexlify("5448E68F80A5")  # MAC
     uuid16 = b"\xD2\xFC"
-    sw_version = b"\x41"
+    sw_version = b"\x42"
     bindkey = binascii.unhexlify("231d39c1d7cc1ab1aee224cd096db932")
 
     payload = encrypt_payload(
