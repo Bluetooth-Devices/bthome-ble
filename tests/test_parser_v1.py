@@ -23,6 +23,7 @@ KEY_BATTERY = DeviceKey(key="battery", device_id=None)
 KEY_BINARY_GENERIC = DeviceKey(key="generic", device_id=None)
 KEY_BINARY_OPENING = DeviceKey(key="opening", device_id=None)
 KEY_BINARY_POWER = DeviceKey(key="power", device_id=None)
+KEY_BUTTON = DeviceKey(key="button", device_id=None)
 KEY_CO2 = DeviceKey(key="carbon_dioxide", device_id=None)
 KEY_DIMMER = DeviceKey(key="dimmer", device_id=None)
 KEY_COUNT = DeviceKey(key="count", device_id=None)
@@ -37,7 +38,6 @@ KEY_PM10 = DeviceKey(key="pm10", device_id=None)
 KEY_POWER = DeviceKey(key="power", device_id=None)
 KEY_PRESSURE = DeviceKey(key="pressure", device_id=None)
 KEY_SIGNAL_STRENGTH = DeviceKey(key="signal_strength", device_id=None)
-KEY_SWITCH = DeviceKey(key="switch", device_id=None)
 KEY_TEMPERATURE = DeviceKey(key="temperature", device_id=None)
 KEY_VOC = DeviceKey(key="volatile_organic_compounds", device_id=None)
 KEY_VOLTAGE = DeviceKey(key="voltage", device_id=None)
@@ -1026,9 +1026,9 @@ def test_bthome_moisture(caplog):
     )
 
 
-def test_bthome_event_switch_single_press(caplog):
-    """Test BTHome parser for an event of a single press of a switch without encryption."""
-    data_string = b"\x02\x3B\x05"
+def test_bthome_event_button_long_press(caplog):
+    """Test BTHome parser for an event of a long press on a button without encryption."""
+    data_string = b"\x02\x3A\x05"
     advertisement = bytes_to_service_info(
         data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
     )
@@ -1059,10 +1059,10 @@ def test_bthome_event_switch_single_press(caplog):
             ),
         },
         events={
-            KEY_SWITCH: Event(
-                device_key=KEY_SWITCH,
-                name="Switch",
-                event_type="single_press",
+            KEY_BUTTON: Event(
+                device_key=KEY_BUTTON,
+                name="Button",
+                event_type="long_press",
                 event_properties=None,
             ),
         },
@@ -1071,7 +1071,7 @@ def test_bthome_event_switch_single_press(caplog):
 
 def test_bthome_event_dimmer_rotate_left_3_steps(caplog):
     """Test BTHome parser for an event rotating a dimmer 3 steps left."""
-    data_string = b"\x03\x3C\x0C\x03"
+    data_string = b"\x03\x3C\x01\x03"
     advertisement = bytes_to_service_info(
         data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
     )
