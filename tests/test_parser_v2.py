@@ -284,6 +284,85 @@ def test_bindkey_verified_can_be_unset():
     assert not device.bindkey_verified
 
 
+def test_bthome_wrong_object_id(caplog):
+    """Test BTHome parser for a non-existing Object ID xFE."""
+    data_string = b"\x40\xFE\xca\x09"
+    advertisement = bytes_to_service_info(
+        data_string, local_name="ATC_8D18B2", address="A4:C1:38:8D:18:B2"
+    )
+
+    device = BTHomeBluetoothDeviceData()
+    assert device.update(advertisement) == SensorUpdate(
+        title="ATC 18B2",
+        devices={
+            None: SensorDeviceInfo(
+                name="ATC 18B2",
+                manufacturer="Xiaomi",
+                model="BTHome sensor",
+                sw_version="BTHome BLE v2",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            KEY_SIGNAL_STRENGTH: SensorDescription(
+                device_key=KEY_SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
+            KEY_SIGNAL_STRENGTH: SensorValue(
+                device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+    )
+
+
+def test_bthome_battery_wrong_oobject_id_humidity(caplog):
+    """
+    Test BTHome parser for battery, wrong object id and humidity reading.
+    Should only return the battery reading, as humidity is after wrong object id.
+    """
+    data_string = b"\x40\x01\x5d\xfe\x5d\x09\x03\xb7\x18"
+    advertisement = bytes_to_service_info(
+        data_string, local_name="ATC_8D18B2", address="A4:C1:38:8D:18:B2"
+    )
+
+    device = BTHomeBluetoothDeviceData()
+    assert device.update(advertisement) == SensorUpdate(
+        title="ATC 18B2",
+        devices={
+            None: SensorDeviceInfo(
+                name="ATC 18B2",
+                manufacturer="Xiaomi",
+                model="BTHome sensor",
+                sw_version="BTHome BLE v2",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            KEY_BATTERY: SensorDescription(
+                device_key=KEY_BATTERY,
+                device_class=SensorDeviceClass.BATTERY,
+                native_unit_of_measurement=Units.PERCENTAGE,
+            ),
+            KEY_SIGNAL_STRENGTH: SensorDescription(
+                device_key=KEY_SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
+            KEY_BATTERY: SensorValue(
+                device_key=KEY_BATTERY, name="Battery", native_value=93
+            ),
+            KEY_SIGNAL_STRENGTH: SensorValue(
+                device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+    )
+
+
 def test_bthome_temperature_humidity(caplog):
     """Test BTHome parser for temperature humidity reading without encryption."""
     data_string = b"\x40\x02\xca\x09\x03\xbf\x13"
@@ -336,7 +415,7 @@ def test_bthome_temperature_humidity(caplog):
 
 def test_bthome_temperature_humidity_battery(caplog):
     """Test BTHome parser for temperature humidity battery reading."""
-    data_string = b"\x40\x02\x5d\x09\x03\xb7\x18\x01\x5d"
+    data_string = b"\x40\x01\x5d\x02\x5d\x09\x03\xb7\x18"
     advertisement = bytes_to_service_info(
         data_string, local_name="ATC_8D18B2", address="A4:C1:38:8D:18:B2"
     )

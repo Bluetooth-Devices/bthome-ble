@@ -311,6 +311,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
     def _parse_payload(self, payload: bytes, sw_version: int) -> bool:
         payload_length = len(payload)
         next_obj_start = 0
+        prev_obj_meas_type = 0
         result = False
         measurements: list[dict[str, Any]] = []
         device_id_dict: dict[int, int] = {}
@@ -331,6 +332,20 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             else:
                 # BTHome V2
                 obj_meas_type = payload[obj_start]
+                if prev_obj_meas_type < obj_meas_type:
+                    _LOGGER.warning(
+                        "BTHome device is not sending object ids in numerical order (from low to "
+                        "high object id). This can cause issues with your BTHome receiver, "
+                        "payload: %s",
+                        payload.hex(),
+                    )
+                if obj_meas_type not in MEAS_TYPES:
+                    _LOGGER.debug(
+                        "Invalid Object ID found in payload: %s",
+                        payload.hex(),
+                    )
+                    break
+                prev_obj_meas_type = obj_meas_type
                 obj_data_length = MEAS_TYPES[obj_meas_type].data_length
                 obj_data_format = MEAS_TYPES[obj_meas_type].data_format
                 obj_data_start = obj_start + 1
