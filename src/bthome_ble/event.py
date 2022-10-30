@@ -20,13 +20,11 @@ class EventDeviceKeys(StrEnum):
 BUTTON_EVENTS: dict[int, str | None] = {
     0x00: None,
     0x01: "press",
-    0x02: "single_press",
-    0x03: "double_press",
-    0x04: "triple_press",
-    0x05: "long_press",
-    0x06: "long_single_press",
-    0x07: "long_double_press",
-    0x08: "long_triple_press",
+    0x02: "double_press",
+    0x03: "triple_press",
+    0x04: "long_press",
+    0x05: "long_double_press",
+    0x06: "long_triple_press",
 }
 
 DIMMER_EVENTS: dict[int, str | None] = {

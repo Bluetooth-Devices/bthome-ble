@@ -1159,7 +1159,7 @@ def test_bthome_moisture(caplog):
 
 def test_bthome_event_button_long_press(caplog):
     """Test BTHome parser for an event of a long press on a button without encryption."""
-    data_string = b"\x40\x3A\x05"
+    data_string = b"\x40\x3A\x04"
     advertisement = bytes_to_service_info(
         data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
     )
@@ -1205,7 +1205,7 @@ def test_bthome_event_triple_button_device(caplog):
     Test BTHome parser for an event of a triple button device where
     the 2nd button is pressed and the 3rd button is triple pressed.
     """
-    data_string = b"\x40\x3A\x00\x3A\x01\x3A\x04"
+    data_string = b"\x40\x3A\x00\x3A\x01\x3A\x03"
     advertisement = bytes_to_service_info(
         data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
     )
