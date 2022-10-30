@@ -243,7 +243,6 @@ MEAS_TYPES: dict[int, MeasTypes] = {
     0x2E: MeasTypes(meas_format=SensorLibrary.HUMIDITY__PERCENTAGE),
     0x2F: MeasTypes(meas_format=SensorLibrary.MOISTURE__PERCENTAGE),
     0x3A: MeasTypes(meas_format=EventDeviceKeys.BUTTON),
-    0x3B: MeasTypes(meas_format=EventDeviceKeys.SWITCH),
     0x3C: MeasTypes(
         meas_format=EventDeviceKeys.DIMMER,
         data_length=2,

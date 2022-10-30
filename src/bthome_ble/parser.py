@@ -26,7 +26,7 @@ from sensor_state_data.description import (
 )
 
 from .const import MEAS_TYPES
-from .event import EVENT_TYPES, EventDeviceKeys
+from .event import BUTTON_EVENTS, DIMMER_EVENTS, EventDeviceKeys
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -81,11 +81,22 @@ def parse_string(data_obj: bytes) -> str:
     return data_obj.decode("UTF-8")
 
 
+def parse_event_type(event_device: str, data_obj: int) -> str | None:
+    """Convert bytes to event type."""
+    if event_device == "dimmer":
+        event_type = DIMMER_EVENTS[data_obj]
+    elif event_device == "button":
+        event_type = BUTTON_EVENTS[data_obj]
+    else:
+        event_type = None
+    return event_type
+
+
 def parse_event_properties(
-    event_type: str, data_obj: bytes
+    event_device: str, data_obj: bytes
 ) -> dict[str, str | int | float | None] | None:
     """Convert bytes to event properties."""
-    if event_type in ["rotate_left", "rotate_right"]:
+    if event_device == "dimmer":
         # number of steps for rotating a dimmer
         return {"steps": int.from_bytes(data_obj, "little", signed=True)}
     else:
@@ -300,6 +311,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
     def _parse_payload(self, payload: bytes, sw_version: int) -> bool:
         payload_length = len(payload)
         next_obj_start = 0
+        prev_obj_meas_type = 0
         result = False
         measurements: list[dict[str, Any]] = []
         device_id_dict: dict[int, int] = {}
@@ -320,6 +332,20 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             else:
                 # BTHome V2
                 obj_meas_type = payload[obj_start]
+                if prev_obj_meas_type < obj_meas_type:
+                    _LOGGER.warning(
+                        "BTHome device is not sending object ids in numerical order (from low to "
+                        "high object id). This can cause issues with your BTHome receiver, "
+                        "payload: %s",
+                        payload.hex(),
+                    )
+                if obj_meas_type not in MEAS_TYPES:
+                    _LOGGER.debug(
+                        "Invalid Object ID found in payload: %s",
+                        payload.hex(),
+                    )
+                    break
+                prev_obj_meas_type = obj_meas_type
                 obj_data_length = MEAS_TYPES[obj_meas_type].data_length
                 obj_data_format = MEAS_TYPES[obj_meas_type].data_format
                 obj_data_start = obj_start + 1
@@ -415,18 +441,21 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                         device_id=device_id,
                     )
                 elif type(meas_format) == EventDeviceKeys:
-                    event_type = EVENT_TYPES[meas["measurement data"][0]]
-                    event_properties = None
-                    if len(meas["measurement data"]) >= 2:
-                        event_properties = parse_event_properties(
-                            event_type, meas["measurement data"][1:]
-                        )
-                    self.fire_event(
-                        key=str(meas_format),
-                        event_type=event_type,
-                        event_properties=event_properties,
-                        device_id=device_id,
+                    event_type = parse_event_type(
+                        event_device=meas_format,
+                        data_obj=meas["measurement data"][0],
                     )
+                    event_properties = parse_event_properties(
+                        event_device=meas_format,
+                        data_obj=meas["measurement data"][1:],
+                    )
+                    if event_type:
+                        self.fire_event(
+                            key=str(meas_format),
+                            event_type=event_type,
+                            event_properties=event_properties,
+                            device_id=device_id,
+                        )
                 result = True
             else:
                 _LOGGER.debug(
@@ -461,7 +490,6 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             uuid = b"\x1e\x18"
         else:
             uuid = b"\xd2\xfc\x41"
-        print(data.hex())
         encrypted_payload = data[:-8]
         count_id = data[-8:-4]
         mic = data[-4:]
