@@ -40,7 +40,7 @@ Install this via pip (or your favourite package manager):
 
 ## BThome BLE format
 
-More detailed information about the BTHome BLE format can be found on the [usage page](https://github.com/Bluetooth-Devices/bthome-ble/blob/main/docs/source/usage.md)
+More detailed information about the BTHome BLE format can be found on the [usage page](https://https://bthome.io/)
 
 ## Contributors ✨
 
