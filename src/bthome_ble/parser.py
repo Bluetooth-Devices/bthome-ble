@@ -167,8 +167,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             elif uuid == "0000fcd2-0000-1000-8000-00805f9b34fb":
                 if self._parse_bthome_v2(service_info, service_info.name, data):
                     self.last_service_info = service_info
-            else:
-                return None
+        return None
 
     def _parse_bthome_v1(
         self, service_info: BluetoothServiceInfo, name: str, data: bytes
@@ -201,13 +200,13 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         self.set_device_type("BTHome sensor")
 
         uuid16 = list(service_info.service_data.keys())
-        if uuid16 == ["0000181c-0000-1000-8000-00805f9b34fb"]:
+        if "0000181c-0000-1000-8000-00805f9b34fb" in uuid16:
             # Non-encrypted BTHome BLE format
             self.encryption_scheme = EncryptionScheme.NONE
             self.set_device_sw_version("BTHome BLE v1")
             payload = data
             packet_id = None  # noqa: F841
-        elif uuid16 == ["0000181e-0000-1000-8000-00805f9b34fb"]:
+        elif "0000181e-0000-1000-8000-00805f9b34fb" in uuid16:
             # Encrypted BTHome BLE format
             self.encryption_scheme = EncryptionScheme.BTHOME_BINDKEY
             self.set_device_sw_version("BTHome BLE v1 (encrypted)")

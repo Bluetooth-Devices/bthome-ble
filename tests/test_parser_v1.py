@@ -1110,3 +1110,72 @@ def test_bthome_event_dimmer_rotate_left_3_steps(caplog):
             ),
         },
     )
+
+
+def test_bthome_multiple_uuids(caplog):
+    """Test BTHome parser for a device that broadcasts multiple uuids."""
+    advertisement = BluetoothServiceInfo(
+        name="ATC_8D18B2",
+        address="A4:C1:38:8D:18:B2",
+        rssi=-60,
+        manufacturer_data={},
+        service_data={
+            "0000181a-0000-1000-8000-00805f9b34fb": b"\xc4$\x818\xc1\xa4V\x08\x83\x18\xbf",
+            "0000fe95-0000-1000-8000-00805f9b34fb": b"0X[\x05\x01\xc4$\x818\xc1\xa4(\x01\x00",
+            "0000181c-0000-1000-8000-00805f9b34fb": b"\x02\x00\xb4\x02\x10\x00\x03\x0c\xbe\x0b",
+        },
+        service_uuids=[
+            "0000181a-0000-1000-8000-00805f9b34fb",
+            "0000fe95-0000-1000-8000-00805f9b34fb",
+            "0000181c-0000-1000-8000-00805f9b34fb",
+        ],
+        source="",
+    )
+
+    device = BTHomeBluetoothDeviceData()
+
+    assert device.update(advertisement) == SensorUpdate(
+        title="ATC 18B2",
+        devices={
+            None: SensorDeviceInfo(
+                name="ATC 18B2",
+                manufacturer="Xiaomi",
+                model="BTHome sensor",
+                sw_version="BTHome BLE v1",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            KEY_VOLTAGE: SensorDescription(
+                device_key=KEY_VOLTAGE,
+                device_class=SensorDeviceClass.VOLTAGE,
+                native_unit_of_measurement=Units.ELECTRIC_POTENTIAL_VOLT,
+            ),
+            KEY_SIGNAL_STRENGTH: SensorDescription(
+                device_key=KEY_SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
+            KEY_VOLTAGE: SensorValue(
+                device_key=KEY_VOLTAGE, name="Voltage", native_value=3.006
+            ),
+            KEY_SIGNAL_STRENGTH: SensorValue(
+                device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+        binary_entity_descriptions={
+            DeviceKey(key="power", device_id=None): BinarySensorDescription(
+                device_key=DeviceKey(key="power", device_id=None),
+                device_class=BinarySensorDeviceClass.POWER,
+            )
+        },
+        binary_entity_values={
+            DeviceKey(key="power", device_id=None): BinarySensorValue(
+                device_key=DeviceKey(key="power", device_id=None),
+                name="Power",
+                native_value=False,
+            )
+        },
+    )

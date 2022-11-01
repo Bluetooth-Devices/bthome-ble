@@ -1442,3 +1442,75 @@ def test_bthome_tripple_temperature_double_humidity_battery(caplog):
             ),
         },
     )
+
+
+def test_bthome_multiple_uuids(caplog):
+    """Test BTHome parser for a device that broadcasts multiple uuids."""
+    advertisement = BluetoothServiceInfo(
+        name="ATC_8D18B2",
+        address="A4:C1:38:8D:18:B2",
+        rssi=-60,
+        manufacturer_data={},
+        service_data={
+            "0000181a-0000-1000-8000-00805f9b34fb": b"\xc4$\x818\xc1\xa4V\x08\x83\x18\xbf",
+            "0000fe95-0000-1000-8000-00805f9b34fb": b"0X[\x05\x01\xc4$\x818\xc1\xa4(\x01\x00",
+            "0000fcd2-0000-1000-8000-00805f9b34fb": b"\x40\x01\x5d\x02\x5d\x09\x03\xb7\x18",
+        },
+        service_uuids=[
+            "0000181a-0000-1000-8000-00805f9b34fb",
+            "0000fe95-0000-1000-8000-00805f9b34fb",
+            "0000fcd2-0000-1000-8000-00805f9b34fb",
+        ],
+        source="",
+    )
+
+    device = BTHomeBluetoothDeviceData()
+
+    assert device.update(advertisement) == SensorUpdate(
+        title="ATC 18B2",
+        devices={
+            None: SensorDeviceInfo(
+                name="ATC 18B2",
+                manufacturer="Xiaomi",
+                model="BTHome sensor",
+                sw_version="BTHome BLE v2",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            KEY_TEMPERATURE: SensorDescription(
+                device_key=KEY_TEMPERATURE,
+                device_class=SensorDeviceClass.TEMPERATURE,
+                native_unit_of_measurement=Units.TEMP_CELSIUS,
+            ),
+            KEY_HUMIDITY: SensorDescription(
+                device_key=KEY_HUMIDITY,
+                device_class=SensorDeviceClass.HUMIDITY,
+                native_unit_of_measurement=Units.PERCENTAGE,
+            ),
+            KEY_BATTERY: SensorDescription(
+                device_key=KEY_BATTERY,
+                device_class=SensorDeviceClass.BATTERY,
+                native_unit_of_measurement=Units.PERCENTAGE,
+            ),
+            KEY_SIGNAL_STRENGTH: SensorDescription(
+                device_key=KEY_SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
+            KEY_TEMPERATURE: SensorValue(
+                device_key=KEY_TEMPERATURE, name="Temperature", native_value=23.97
+            ),
+            KEY_HUMIDITY: SensorValue(
+                device_key=KEY_HUMIDITY, name="Humidity", native_value=63.27
+            ),
+            KEY_BATTERY: SensorValue(
+                device_key=KEY_BATTERY, name="Battery", native_value=93
+            ),
+            KEY_SIGNAL_STRENGTH: SensorValue(
+                device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+    )
