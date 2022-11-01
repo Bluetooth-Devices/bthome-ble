@@ -467,7 +467,7 @@ use_chardet_on_py3 = ["chardet (>=3.0.2,<6)"]
 
 [[package]]
 name = "sensor-state-data"
-version = "2.9.1"
+version = "2.10.1"
 description = "Models for storing and converting Sensor Data state"
 category = "main"
 optional = false
