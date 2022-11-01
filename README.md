@@ -30,7 +30,7 @@
   <img src="https://img.shields.io/pypi/l/bthome-ble.svg?style=flat-square" alt="License">
 </p>
 
-BLE parser for sensors that support the BTHome BLE format.
+BLE parser for sensors that support the BTHome BLE format (V1 and V2).
 
 ## Installation
 
