@@ -2,6 +2,15 @@
 
 <!--next-version-placeholder-->
 
+## v2.0.0 (2022-11-01)
+### Feature
+* V2 release bump ([`93bfd22`](https://github.com/Bluetooth-Devices/bthome-ble/commit/93bfd22eff117f1cf2b98248b2ccf9b9dd90e6d8))
+* V2 release bump ([`3487df3`](https://github.com/Bluetooth-Devices/bthome-ble/commit/3487df36be7a478d5b5512f348ade6cb43a67079))
+
+### Breaking
+* v2 release bump ([`93bfd22`](https://github.com/Bluetooth-Devices/bthome-ble/commit/93bfd22eff117f1cf2b98248b2ccf9b9dd90e6d8))
+* V2 release bump ([`3487df3`](https://github.com/Bluetooth-Devices/bthome-ble/commit/3487df36be7a478d5b5512f348ade6cb43a67079))
+
 ## v1.4.0 (2022-11-01)
 ### Feature
 * Remove object format and length byte ([`2f43a29`](https://github.com/Bluetooth-Devices/bthome-ble/commit/2f43a296cfb59fcb2938502801b3f4d12785358c))
