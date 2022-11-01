@@ -14,65 +14,76 @@ class MeasTypes:
         description.BaseBinarySensorDescription,
         description.BaseSensorDescription,
     ]
+    data_length: int = 1
+    data_format: str = "uint"
     factor: float = 1
 
 
 MEAS_TYPES: dict[int, MeasTypes] = {
-    0x01: MeasTypes(
-        meas_format=SensorLibrary.BATTERY__PERCENTAGE,
-        factor=1,
-    ),
+    0x01: MeasTypes(meas_format=SensorLibrary.BATTERY__PERCENTAGE),
     0x02: MeasTypes(
         meas_format=SensorLibrary.TEMPERATURE__CELSIUS,
+        data_length=2,
+        data_format="int",
         factor=0.01,
     ),
     0x03: MeasTypes(
         meas_format=SensorLibrary.HUMIDITY__PERCENTAGE,
+        data_length=2,
         factor=0.01,
     ),
     0x04: MeasTypes(
         meas_format=SensorLibrary.PRESSURE__MBAR,
+        data_length=3,
         factor=0.01,
     ),
     0x05: MeasTypes(
         meas_format=SensorLibrary.LIGHT__LIGHT_LUX,
+        data_length=3,
         factor=0.01,
     ),
     0x06: MeasTypes(
         meas_format=SensorLibrary.MASS__MASS_KILOGRAMS,
+        data_length=2,
         factor=0.01,
     ),
     0x07: MeasTypes(
         meas_format=SensorLibrary.MASS__MASS_POUNDS,
+        data_length=2,
         factor=0.01,
     ),
     0x08: MeasTypes(
         meas_format=SensorLibrary.DEW_POINT__TEMP_CELSIUS,
+        data_length=2,
+        data_format="int",
         factor=0.01,
     ),
     0x09: MeasTypes(
         meas_format=SensorLibrary.COUNT__NONE,
-        factor=1,
+        data_length=1,
     ),
     0x0A: MeasTypes(
         meas_format=SensorLibrary.ENERGY__ENERGY_KILO_WATT_HOUR,
+        data_length=3,
         factor=0.001,
     ),
     0x0B: MeasTypes(
         meas_format=SensorLibrary.POWER__POWER_WATT,
+        data_length=3,
         factor=0.01,
     ),
     0x0C: MeasTypes(
         meas_format=SensorLibrary.VOLTAGE__ELECTRIC_POTENTIAL_VOLT,
+        data_length=2,
         factor=0.001,
     ),
     0x0D: MeasTypes(
         meas_format=SensorLibrary.PM25__CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
-        factor=1,
+        data_length=2,
     ),
     0x0E: MeasTypes(
         meas_format=SensorLibrary.PM10__CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
-        factor=1,
+        data_length=2,
     ),
     0x0F: MeasTypes(
         meas_format=description.BaseBinarySensorDescription(
@@ -91,16 +102,17 @@ MEAS_TYPES: dict[int, MeasTypes] = {
     ),
     0x12: MeasTypes(
         meas_format=SensorLibrary.CO2__CONCENTRATION_PARTS_PER_MILLION,
-        factor=1,
+        data_length=2,
     ),
     0x13: MeasTypes(
         meas_format=(
             SensorLibrary.VOLATILE_ORGANIC_COMPOUNDS__CONCENTRATION_MICROGRAMS_PER_CUBIC_METER
         ),
-        factor=1,
+        data_length=2,
     ),
     0x14: MeasTypes(
         meas_format=SensorLibrary.MOISTURE__PERCENTAGE,
+        data_length=2,
         factor=0.01,
     ),
     0x15: MeasTypes(
@@ -228,15 +240,19 @@ MEAS_TYPES: dict[int, MeasTypes] = {
             device_class=BinarySensorDeviceClass.WINDOW,
         )
     ),
-    0x2E: MeasTypes(
-        meas_format=SensorLibrary.HUMIDITY__PERCENTAGE,
-        factor=1,
-    ),
-    0x2F: MeasTypes(
-        meas_format=SensorLibrary.MOISTURE__PERCENTAGE,
-        factor=1,
-    ),
+    0x2E: MeasTypes(meas_format=SensorLibrary.HUMIDITY__PERCENTAGE),
+    0x2F: MeasTypes(meas_format=SensorLibrary.MOISTURE__PERCENTAGE),
     0x3A: MeasTypes(meas_format=EventDeviceKeys.BUTTON),
-    0x3B: MeasTypes(meas_format=EventDeviceKeys.SWITCH),
-    0x3C: MeasTypes(meas_format=EventDeviceKeys.DIMMER),
+    0x3C: MeasTypes(
+        meas_format=EventDeviceKeys.DIMMER,
+        data_length=2,
+    ),
+    0x3D: MeasTypes(
+        meas_format=SensorLibrary.COUNT__NONE,
+        data_length=2,
+    ),
+    0x3E: MeasTypes(
+        meas_format=SensorLibrary.COUNT__NONE,
+        data_length=4,
+    ),
 }
