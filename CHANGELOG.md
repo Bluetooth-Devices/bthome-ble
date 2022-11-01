@@ -2,6 +2,27 @@
 
 <!--next-version-placeholder-->
 
+## v1.4.0 (2022-11-01)
+### Feature
+* Remove object format and length byte ([`2f43a29`](https://github.com/Bluetooth-Devices/bthome-ble/commit/2f43a296cfb59fcb2938502801b3f4d12785358c))
+* Remove predefined device info ([`cb16b35`](https://github.com/Bluetooth-Devices/bthome-ble/commit/cb16b35edec71c609ae12281f900f6f56d300e93))
+* Multiple measurements of the same type ([`e57ed3d`](https://github.com/Bluetooth-Devices/bthome-ble/commit/e57ed3d857164d373bba3ca86f368a9a4ed9030f))
+* UUID V2 and adv_info byte ([`a4d6440`](https://github.com/Bluetooth-Devices/bthome-ble/commit/a4d64403dd359102762f2dbea777ccdf5e58a21d))
+
+### Fix
+* Parser not parsing multiple uuids ([#21](https://github.com/Bluetooth-Devices/bthome-ble/issues/21)) ([`e8d2646`](https://github.com/Bluetooth-Devices/bthome-ble/commit/e8d2646bb73d39e7920a04243d862c9ed68ed2c0))
+* Adjust button events ([`b796cdb`](https://github.com/Bluetooth-Devices/bthome-ble/commit/b796cdb9d18703c12bfbc1a03602edae823df6f0))
+* Logs and fix for wrong id ([`fc611c9`](https://github.com/Bluetooth-Devices/bthome-ble/commit/fc611c940295f7254bb89911d450e3abee544880))
+* Fix v1 tests ([`8099cad`](https://github.com/Bluetooth-Devices/bthome-ble/commit/8099cadcf47efdfa10a4945b8cad6cbd9fad88f6))
+* Add annotations ([`fb19043`](https://github.com/Bluetooth-Devices/bthome-ble/commit/fb19043808124ba9cfcea340c6144c9d19abc84a))
+* Button and dimmer events ([`ac3b8fa`](https://github.com/Bluetooth-Devices/bthome-ble/commit/ac3b8faac93913cf93f2095053dee580407ae939))
+* Wrong bthome device info byte ([`97d03ef`](https://github.com/Bluetooth-Devices/bthome-ble/commit/97d03efe657d875c06b6018453cc692a73a14531))
+* Remove device_info_flag ([`f524294`](https://github.com/Bluetooth-Devices/bthome-ble/commit/f524294f29ad3df43066c5e13faf90c45e1e9b7d))
+* Resolve comments ([`5a904f6`](https://github.com/Bluetooth-Devices/bthome-ble/commit/5a904f6c97c2ad17ad706c224dbc5c2b2265f7b3))
+* Improve coverage ([`f21a739`](https://github.com/Bluetooth-Devices/bthome-ble/commit/f21a739325ed2fe20d22256fe6e085c6404f8b12))
+* Resolve comments review ([`e0d58a0`](https://github.com/Bluetooth-Devices/bthome-ble/commit/e0d58a0e139f1b7928ff3407a56c02e40df9c5da))
+* Remove mac parser and code cleaning ([`4a4fe68`](https://github.com/Bluetooth-Devices/bthome-ble/commit/4a4fe683b781caf05524f6a38290d8215bb3a4b6))
+
 ## v1.3.0 (2022-10-04)
 ### Feature
 * Force new release adding events ([`8ae802a`](https://github.com/Bluetooth-Devices/bthome-ble/commit/8ae802a6a34eb9419504347a5a498bf9617063d1))
