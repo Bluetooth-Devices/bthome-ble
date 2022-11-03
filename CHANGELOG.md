@@ -2,6 +2,13 @@
 
 <!--next-version-placeholder-->
 
+## v2.1.0 (2022-11-03)
+### Feature
+* New sensor types ([`1bbf778`](https://github.com/Bluetooth-Devices/bthome-ble/commit/1bbf778887cb411d710a7787c3ae0f68a9a9eac2))
+
+### Fix
+* Update poetry file ([`90cf1ea`](https://github.com/Bluetooth-Devices/bthome-ble/commit/90cf1eaf4e8b474dfda13c6f579a46a3f08e95d2))
+
 ## v2.0.0 (2022-11-01)
 
 ### Breaking
