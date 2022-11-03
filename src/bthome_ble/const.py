@@ -15,7 +15,7 @@ class MeasTypes:
         description.BaseSensorDescription,
     ]
     data_length: int = 1
-    data_format: str = "uint"
+    data_format: str = "unsigned_integer"
     factor: float = 1
 
 
@@ -24,7 +24,7 @@ MEAS_TYPES: dict[int, MeasTypes] = {
     0x02: MeasTypes(
         meas_format=SensorLibrary.TEMPERATURE__CELSIUS,
         data_length=2,
-        data_format="int",
+        data_format="signed_integer",
         factor=0.01,
     ),
     0x03: MeasTypes(
@@ -55,7 +55,7 @@ MEAS_TYPES: dict[int, MeasTypes] = {
     0x08: MeasTypes(
         meas_format=SensorLibrary.DEW_POINT__TEMP_CELSIUS,
         data_length=2,
-        data_format="int",
+        data_format="signed_integer",
         factor=0.01,
     ),
     0x09: MeasTypes(
@@ -254,5 +254,36 @@ MEAS_TYPES: dict[int, MeasTypes] = {
     0x3E: MeasTypes(
         meas_format=SensorLibrary.COUNT__NONE,
         data_length=4,
+    ),
+    0x3F: MeasTypes(
+        meas_format=SensorLibrary.ROTATION__DEGREE,
+        data_length=2,
+        data_format="signed_integer",
+        factor=0.1,
+    ),
+    0x40: MeasTypes(
+        meas_format=SensorLibrary.DISTANCE__LENGTH_MILLIMETERS,
+        data_length=2,
+        factor=1,
+    ),
+    0x41: MeasTypes(
+        meas_format=SensorLibrary.DISTANCE__LENGTH_METERS,
+        data_length=2,
+        factor=0.1,
+    ),
+    0x42: MeasTypes(
+        meas_format=SensorLibrary.TIME__TIME_SECONDS,
+        data_length=3,
+        factor=0.001,
+    ),
+    0x43: MeasTypes(
+        meas_format=SensorLibrary.CURRENT__ELECTRIC_CURRENT_AMPERE,
+        data_length=2,
+        factor=0.001,
+    ),
+    0x44: MeasTypes(
+        meas_format=SensorLibrary.SPEED__SPEED_METERS_PER_SECOND,
+        data_length=2,
+        factor=0.01,
     ),
 }

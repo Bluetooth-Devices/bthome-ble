@@ -402,13 +402,13 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             meas_factor = meas_type.factor
             value: None | str | int | float
 
-            if meas["data format"] == 0 or meas["data format"] == "uint":
+            if meas["data format"] == 0 or meas["data format"] == "unsigned_integer":
                 value = parse_uint(meas["measurement data"], meas_factor)
-            elif meas["data format"] == 1 or meas["data format"] == "int":
+            elif meas["data format"] == 1 or meas["data format"] == "signed_integer":
                 value = parse_int(meas["measurement data"], meas_factor)
             elif meas["data format"] == 2 or meas["data format"] == "float":
                 value = parse_float(meas["measurement data"], meas_factor)
-            elif meas["data format"] == 3 or meas["data format"] == "str":
+            elif meas["data format"] == 3 or meas["data format"] == "string":
                 value = parse_string(meas["measurement data"])
             else:
                 _LOGGER.error(
