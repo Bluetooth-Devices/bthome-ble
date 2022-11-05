@@ -272,7 +272,7 @@ MEAS_TYPES: dict[int, MeasTypes] = {
         factor=0.1,
     ),
     0x42: MeasTypes(
-        meas_format=SensorLibrary.TIME__TIME_SECONDS,
+        meas_format=SensorLibrary.DURATION__TIME_SECONDS,
         data_length=3,
         factor=0.001,
     ),
@@ -285,5 +285,16 @@ MEAS_TYPES: dict[int, MeasTypes] = {
         meas_format=SensorLibrary.SPEED__SPEED_METERS_PER_SECOND,
         data_length=2,
         factor=0.01,
+    ),
+    0x45: MeasTypes(
+        meas_format=SensorLibrary.TEMPERATURE__CELSIUS,
+        data_length=2,
+        data_format="signed_integer",
+        factor=0.1,
+    ),
+    0x46: MeasTypes(
+        meas_format=SensorLibrary.UV_INDEX__NONE,
+        data_length=1,
+        factor=0.1,
     ),
 }

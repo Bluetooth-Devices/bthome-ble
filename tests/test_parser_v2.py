@@ -43,7 +43,7 @@ KEY_ROTATION = DeviceKey(key="rotation", device_id=None)
 KEY_SIGNAL_STRENGTH = DeviceKey(key="signal_strength", device_id=None)
 KEY_SPEED = DeviceKey(key="speed", device_id=None)
 KEY_TEMPERATURE = DeviceKey(key="temperature", device_id=None)
-KEY_TIME = DeviceKey(key="time", device_id=None)
+KEY_DURATION = DeviceKey(key="duration", device_id=None)
 KEY_VOC = DeviceKey(key="volatile_organic_compounds", device_id=None)
 KEY_VOLTAGE = DeviceKey(key="voltage", device_id=None)
 
@@ -1429,8 +1429,8 @@ def test_bthome_distance_meters(caplog):
     )
 
 
-def test_bthome_time(caplog):
-    """Test BTHome parser for time in seconds."""
+def test_bthome_duration(caplog):
+    """Test BTHome parser for duration in seconds."""
     data_string = b"\x40\x42\x4E\x34\x00"
     advertisement = bytes_to_service_info(
         data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
@@ -1450,9 +1450,9 @@ def test_bthome_time(caplog):
             )
         },
         entity_descriptions={
-            KEY_TIME: SensorDescription(
-                device_key=KEY_TIME,
-                device_class=SensorDeviceClass.TIME,
+            KEY_DURATION: SensorDescription(
+                device_key=KEY_DURATION,
+                device_class=SensorDeviceClass.DURATION,
                 native_unit_of_measurement=Units.TIME_SECONDS,
             ),
             KEY_SIGNAL_STRENGTH: SensorDescription(
@@ -1462,7 +1462,9 @@ def test_bthome_time(caplog):
             ),
         },
         entity_values={
-            KEY_TIME: SensorValue(device_key=KEY_TIME, name="Time", native_value=13.39),
+            KEY_DURATION: SensorValue(
+                device_key=KEY_DURATION, name="Duration", native_value=13.39
+            ),
             KEY_SIGNAL_STRENGTH: SensorValue(
                 device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
             ),
