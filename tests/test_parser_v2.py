@@ -1242,15 +1242,15 @@ def test_bthome_event_triple_button_device(caplog):
             ),
         },
         events={
-            DeviceKey(key="button", device_id="2"): Event(
-                device_key=DeviceKey(key="button", device_id="2"),
-                name="Button",
+            DeviceKey(key="button_2", device_id=None): Event(
+                device_key=DeviceKey(key="button_2", device_id=None),
+                name="Button 2",
                 event_type="press",
                 event_properties=None,
             ),
-            DeviceKey(key="button", device_id="3"): Event(
-                device_key=DeviceKey(key="button", device_id="3"),
-                name="Button",
+            DeviceKey(key="button_3", device_id=None): Event(
+                device_key=DeviceKey(key="button_3", device_id=None),
+                name="Button 3",
                 event_type="triple_press",
                 event_properties=None,
             ),
@@ -1665,13 +1665,13 @@ def test_bthome_double_temperature(caplog):
             )
         },
         entity_descriptions={
-            DeviceKey(key="temperature", device_id="1"): SensorDescription(
-                device_key=DeviceKey(key="temperature", device_id="1"),
+            DeviceKey(key="temperature_1", device_id=None): SensorDescription(
+                device_key=DeviceKey(key="temperature_1", device_id=None),
                 device_class=SensorDeviceClass.TEMPERATURE,
                 native_unit_of_measurement=Units.TEMP_CELSIUS,
             ),
-            DeviceKey(key="temperature", device_id="2"): SensorDescription(
-                device_key=DeviceKey(key="temperature", device_id="2"),
+            DeviceKey(key="temperature_2", device_id=None): SensorDescription(
+                device_key=DeviceKey(key="temperature_2", device_id=None),
                 device_class=SensorDeviceClass.TEMPERATURE,
                 native_unit_of_measurement=Units.TEMP_CELSIUS,
             ),
@@ -1682,14 +1682,14 @@ def test_bthome_double_temperature(caplog):
             ),
         },
         entity_values={
-            DeviceKey(key="temperature", device_id="1"): SensorValue(
-                device_key=DeviceKey(key="temperature", device_id="1"),
-                name="Temperature",
+            DeviceKey(key="temperature_1", device_id=None): SensorValue(
+                device_key=DeviceKey(key="temperature_1", device_id=None),
+                name="Temperature 1",
                 native_value=25.06,
             ),
-            DeviceKey(key="temperature", device_id="2"): SensorValue(
-                device_key=DeviceKey(key="temperature", device_id="2"),
-                name="Temperature",
+            DeviceKey(key="temperature_2", device_id=None): SensorValue(
+                device_key=DeviceKey(key="temperature_2", device_id=None),
+                name="Temperature 2",
                 native_value=25.11,
             ),
             KEY_SIGNAL_STRENGTH: SensorValue(
@@ -1699,7 +1699,7 @@ def test_bthome_double_temperature(caplog):
     )
 
 
-def test_bthome_tripple_temperature_double_humidity_battery(caplog):
+def test_bthome_triple_temperature_double_humidity_battery(caplog):
     """
     Test BTHome parser for triple temperature, double humidity and
     single battery reading without encryption.
@@ -1724,28 +1724,28 @@ def test_bthome_tripple_temperature_double_humidity_battery(caplog):
             )
         },
         entity_descriptions={
-            DeviceKey(key="temperature", device_id="1"): SensorDescription(
-                device_key=DeviceKey(key="temperature", device_id="1"),
+            DeviceKey(key="temperature_1", device_id=None): SensorDescription(
+                device_key=DeviceKey(key="temperature_1", device_id=None),
                 device_class=SensorDeviceClass.TEMPERATURE,
                 native_unit_of_measurement=Units.TEMP_CELSIUS,
             ),
-            DeviceKey(key="temperature", device_id="2"): SensorDescription(
-                device_key=DeviceKey(key="temperature", device_id="2"),
+            DeviceKey(key="temperature_2", device_id=None): SensorDescription(
+                device_key=DeviceKey(key="temperature_2", device_id=None),
                 device_class=SensorDeviceClass.TEMPERATURE,
                 native_unit_of_measurement=Units.TEMP_CELSIUS,
             ),
-            DeviceKey(key="temperature", device_id="3"): SensorDescription(
-                device_key=DeviceKey(key="temperature", device_id="3"),
+            DeviceKey(key="temperature_3", device_id=None): SensorDescription(
+                device_key=DeviceKey(key="temperature_3", device_id=None),
                 device_class=SensorDeviceClass.TEMPERATURE,
                 native_unit_of_measurement=Units.TEMP_CELSIUS,
             ),
-            DeviceKey(key="humidity", device_id="1"): SensorDescription(
-                device_key=DeviceKey(key="humidity", device_id="1"),
+            DeviceKey(key="humidity_1", device_id=None): SensorDescription(
+                device_key=DeviceKey(key="humidity_1", device_id=None),
                 device_class=SensorDeviceClass.HUMIDITY,
                 native_unit_of_measurement=Units.PERCENTAGE,
             ),
-            DeviceKey(key="humidity", device_id="2"): SensorDescription(
-                device_key=DeviceKey(key="humidity", device_id="2"),
+            DeviceKey(key="humidity_2", device_id=None): SensorDescription(
+                device_key=DeviceKey(key="humidity_2", device_id=None),
                 device_class=SensorDeviceClass.HUMIDITY,
                 native_unit_of_measurement=Units.PERCENTAGE,
             ),
@@ -1761,29 +1761,29 @@ def test_bthome_tripple_temperature_double_humidity_battery(caplog):
             ),
         },
         entity_values={
-            DeviceKey(key="temperature", device_id="1"): SensorValue(
-                device_key=DeviceKey(key="temperature", device_id="1"),
-                name="Temperature",
+            DeviceKey(key="temperature_1", device_id=None): SensorValue(
+                device_key=DeviceKey(key="temperature_1", device_id=None),
+                name="Temperature 1",
                 native_value=25.06,
             ),
-            DeviceKey(key="temperature", device_id="2"): SensorValue(
-                device_key=DeviceKey(key="temperature", device_id="2"),
-                name="Temperature",
+            DeviceKey(key="temperature_2", device_id=None): SensorValue(
+                device_key=DeviceKey(key="temperature_2", device_id=None),
+                name="Temperature 2",
                 native_value=25.11,
             ),
-            DeviceKey(key="temperature", device_id="3"): SensorValue(
-                device_key=DeviceKey(key="temperature", device_id="3"),
-                name="Temperature",
+            DeviceKey(key="temperature_3", device_id=None): SensorValue(
+                device_key=DeviceKey(key="temperature_3", device_id=None),
+                name="Temperature 3",
                 native_value=22.55,
             ),
-            DeviceKey(key="humidity", device_id="1"): SensorValue(
-                device_key=DeviceKey(key="humidity", device_id="1"),
-                name="Humidity",
+            DeviceKey(key="humidity_1", device_id=None): SensorValue(
+                device_key=DeviceKey(key="humidity_1", device_id=None),
+                name="Humidity 1",
                 native_value=63.27,
             ),
-            DeviceKey(key="humidity", device_id="2"): SensorValue(
-                device_key=DeviceKey(key="humidity", device_id="2"),
-                name="Humidity",
+            DeviceKey(key="humidity_2", device_id=None): SensorValue(
+                device_key=DeviceKey(key="humidity_2", device_id=None),
+                name="Humidity 2",
                 native_value=60.71,
             ),
             KEY_BATTERY: SensorValue(KEY_BATTERY, name="Battery", native_value=93),
