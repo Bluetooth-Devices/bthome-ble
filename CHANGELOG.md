@@ -2,6 +2,14 @@
 
 <!--next-version-placeholder-->
 
+## v2.2.0 (2022-11-06)
+### Feature
+* Update dependencies ([`a3e9daf`](https://github.com/Bluetooth-Devices/bthome-ble/commit/a3e9dafcaa907ae3672c60df7e2da3ce8128b340))
+
+### Fix
+* Add tests for duration and temperature ([`552cbb8`](https://github.com/Bluetooth-Devices/bthome-ble/commit/552cbb8be03e62b1b9e2231ba4c658c658d375cd))
+* Uv and duration sensors ([`4130c71`](https://github.com/Bluetooth-Devices/bthome-ble/commit/4130c71b01f4a1d733e11b153fbe50031b53b48b))
+
 ## v2.1.0 (2022-11-03)
 ### Feature
 * New sensor types ([`1bbf778`](https://github.com/Bluetooth-Devices/bthome-ble/commit/1bbf778887cb411d710a7787c3ae0f68a9a9eac2))
