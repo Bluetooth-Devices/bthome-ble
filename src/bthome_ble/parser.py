@@ -313,7 +313,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         prev_obj_meas_type = 0
         result = False
         measurements: list[dict[str, Any]] = []
-        device_id_dict: dict[int, int] = {}
+        postfix_dict: dict[int, int] = {}
         obj_data_format: str | int
 
         # Create a list with all individual objects
@@ -390,12 +390,12 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                 continue
 
             if meas["measurement type"] in dup_meas_types:
-                # Add a device_id for advertisements with multiple measurements of the same type
-                device_id_counter = device_id_dict.get(meas["measurement type"], 0) + 1
-                device_id_dict[meas["measurement type"]] = device_id_counter
-                device_id = str(device_id_counter)
+                # Add a postfix for advertisements with multiple measurements of the same type
+                postfix_counter = postfix_dict.get(meas["measurement type"], 0) + 1
+                postfix_dict[meas["measurement type"]] = postfix_counter
+                postfix = f"_{postfix_counter}"
             else:
-                device_id = None
+                postfix = ""
 
             meas_type = MEAS_TYPES[meas["measurement type"]]
             meas_format = meas_type.meas_format
@@ -423,21 +423,19 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                     and meas_format.device_class
                 ):
                     self.update_sensor(
-                        key=str(meas_format.device_class),
+                        key=f"{str(meas_format.device_class)}{postfix}",
                         native_unit_of_measurement=meas_format.native_unit_of_measurement,
                         native_value=value,
                         device_class=meas_format.device_class,
-                        device_id=device_id,
                     )
                 elif (
                     type(meas_format) == BaseBinarySensorDescription
                     and meas_format.device_class
                 ):
                     self.update_binary_sensor(
-                        key=str(meas_format.device_class),
+                        key=f"{str(meas_format.device_class)}{postfix}",
                         device_class=meas_format.device_class,
                         native_value=bool(value),
-                        device_id=device_id,
                     )
                 elif type(meas_format) == EventDeviceKeys:
                     event_type = parse_event_type(
@@ -450,10 +448,9 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                     )
                     if event_type:
                         self.fire_event(
-                            key=str(meas_format),
+                            key=f"{str(meas_format)}{postfix}",
                             event_type=event_type,
                             event_properties=event_properties,
-                            device_id=device_id,
                         )
                 result = True
             else:
