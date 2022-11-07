@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v2.2.1 (2022-11-07)
+### Fix
+* Multiple measurements fix ([`849deab`](https://github.com/Bluetooth-Devices/bthome-ble/commit/849deab688a83ba040e8f7e42598b4aa339d0460))
+
 ## v2.2.0 (2022-11-06)
 ### Feature
 * Update dependencies ([`a3e9daf`](https://github.com/Bluetooth-Devices/bthome-ble/commit/a3e9dafcaa907ae3672c60df7e2da3ce8128b340))
