@@ -493,7 +493,8 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         # nonce: mac [6], uuid16 [2 (v1) or 3 (v2)], count_id [4]
         nonce = b"".join([bthome_mac, uuid, count_id])
         cipher = AES.new(self.bindkey, AES.MODE_CCM, nonce=nonce, mac_len=4)
-        cipher.update(b"\x11")
+        if sw_version == 1:
+            cipher.update(b"\x11")
 
         # decrypt the data
         try:
