@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v2.3.0 (2022-11-18)
+### Feature
+* Remove cipher update ([`21b9390`](https://github.com/Bluetooth-Devices/bthome-ble/commit/21b9390953341e540a42636f49b09ab17519ef5c))
+
 ## v2.2.1 (2022-11-07)
 ### Fix
 * Multiple measurements fix ([`849deab`](https://github.com/Bluetooth-Devices/bthome-ble/commit/849deab688a83ba040e8f7e42598b4aa339d0460))
