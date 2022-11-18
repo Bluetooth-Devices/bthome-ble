@@ -221,7 +221,7 @@ def test_bindkey_wrong():
 def test_bindkey_correct():
     """Test BTHome parser with correct encryption key."""
     bindkey = "231d39c1d7cc1ab1aee224cd096db932"
-    data_string = b"\x41\xa4\x72\x66\xc9\x5f\x73\x00\x11\x22\x33\xb7\xce\xd8\xe5"
+    data_string = b"\x41\xa4\x72\x66\xc9\x5f\x73\x00\x11\x22\x33\x78\x23\x72\x14"
     advertisement = bytes_to_service_info(
         data_string,
         local_name="TEST DEVICE",
@@ -276,7 +276,7 @@ def test_bindkey_correct():
 def test_bindkey_verified_can_be_unset():
     """Test BTHome parser with wrong encryption key."""
     bindkey = "814aac74c4f17b6c1581e1ab87816b99"
-    data_string = b'\x41\xfb\xa45\xe4\xd3\xc3\x12\xfb\x00\x11"3W\xd9\n\x99'
+    data_string = b"\x41\xa4\x72\x66\xc9\x5f\x73\x00\x11\x22\x33\x78\x23\x72\x14"
     advertisement = bytes_to_service_info(
         data_string,
         local_name="ATC_8D18B2",

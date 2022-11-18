@@ -26,7 +26,6 @@ def decrypt_payload(
     print("CryptData:", payload.hex())
     print("Mic:", mic.hex())
     cipher = AES.new(key, AES.MODE_CCM, nonce=nonce, mac_len=4)
-    cipher.update(b"\x11")
     print()
     print("Starting Decryption data")
     try:
@@ -71,7 +70,6 @@ def encrypt_payload(
     """Encrypt payload."""
     nonce = b"".join([mac, uuid16, sw_version, count_id])  # 6+2+1+4 = 13 bytes
     cipher = AES.new(key, AES.MODE_CCM, nonce=nonce, mac_len=4)
-    cipher.update(b"\x11")
     ciphertext, mic = cipher.encrypt_and_digest(data)
     print("MAC:", mac.hex())
     print("Binkey:", key.hex())
@@ -96,7 +94,7 @@ def main() -> None:
     count_id = bytes(bytearray.fromhex("00112233"))  # count id (change every message)
     mac = binascii.unhexlify("5448E68F80A5")  # MAC
     uuid16 = b"\xD2\xFC"
-    sw_version = b"\x42"
+    sw_version = b"\x41"
     bindkey = binascii.unhexlify("231d39c1d7cc1ab1aee224cd096db932")
 
     payload = encrypt_payload(
