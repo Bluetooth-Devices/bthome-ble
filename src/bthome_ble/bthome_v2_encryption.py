@@ -23,8 +23,8 @@ def decrypt_payload(
 ) -> dict[str, float] | None:
     """Decrypt payload."""
     print("Nonce:", nonce.hex())
-    print("CryptData:", payload.hex())
-    print("Mic:", mic.hex())
+    print("Ciphertext:", payload.hex())
+    print("MIC:", mic.hex())
     cipher = AES.new(key, AES.MODE_CCM, nonce=nonce, mac_len=4)
     print()
     print("Starting Decryption data")
@@ -75,7 +75,8 @@ def encrypt_payload(
     print("Binkey:", key.hex())
     print("Data:", data.hex())
     print("Nonce:", nonce.hex())
-    print("CryptData:", ciphertext.hex(), "Mic:", mic.hex())
+    print("Ciphertext:", ciphertext.hex())
+    print("MIC:", mic.hex())
     return b"".join([uuid16, sw_version, ciphertext, count_id, mic])
 
 
