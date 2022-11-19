@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v2.3.1 (2022-11-19)
+### Fix
+* Warning for numerical order object id ([`b86feaa`](https://github.com/Bluetooth-Devices/bthome-ble/commit/b86feaa7f2845c1471bd13d48443a23122078bc6))
+
 ## v2.3.0 (2022-11-18)
 ### Feature
 * Remove cipher update ([`21b9390`](https://github.com/Bluetooth-Devices/bthome-ble/commit/21b9390953341e540a42636f49b09ab17519ef5c))
