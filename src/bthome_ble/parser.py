@@ -331,7 +331,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             else:
                 # BTHome V2
                 obj_meas_type = payload[obj_start]
-                if prev_obj_meas_type < obj_meas_type:
+                if prev_obj_meas_type > obj_meas_type:
                     _LOGGER.warning(
                         "BTHome device is not sending object ids in numerical order (from low to "
                         "high object id). This can cause issues with your BTHome receiver, "
