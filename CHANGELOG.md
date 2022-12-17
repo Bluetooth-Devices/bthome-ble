@@ -2,6 +2,13 @@
 
 <!--next-version-placeholder-->
 
+## v2.4.0 (2022-12-17)
+### Feature
+* Add volume and packet id ([`aaefa4e`](https://github.com/Bluetooth-Devices/bthome-ble/commit/aaefa4e5913bc6db80ad98e4e2947fb58e8abb83))
+
+### Fix
+* Update tests and dependencies ([`bb9d0a2`](https://github.com/Bluetooth-Devices/bthome-ble/commit/bb9d0a2c4941915dd9e37b8fe8db3ef5f8c627d3))
+
 ## v2.3.1 (2022-11-19)
 ### Fix
 * Warning for numerical order object id ([`b86feaa`](https://github.com/Bluetooth-Devices/bthome-ble/commit/b86feaa7f2845c1471bd13d48443a23122078bc6))
