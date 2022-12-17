@@ -20,6 +20,7 @@ class MeasTypes:
 
 
 MEAS_TYPES: dict[int, MeasTypes] = {
+    0x00: MeasTypes(meas_format=SensorLibrary.PACKET_ID__NONE),
     0x01: MeasTypes(meas_format=SensorLibrary.BATTERY__PERCENTAGE),
     0x02: MeasTypes(
         meas_format=SensorLibrary.TEMPERATURE__CELSIUS,
@@ -296,5 +297,19 @@ MEAS_TYPES: dict[int, MeasTypes] = {
         meas_format=SensorLibrary.UV_INDEX__NONE,
         data_length=1,
         factor=0.1,
+    ),
+    0x47: MeasTypes(
+        meas_format=SensorLibrary.VOLUME__VOLUME_LITERS,
+        data_length=2,
+        factor=0.1,
+    ),
+    0x48: MeasTypes(
+        meas_format=SensorLibrary.VOLUME__VOLUME_MILLILITERS,
+        data_length=2,
+    ),
+    0x49: MeasTypes(
+        meas_format=SensorLibrary.VOLUME_FLOW_RATE__VOLUME_FLOW_RATE_CUBIC_METERS_PER_HOUR,
+        data_length=2,
+        factor=0.001,
     ),
 }
