@@ -33,6 +33,7 @@ KEY_HUMIDITY = DeviceKey(key="humidity", device_id=None)
 KEY_ILLUMINANCE = DeviceKey(key="illuminance", device_id=None)
 KEY_MASS = DeviceKey(key="mass", device_id=None)
 KEY_MOISTURE = DeviceKey(key="moisture", device_id=None)
+KEY_PACKET_ID = DeviceKey(key="packet_id", device_id=None)
 KEY_PM25 = DeviceKey(key="pm25", device_id=None)
 KEY_PM10 = DeviceKey(key="pm10", device_id=None)
 KEY_POWER = DeviceKey(key="power", device_id=None)
@@ -1146,6 +1147,11 @@ def test_bthome_multiple_uuids(caplog):
             )
         },
         entity_descriptions={
+            KEY_PACKET_ID: SensorDescription(
+                device_key=KEY_PACKET_ID,
+                device_class=SensorDeviceClass.PACKET_ID,
+                native_unit_of_measurement=None,
+            ),
             KEY_VOLTAGE: SensorDescription(
                 device_key=KEY_VOLTAGE,
                 device_class=SensorDeviceClass.VOLTAGE,
@@ -1158,6 +1164,9 @@ def test_bthome_multiple_uuids(caplog):
             ),
         },
         entity_values={
+            KEY_PACKET_ID: SensorValue(
+                device_key=KEY_PACKET_ID, name="Packet Id", native_value=180
+            ),
             KEY_VOLTAGE: SensorValue(
                 device_key=KEY_VOLTAGE, name="Voltage", native_value=3.006
             ),
