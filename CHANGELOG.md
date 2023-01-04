@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v2.4.1 (2023-01-04)
+### Fix
+* Bump sensor-state-data ([`1202ace`](https://github.com/Bluetooth-Devices/bthome-ble/commit/1202ace26e0a5acdb26cc90e4eae1d8deab3a2dd))
+* Bump sensor-state-data ([`7bff7be`](https://github.com/Bluetooth-Devices/bthome-ble/commit/7bff7be46ad1c0ca082c7801f7741343c92cb342))
+* Bump sensor-state-data ([`930b222`](https://github.com/Bluetooth-Devices/bthome-ble/commit/930b22299e20c61bd8256b4a9db3b4306e4a224a))
+
 ## v2.4.0 (2022-12-17)
 ### Feature
 * Add volume and packet id ([`aaefa4e`](https://github.com/Bluetooth-Devices/bthome-ble/commit/aaefa4e5913bc6db80ad98e4e2947fb58e8abb83))
