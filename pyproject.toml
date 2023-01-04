@@ -31,7 +31,7 @@ sphinx-rtd-theme = {version = "^1.0", optional = true}
 myst-parser = {version = "^0.18", optional = true}
 bluetooth-sensor-state-data = ">=1.6.0"
 pycryptodomex = ">=3.15.0"
-sensor-state-data = ">=2.10.1"
+sensor-state-data = ">=2.13.0"
 bluetooth-data-tools = ">=0.1.2"
 
 [tool.poetry.extras]
