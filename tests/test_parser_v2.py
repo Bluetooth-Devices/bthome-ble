@@ -1787,6 +1787,48 @@ def test_bthome_volume_flow_rate(caplog):
     )
 
 
+def test_bthome_voltage_2(caplog):
+    """Test BThome parser for voltage reading without encryption."""
+    data_string = b"\x40\x4a\x02\x0c"
+    advertisement = bytes_to_service_info(
+        data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
+    )
+
+    device = BTHomeBluetoothDeviceData()
+    assert device.update(advertisement) == SensorUpdate(
+        title="TEST DEVICE 18B2",
+        devices={
+            None: SensorDeviceInfo(
+                name="TEST DEVICE 18B2",
+                manufacturer=None,
+                model="BTHome sensor",
+                sw_version="BTHome BLE v2",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            KEY_VOLTAGE: SensorDescription(
+                device_key=KEY_VOLTAGE,
+                device_class=SensorDeviceClass.VOLTAGE,
+                native_unit_of_measurement=Units.ELECTRIC_POTENTIAL_VOLT,
+            ),
+            KEY_SIGNAL_STRENGTH: SensorDescription(
+                device_key=KEY_SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
+            KEY_VOLTAGE: SensorValue(
+                device_key=KEY_VOLTAGE, name="Voltage", native_value=307.4
+            ),
+            KEY_SIGNAL_STRENGTH: SensorValue(
+                device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+    )
+
+
 def test_bthome_double_temperature(caplog):
     """Test BTHome parser for double temperature reading without encryption."""
     data_string = b"\x40\x02\xca\x09\x02\xcf\x09"

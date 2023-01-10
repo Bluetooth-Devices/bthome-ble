@@ -312,4 +312,9 @@ MEAS_TYPES: dict[int, MeasTypes] = {
         data_length=2,
         factor=0.001,
     ),
+    0x4A: MeasTypes(
+        meas_format=SensorLibrary.VOLTAGE__ELECTRIC_POTENTIAL_VOLT,
+        data_length=2,
+        factor=0.1,
+    ),
 }
