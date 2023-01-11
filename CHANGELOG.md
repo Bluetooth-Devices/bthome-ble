@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v2.5.0 (2023-01-11)
+### Feature
+* Add voltage with 1 digit ([`acd1da7`](https://github.com/Bluetooth-Devices/bthome-ble/commit/acd1da7e62a652cba588d8b543479afd6b86a42f))
+
 ## v2.4.1 (2023-01-04)
 ### Fix
 * Bump sensor-state-data ([`1202ace`](https://github.com/Bluetooth-Devices/bthome-ble/commit/1202ace26e0a5acdb26cc90e4eae1d8deab3a2dd))
