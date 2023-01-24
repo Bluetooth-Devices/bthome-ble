@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v2.5.1 (2023-01-24)
+### Fix
+* Correct data length check ([`aed08c4`](https://github.com/Bluetooth-Devices/bthome-ble/commit/aed08c4d07a7fc1dd25d5f081a88d88171946498))
+
 ## v2.5.0 (2023-01-11)
 ### Feature
 * Add voltage with 1 digit ([`acd1da7`](https://github.com/Bluetooth-Devices/bthome-ble/commit/acd1da7e62a652cba588d8b543479afd6b86a42f))
