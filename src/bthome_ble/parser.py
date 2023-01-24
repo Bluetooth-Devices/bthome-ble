@@ -477,7 +477,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             raise ValueError
 
         # check for minimum length of encrypted advertisement
-        if len(data) < (15 if sw_version == 1 else 14):
+        if len(data) < (12 if sw_version == 1 else 11):
             _LOGGER.debug("Invalid data length (for decryption), adv: %s", data.hex())
             raise ValueError
 
