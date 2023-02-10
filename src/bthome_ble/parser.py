@@ -313,7 +313,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         prev_obj_meas_type = 0
         result = False
         measurements: list[dict[str, Any]] = []
-        postfix_dict: dict[int, int] = {}
+        postfix_dict: dict[str, int] = {}
         obj_data_format: str | int
 
         # Create a list with all individual objects
@@ -371,13 +371,15 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             )
 
         # Get a list of measurement types that are included more than once.
-        seen_meas_types = set()
-        dup_meas_types = set()
+        seen_meas_formats = set()
+        dup_meas_formats = set()
         for meas in measurements:
-            if meas["measurement type"] in seen_meas_types:
-                dup_meas_types.add(meas["measurement type"])
-            else:
-                seen_meas_types.add(meas["measurement type"])
+            if meas["measurement type"] in MEAS_TYPES:
+                meas_format = MEAS_TYPES[meas["measurement type"]].meas_format
+                if meas_format in seen_meas_formats:
+                    dup_meas_formats.add(meas_format)
+                else:
+                    seen_meas_formats.add(meas_format)
 
         # Parse each object into readable information
         for meas in measurements:
@@ -389,17 +391,18 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                 )
                 continue
 
-            if meas["measurement type"] in dup_meas_types:
+            meas_type = MEAS_TYPES[meas["measurement type"]]
+            meas_format = meas_type.meas_format
+            meas_factor = meas_type.factor
+
+            if meas_type.meas_format in dup_meas_formats:
                 # Add a postfix for advertisements with multiple measurements of the same type
-                postfix_counter = postfix_dict.get(meas["measurement type"], 0) + 1
-                postfix_dict[meas["measurement type"]] = postfix_counter
+                postfix_counter = postfix_dict.get(meas_format, 0) + 1
+                postfix_dict[meas_format] = postfix_counter
                 postfix = f"_{postfix_counter}"
             else:
                 postfix = ""
 
-            meas_type = MEAS_TYPES[meas["measurement type"]]
-            meas_format = meas_type.meas_format
-            meas_factor = meas_type.factor
             value: None | str | int | float
 
             if meas["data format"] == 0 or meas["data format"] == "unsigned_integer":

@@ -2048,3 +2048,83 @@ def test_bthome_multiple_uuids(caplog):
             ),
         },
     )
+
+
+def test_bthome_double_voltage_different_object_id(caplog):
+    """
+    Test BTHome parser for double voltage with different object id.
+    """
+    data_string = b"@\x00\x01\x0b\x00\x00\x00J\r\t\x013\x0c\xe9\x0c"
+    advertisement = bytes_to_service_info(
+        data_string, local_name="A4:C1:38:8D:18:B2", address="A4:C1:38:8D:18:B2"
+    )
+
+    device = BTHomeBluetoothDeviceData()
+    assert device.update(advertisement) == SensorUpdate(
+        title="BTHome sensor 18B2",
+        devices={
+            None: SensorDeviceInfo(
+                name="BTHome sensor 18B2",
+                manufacturer=None,
+                model="BTHome sensor",
+                sw_version="BTHome BLE v2",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            KEY_PACKET_ID: SensorDescription(
+                device_key=KEY_PACKET_ID,
+                device_class=SensorDeviceClass.PACKET_ID,
+                native_unit_of_measurement=None,
+            ),
+            DeviceKey(key="power", device_id=None): SensorDescription(
+                device_key=DeviceKey(key="power", device_id=None),
+                device_class=SensorDeviceClass.POWER,
+                native_unit_of_measurement=Units.POWER_WATT,
+            ),
+            DeviceKey(key="voltage_1", device_id=None): SensorDescription(
+                device_key=DeviceKey(key="voltage_1", device_id=None),
+                device_class=SensorDeviceClass.VOLTAGE,
+                native_unit_of_measurement=Units.ELECTRIC_POTENTIAL_VOLT,
+            ),
+            KEY_BATTERY: SensorDescription(
+                device_key=KEY_BATTERY,
+                device_class=SensorDeviceClass.BATTERY,
+                native_unit_of_measurement=Units.PERCENTAGE,
+            ),
+            DeviceKey(key="voltage_2", device_id=None): SensorDescription(
+                device_key=DeviceKey(key="voltage_2", device_id=None),
+                device_class=SensorDeviceClass.VOLTAGE,
+                native_unit_of_measurement=Units.ELECTRIC_POTENTIAL_VOLT,
+            ),
+            KEY_SIGNAL_STRENGTH: SensorDescription(
+                device_key=KEY_SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
+            KEY_PACKET_ID: SensorValue(
+                device_key=KEY_PACKET_ID, name="Packet Id", native_value=1
+            ),
+            DeviceKey(key="power", device_id=None): SensorValue(
+                device_key=DeviceKey(key="power", device_id=None),
+                name="Power",
+                native_value=0.0,
+            ),
+            DeviceKey(key="voltage_1", device_id=None): SensorValue(
+                device_key=DeviceKey(key="voltage_1", device_id=None),
+                name="Voltage 1",
+                native_value=231.7,
+            ),
+            KEY_BATTERY: SensorValue(KEY_BATTERY, name="Battery", native_value=51),
+            DeviceKey(key="voltage_2", device_id=None): SensorValue(
+                device_key=DeviceKey(key="voltage_2", device_id=None),
+                name="Voltage 2",
+                native_value=3.305,
+            ),
+            KEY_SIGNAL_STRENGTH: SensorValue(
+                device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+    )
