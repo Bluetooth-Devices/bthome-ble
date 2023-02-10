@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v2.5.2 (2023-02-10)
+### Fix
+* Parse objects of the same time correctly ([#47](https://github.com/Bluetooth-Devices/bthome-ble/issues/47)) ([`27e5982`](https://github.com/Bluetooth-Devices/bthome-ble/commit/27e5982214ee34cca6243532dff4e9b2e65e0da9))
+
 ## v2.5.1 (2023-01-24)
 ### Fix
 * Correct data length check ([`aed08c4`](https://github.com/Bluetooth-Devices/bthome-ble/commit/aed08c4d07a7fc1dd25d5f081a88d88171946498))
