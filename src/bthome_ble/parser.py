@@ -287,21 +287,27 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         self.set_title(f"{name} {identifier}")
         self.set_device_type("BTHome sensor")
 
-        payload = data[1:]
+        mac_included = adv_info & (1 << 1)  # bit 1
+        if mac_included:
+            bthome_mac_reversed = data[1:7]
+            mac_readable = to_mac(bthome_mac_reversed[::-1])
+            payload = data[7:]
+        else:
+            mac_readable = service_info.address
+            payload = data[1:]
 
         if self.encryption_scheme == EncryptionScheme.BTHOME_BINDKEY:
-            mac_readable = service_info.address
             if len(mac_readable) != 17 and mac_readable[2] != ":":
                 # On macOS, we get a UUID, which is useless for BTHome sensors
+                # Unless the MAC address is specified in the payload
                 self.mac_known = False
                 return False
             else:
                 self.mac_known = True
-            source_mac = bytes.fromhex(mac_readable.replace(":", ""))
-
+            bthome_mac = bytes.fromhex(mac_readable.replace(":", ""))
             # Decode encrypted payload
             try:
-                payload = self._decrypt_bthome(payload, source_mac, sw_version)
+                payload = self._decrypt_bthome(payload, bthome_mac, sw_version)
             except (ValueError, TypeError):
                 return True
 

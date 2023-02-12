@@ -372,6 +372,103 @@ def test_bthome_battery_wrong_object_id_humidity(caplog):
     )
 
 
+def test_bthome_with_mac(caplog):
+    """Test BTHome parser for pressure reading mac address in payload."""
+    data_string = b"\x42\xb2\x18\x8d\x38\xc1\xa4\x04\x13\x8a\x01"
+    advertisement = bytes_to_service_info(
+        data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
+    )
+
+    device = BTHomeBluetoothDeviceData()
+    assert device.update(advertisement) == SensorUpdate(
+        title="TEST DEVICE 18B2",
+        devices={
+            None: SensorDeviceInfo(
+                name="TEST DEVICE 18B2",
+                manufacturer=None,
+                model="BTHome sensor",
+                sw_version="BTHome BLE v2",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            KEY_PRESSURE: SensorDescription(
+                device_key=KEY_PRESSURE,
+                device_class=SensorDeviceClass.PRESSURE,
+                native_unit_of_measurement=Units.PRESSURE_MBAR,
+            ),
+            KEY_SIGNAL_STRENGTH: SensorDescription(
+                device_key=KEY_SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
+            KEY_PRESSURE: SensorValue(
+                device_key=KEY_PRESSURE, name="Pressure", native_value=1008.83
+            ),
+            KEY_SIGNAL_STRENGTH: SensorValue(
+                device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+    )
+
+
+def test_bthome_with_mac_encrypted():
+    """Test BTHome parser with mac address in payload plus encryption."""
+    bindkey = "231d39c1d7cc1ab1aee224cd096db932"
+    data_string = b"\x43\xa5\x80\x8f\xe6\x48\x54\xa4\x72\x66\xc9\x5f\x73\x00\x11\x22\x33\x78\x23\x72\x14"
+    advertisement = bytes_to_service_info(
+        data_string,
+        local_name="TEST DEVICE",
+        address="54:48:E6:8F:80:A5",
+    )
+
+    device = BTHomeBluetoothDeviceData(bindkey=bytes.fromhex(bindkey))
+    assert device.supported(advertisement)
+    assert device.bindkey_verified
+    assert device.update(advertisement) == SensorUpdate(
+        title="TEST DEVICE 80A5",
+        devices={
+            None: SensorDeviceInfo(
+                name="TEST DEVICE 80A5",
+                manufacturer=None,
+                model="BTHome sensor",
+                sw_version="BTHome BLE v2 (encrypted)",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            KEY_TEMPERATURE: SensorDescription(
+                device_key=KEY_TEMPERATURE,
+                device_class=SensorDeviceClass.TEMPERATURE,
+                native_unit_of_measurement=Units.TEMP_CELSIUS,
+            ),
+            KEY_HUMIDITY: SensorDescription(
+                device_key=KEY_HUMIDITY,
+                device_class=SensorDeviceClass.HUMIDITY,
+                native_unit_of_measurement=Units.PERCENTAGE,
+            ),
+            KEY_SIGNAL_STRENGTH: SensorDescription(
+                device_key=KEY_SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
+            KEY_TEMPERATURE: SensorValue(
+                device_key=KEY_TEMPERATURE, name="Temperature", native_value=25.06
+            ),
+            KEY_HUMIDITY: SensorValue(
+                device_key=KEY_HUMIDITY, name="Humidity", native_value=50.55
+            ),
+            KEY_SIGNAL_STRENGTH: SensorValue(
+                device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+    )
+
+
 def test_bthome_temperature_humidity(caplog):
     """Test BTHome parser for temperature humidity reading without encryption."""
     data_string = b"\x40\x02\xca\x09\x03\xbf\x13"
