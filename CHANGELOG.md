@@ -2,6 +2,13 @@
 
 <!--next-version-placeholder-->
 
+## v2.6.0 (2023-02-17)
+### Feature
+* Add possibility to include mac in payload ([`1059aa1`](https://github.com/Bluetooth-Devices/bthome-ble/commit/1059aa1eca2fc7ac7518e0a9dbbb822548417bf0))
+
+### Fix
+* Fix flake 8 line length error ([`e7490b4`](https://github.com/Bluetooth-Devices/bthome-ble/commit/e7490b487201abf74c6e7271cee1d9eab1db2c2c))
+
 ## v2.5.2 (2023-02-10)
 ### Fix
 * Parse objects of the same time correctly ([#47](https://github.com/Bluetooth-Devices/bthome-ble/issues/47)) ([`27e5982`](https://github.com/Bluetooth-Devices/bthome-ble/commit/27e5982214ee34cca6243532dff4e9b2e65e0da9))
