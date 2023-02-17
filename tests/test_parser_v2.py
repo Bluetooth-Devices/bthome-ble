@@ -417,7 +417,7 @@ def test_bthome_with_mac(caplog):
 def test_bthome_with_mac_encrypted():
     """Test BTHome parser with mac address in payload plus encryption."""
     bindkey = "231d39c1d7cc1ab1aee224cd096db932"
-    data_string = b"\x43\xa5\x80\x8f\xe6\x48\x54\xa4\x72\x66\xc9\x5f\x73\x00\x11\x22\x33\x78\x23\x72\x14"
+    data_string = b"\x43\xa5\x80\x8f\xe6\x48\x54\xa4\x72\x66\xc9\x5f\x73\x00\x11\x22\x33\x78\x23\x72\x14"  # noqa: E501
     advertisement = bytes_to_service_info(
         data_string,
         local_name="TEST DEVICE",
