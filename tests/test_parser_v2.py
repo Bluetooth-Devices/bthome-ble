@@ -32,6 +32,7 @@ KEY_CURRENT = DeviceKey(key="current", device_id=None)
 KEY_DEW_POINT = DeviceKey(key="dew_point", device_id=None)
 KEY_DURATION = DeviceKey(key="duration", device_id=None)
 KEY_ENERGY = DeviceKey(key="energy", device_id=None)
+KEY_GAS = DeviceKey(key="gas", device_id=None)
 KEY_HUMIDITY = DeviceKey(key="humidity", device_id=None)
 KEY_ILLUMINANCE = DeviceKey(key="illuminance", device_id=None)
 KEY_MASS = DeviceKey(key="mass", device_id=None)
@@ -1919,6 +1920,46 @@ def test_bthome_voltage_2(caplog):
             KEY_VOLTAGE: SensorValue(
                 device_key=KEY_VOLTAGE, name="Voltage", native_value=307.4
             ),
+            KEY_SIGNAL_STRENGTH: SensorValue(
+                device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+    )
+
+
+def test_bthome_gas(caplog):
+    """Test BTHome parser for gas reading without encryption."""
+    data_string = b"\x40\x4b\x13\x8a\x14"
+    advertisement = bytes_to_service_info(
+        data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
+    )
+
+    device = BTHomeBluetoothDeviceData()
+    assert device.update(advertisement) == SensorUpdate(
+        title="TEST DEVICE 18B2",
+        devices={
+            None: SensorDeviceInfo(
+                name="TEST DEVICE 18B2",
+                manufacturer=None,
+                model="BTHome sensor",
+                sw_version="BTHome BLE v2",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            KEY_GAS: SensorDescription(
+                device_key=KEY_GAS,
+                device_class=SensorDeviceClass.GAS,
+                native_unit_of_measurement=Units.VOLUME_CUBIC_METERS,
+            ),
+            KEY_SIGNAL_STRENGTH: SensorDescription(
+                device_key=KEY_SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
+            KEY_GAS: SensorValue(device_key=KEY_GAS, name="Gas", native_value=1346.067),
             KEY_SIGNAL_STRENGTH: SensorValue(
                 device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
             ),
