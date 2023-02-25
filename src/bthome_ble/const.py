@@ -317,4 +317,9 @@ MEAS_TYPES: dict[int, MeasTypes] = {
         data_length=2,
         factor=0.1,
     ),
+    0x4B: MeasTypes(
+        meas_format=SensorLibrary.GAS__VOLUME_CUBIC_METERS,
+        data_length=3,
+        factor=0.001,
+    ),
 }
