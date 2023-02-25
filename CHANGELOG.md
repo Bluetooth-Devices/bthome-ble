@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v2.7.0 (2023-02-25)
+### Feature
+* Add gas sensor ([`956610f`](https://github.com/Bluetooth-Devices/bthome-ble/commit/956610fd72e5490f0dbf47ab5cbac7871c8d2565))
+
 ## v2.6.0 (2023-02-17)
 ### Feature
 * Add possibility to include mac in payload ([`1059aa1`](https://github.com/Bluetooth-Devices/bthome-ble/commit/1059aa1eca2fc7ac7518e0a9dbbb822548417bf0))
