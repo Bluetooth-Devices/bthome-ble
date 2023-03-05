@@ -322,4 +322,19 @@ MEAS_TYPES: dict[int, MeasTypes] = {
         data_length=3,
         factor=0.001,
     ),
+    0x4C: MeasTypes(
+        meas_format=SensorLibrary.GAS__VOLUME_CUBIC_METERS,
+        data_length=4,
+        factor=0.001,
+    ),
+    0x4D: MeasTypes(
+        meas_format=SensorLibrary.ENERGY__ENERGY_KILO_WATT_HOUR,
+        data_length=4,
+        factor=0.001,
+    ),
+    0x4E: MeasTypes(
+        meas_format=SensorLibrary.VOLUME__VOLUME_LITERS,
+        data_length=4,
+        factor=0.001,
+    ),
 }
