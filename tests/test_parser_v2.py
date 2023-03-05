@@ -1967,6 +1967,133 @@ def test_bthome_gas(caplog):
     )
 
 
+def test_bthome_gas_2(caplog):
+    """Test BTHome parser for gas reading without encryption."""
+    data_string = b"\x40\x4c\x41\x01\x8a\x01"
+    advertisement = bytes_to_service_info(
+        data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
+    )
+
+    device = BTHomeBluetoothDeviceData()
+    assert device.update(advertisement) == SensorUpdate(
+        title="TEST DEVICE 18B2",
+        devices={
+            None: SensorDeviceInfo(
+                name="TEST DEVICE 18B2",
+                manufacturer=None,
+                model="BTHome sensor",
+                sw_version="BTHome BLE v2",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            KEY_GAS: SensorDescription(
+                device_key=KEY_GAS,
+                device_class=SensorDeviceClass.GAS,
+                native_unit_of_measurement=Units.VOLUME_CUBIC_METERS,
+            ),
+            KEY_SIGNAL_STRENGTH: SensorDescription(
+                device_key=KEY_SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
+            KEY_GAS: SensorValue(
+                device_key=KEY_GAS, name="Gas", native_value=25821.505
+            ),
+            KEY_SIGNAL_STRENGTH: SensorValue(
+                device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+    )
+
+
+def test_bthome_energy_2(caplog):
+    """Test BTHome parser for energy reading without encryption."""
+    data_string = b"\x40\x4d\x12\x13\x8a\x14"
+    advertisement = bytes_to_service_info(
+        data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
+    )
+
+    device = BTHomeBluetoothDeviceData()
+    assert device.update(advertisement) == SensorUpdate(
+        title="TEST DEVICE 18B2",
+        devices={
+            None: SensorDeviceInfo(
+                name="TEST DEVICE 18B2",
+                manufacturer=None,
+                model="BTHome sensor",
+                sw_version="BTHome BLE v2",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            KEY_ENERGY: SensorDescription(
+                device_key=KEY_ENERGY,
+                device_class=SensorDeviceClass.ENERGY,
+                native_unit_of_measurement=Units.ENERGY_KILO_WATT_HOUR,
+            ),
+            KEY_SIGNAL_STRENGTH: SensorDescription(
+                device_key=KEY_SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
+            KEY_ENERGY: SensorValue(
+                device_key=KEY_ENERGY, name="Energy", native_value=344593.17
+            ),
+            KEY_SIGNAL_STRENGTH: SensorValue(
+                device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+    )
+
+
+def test_bthome_volume_liters_2(caplog):
+    """Test BTHome parser for Volume in Liters."""
+    data_string = b"\x40\x4e\x87\x56\x2a\x01"
+    advertisement = bytes_to_service_info(
+        data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
+    )
+
+    device = BTHomeBluetoothDeviceData()
+
+    assert device.update(advertisement) == SensorUpdate(
+        title="TEST DEVICE 18B2",
+        devices={
+            None: SensorDeviceInfo(
+                name="TEST DEVICE 18B2",
+                manufacturer=None,
+                model="BTHome sensor",
+                sw_version="BTHome BLE v2",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            KEY_VOLUME: SensorDescription(
+                device_key=KEY_VOLUME,
+                device_class=SensorDeviceClass.VOLUME,
+                native_unit_of_measurement=Units.VOLUME_LITERS,
+            ),
+            KEY_SIGNAL_STRENGTH: SensorDescription(
+                device_key=KEY_SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
+            KEY_VOLUME: SensorValue(
+                device_key=KEY_VOLUME, name="Volume", native_value=19551.879
+            ),
+            KEY_SIGNAL_STRENGTH: SensorValue(
+                device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+    )
+
+
 def test_bthome_double_temperature(caplog):
     """Test BTHome parser for double temperature reading without encryption."""
     data_string = b"\x40\x02\xca\x09\x02\xcf\x09"
