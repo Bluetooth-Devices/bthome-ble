@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v2.9.0 (2023-03-12)
+### Feature
+* Add water sensor ([`c228d77`](https://github.com/Bluetooth-Devices/bthome-ble/commit/c228d772a4c2757e59697b9b233057d1648f9525))
+
 ## v2.8.0 (2023-03-05)
 ### Feature
 * Add gas water energy meter ([`152bcea`](https://github.com/Bluetooth-Devices/bthome-ble/commit/152bcea19394fa32b82fca1d2cfffcba5609d81c))
