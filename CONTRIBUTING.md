@@ -8,11 +8,13 @@ You can contribute in many ways:
 
 ### Report Bugs
 
-Report bugs to [our issue page][gh-issues]. If you are reporting a bug, please include:
+Report bugs to [our issue page][gh-issues] for code issues or feature requests. If you are reporting a bug, please include:
 
 - Your operating system name and version.
 - Any details about your local setup that might be helpful in troubleshooting.
 - Detailed steps to reproduce the bug.
+
+Documentation issues of the website [bthome.io](https://bthome.io) can be reported at the [issue page of the website][doc-issues].
 
 ### Fix Bugs
 
@@ -25,6 +27,7 @@ Look through the GitHub issues for features. Anything tagged with "enhancement" 
 ### Write Documentation
 
 BTHome BLE could always use more documentation, whether as part of the official BTHome BLE docs, in docstrings, or even on the web in blog posts, articles, and such.
+The official website is located at [bthome.io](https://bthome.io). Changes to the website can be done on the [GitHub page of the site](https://github.com/home-assistant/bthome.io).
 
 ### Submit Feedback
 
@@ -46,13 +49,19 @@ Ready to contribute? Here's how to set yourself up for local development.
    $ git clone git@github.com:your_name_here/bthome-ble.git
    ```
 
-3. Install the project dependencies with [Poetry](https://python-poetry.org):
+3. Go to the cloned folder:
+
+   ```shell
+   $ cd bthome-ble
+   ```
+
+4. Install the project dependencies with [Poetry](https://python-poetry.org):
 
    ```shell
    $ poetry install
    ```
 
-4. Create a branch for local development:
+5. Create a branch for local development:
 
    ```shell
    $ git checkout -b name-of-your-bugfix-or-feature
@@ -60,13 +69,13 @@ Ready to contribute? Here's how to set yourself up for local development.
 
    Now you can make your changes locally.
 
-5. When you're done making changes, check that your changes pass our tests:
+6. When you're done making changes, check that your changes pass our tests:
 
    ```shell
    $ poetry run pytest
    ```
 
-6. Linting is done through [pre-commit](https://pre-commit.com). Provided you have the tool installed globally, you can run them all as one-off:
+7. Linting is done through [pre-commit](https://pre-commit.com). Provided you have the tool installed globally, you can run them all as one-off:
 
    ```shell
    $ pre-commit run -a
@@ -78,7 +87,7 @@ Ready to contribute? Here's how to set yourself up for local development.
    $ pre-commit install
    ```
 
-7. Commit your changes and push your branch to GitHub:
+8. Commit your changes and push your branch to GitHub:
 
    ```shell
    $ git add .
@@ -88,7 +97,7 @@ Ready to contribute? Here's how to set yourself up for local development.
 
    Note: the commit message should follow [the conventional commits](https://www.conventionalcommits.org). We run [`commitlint` on CI](https://github.com/marketplace/actions/commit-linter) to validate it, and if you've installed pre-commit hooks at the previous step, the message will be checked at commit time.
 
-8. Submit a pull request through the GitHub website or using the GitHub CLI (if you have it installed):
+9. Submit a pull request through the GitHub website or using the GitHub CLI (if you have it installed):
 
    ```shell
    $ gh pr create --fill
@@ -115,3 +124,4 @@ $ pytest tests
 The deployment should be automated and can be triggered from the Semantic Release workflow in GitHub. The next version will be based on [the commit logs](https://python-semantic-release.readthedocs.io/en/latest/commit-log-parsing.html#commit-log-parsing). This is done by [python-semantic-release](https://python-semantic-release.readthedocs.io/en/latest/index.html) via a GitHub action.
 
 [gh-issues]: https://github.com/bluetooth-devices/bthome-ble/issues
+[doc-issues]: https://github.com/home-assistant/bthome.io/issues

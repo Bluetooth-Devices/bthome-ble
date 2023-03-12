@@ -337,4 +337,9 @@ MEAS_TYPES: dict[int, MeasTypes] = {
         data_length=4,
         factor=0.001,
     ),
+    0x4F: MeasTypes(
+        meas_format=SensorLibrary.WATER__VOLUME_LITERS,
+        data_length=4,
+        factor=0.001,
+    ),
 }
