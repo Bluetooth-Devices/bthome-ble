@@ -76,7 +76,7 @@ def bytes_to_service_info(
         rssi=-60,
         manufacturer_data={},
         service_data={"0000fcd2-0000-1000-8000-00805f9b34fb": payload},
-        service_uuids=["0000fcd2-0000-1000-8000-00805f9b34fb"],
+        service_uuids=[],
         source="",
     )
 
@@ -2435,5 +2435,75 @@ def test_bthome_double_voltage_different_object_id(caplog):
             KEY_SIGNAL_STRENGTH: SensorValue(
                 device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
             ),
+        },
+    )
+
+
+def test_bthome_shelly_button(caplog):
+    """
+    Test BTHome parser with a shelly button.
+    """
+    data_string = b"@\x00R\x01d:\x01"
+    advertisement = bytes_to_service_info(
+        data_string, local_name="A4:C1:38:8D:18:B2", address="A4:C1:38:8D:18:B2"
+    )
+
+    device = BTHomeBluetoothDeviceData()
+    assert device.supported(advertisement) is True
+    update = device.update(advertisement)
+    assert update == SensorUpdate(
+        title="BTHome sensor 18B2",
+        devices={
+            None: SensorDeviceInfo(
+                name="BTHome sensor 18B2",
+                model="BTHome sensor",
+                manufacturer=None,
+                sw_version="BTHome BLE v2",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            DeviceKey(key="packet_id", device_id=None): SensorDescription(
+                device_key=DeviceKey(key="packet_id", device_id=None),
+                device_class=SensorDeviceClass.PACKET_ID,
+                native_unit_of_measurement=None,
+            ),
+            DeviceKey(key="battery", device_id=None): SensorDescription(
+                device_key=DeviceKey(key="battery", device_id=None),
+                device_class=SensorDeviceClass.BATTERY,
+                native_unit_of_measurement=Units.PERCENTAGE,
+            ),
+            DeviceKey(key="signal_strength", device_id=None): SensorDescription(
+                device_key=DeviceKey(key="signal_strength", device_id=None),
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
+            DeviceKey(key="packet_id", device_id=None): SensorValue(
+                device_key=DeviceKey(key="packet_id", device_id=None),
+                name="Packet " "Id",
+                native_value=82,
+            ),
+            DeviceKey(key="battery", device_id=None): SensorValue(
+                device_key=DeviceKey(key="battery", device_id=None),
+                name="Battery",
+                native_value=100,
+            ),
+            DeviceKey(key="signal_strength", device_id=None): SensorValue(
+                device_key=DeviceKey(key="signal_strength", device_id=None),
+                name="Signal " "Strength",
+                native_value=-60,
+            ),
+        },
+        binary_entity_descriptions={},
+        binary_entity_values={},
+        events={
+            DeviceKey(key="button", device_id=None): Event(
+                device_key=DeviceKey(key="button", device_id=None),
+                name="Button",
+                event_type="press",
+                event_properties=None,
+            )
         },
     )
