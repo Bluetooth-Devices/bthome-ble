@@ -144,7 +144,7 @@ MEAS_TYPES: dict[int, MeasTypes] = {
     0x1A: MeasTypes(
         meas_format=description.BaseBinarySensorDescription(
             device_class=BinarySensorDeviceClass.DOOR,
-        ),
+        )
     ),
     0x1B: MeasTypes(
         meas_format=description.BaseBinarySensorDescription(
