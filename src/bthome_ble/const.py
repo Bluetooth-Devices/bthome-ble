@@ -144,7 +144,7 @@ MEAS_TYPES: dict[int, MeasTypes] = {
     0x1A: MeasTypes(
         meas_format=description.BaseBinarySensorDescription(
             device_class=BinarySensorDeviceClass.DOOR,
-        )
+        ),
     ),
     0x1B: MeasTypes(
         meas_format=description.BaseBinarySensorDescription(
@@ -337,4 +337,22 @@ MEAS_TYPES: dict[int, MeasTypes] = {
         data_length=4,
         factor=0.001,
     ),
+}
+
+
+SLEEPY_BINARY_SENSORS = {
+    "door",
+    "garage_door",
+    "lock",
+    "opening",
+    "presence",
+    "tamper",
+    "vibration",
+    "window",
+}
+
+
+SLEEPY_SENSORS = {
+    "count",
+    "mass",
 }
