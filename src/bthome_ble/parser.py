@@ -273,11 +273,22 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         # Try to get manufacturer based on the name
         if name.startswith(("ATC", "LYWSD03MMC")):
             manufacturer = "Xiaomi"
+            device_type = "Temperature/Humidity sensor"
         elif name.startswith("prst"):
             manufacturer = "b-parasite"
             name = "b-parasite"
+            device_type = "Plant sensor"
+        elif name.startswith("SBBT"):
+            manufacturer = "Shelly"
+            name = "Shelly BLU Button1"
+            device_type = "BLU Button1"
+        elif name.startswith("SBDW"):
+            manufacturer = "Shelly"
+            name = "Shelly BLU Door/Window"
+            device_type = "BLU Door/Window"
         else:
             manufacturer = None
+            device_type = "BTHome sensor"
 
         if manufacturer:
             self.set_device_manufacturer(manufacturer)
@@ -285,7 +296,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         # Get device information from local name and identifier
         self.set_device_name(f"{name} {identifier}")
         self.set_title(f"{name} {identifier}")
-        self.set_device_type("BTHome sensor")
+        self.set_device_type(device_type)
 
         mac_included = adv_info & (1 << 1)  # bit 1
         if mac_included:

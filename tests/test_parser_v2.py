@@ -23,6 +23,7 @@ KEY_BATTERY = DeviceKey(key="battery", device_id=None)
 KEY_BINARY_GENERIC = DeviceKey(key="generic", device_id=None)
 KEY_BINARY_OPENING = DeviceKey(key="opening", device_id=None)
 KEY_BINARY_POWER = DeviceKey(key="power", device_id=None)
+KEY_BINARY_WINDOW = DeviceKey(key="window", device_id=None)
 KEY_BUTTON = DeviceKey(key="button", device_id=None)
 KEY_CO2 = DeviceKey(key="carbon_dioxide", device_id=None)
 KEY_DIMMER = DeviceKey(key="dimmer", device_id=None)
@@ -309,7 +310,7 @@ def test_bthome_wrong_object_id(caplog):
             None: SensorDeviceInfo(
                 name="ATC 18B2",
                 manufacturer="Xiaomi",
-                model="BTHome sensor",
+                model="Temperature/Humidity sensor",
                 sw_version="BTHome BLE v2",
                 hw_version=None,
             )
@@ -346,7 +347,7 @@ def test_bthome_battery_wrong_object_id_humidity(caplog):
             None: SensorDeviceInfo(
                 name="ATC 18B2",
                 manufacturer="Xiaomi",
-                model="BTHome sensor",
+                model="Temperature/Humidity sensor",
                 sw_version="BTHome BLE v2",
                 hw_version=None,
             )
@@ -485,7 +486,7 @@ def test_bthome_temperature_humidity(caplog):
             None: SensorDeviceInfo(
                 name="ATC 18B2",
                 manufacturer="Xiaomi",
-                model="BTHome sensor",
+                model="Temperature/Humidity sensor",
                 sw_version="BTHome BLE v2",
                 hw_version=None,
             )
@@ -535,7 +536,7 @@ def test_bthome_packet_id_temperature_humidity_battery(caplog):
             None: SensorDeviceInfo(
                 name="ATC 18B2",
                 manufacturer="Xiaomi",
-                model="BTHome sensor",
+                model="Temperature/Humidity sensor",
                 sw_version="BTHome BLE v2",
                 hw_version=None,
             )
@@ -1097,6 +1098,52 @@ def test_bthome_binary_sensor_opening(caplog):
     )
 
 
+def test_bthome_binary_sensor_window(caplog):
+    """Test BTHome parser for binary sensor window without encryption."""
+    data_string = b"\x40\x2D\x01"
+    advertisement = bytes_to_service_info(
+        data_string, local_name="SBDW-002C", address="A4:C1:38:8D:18:B2"
+    )
+
+    device = BTHomeBluetoothDeviceData()
+
+    assert device.update(advertisement) == SensorUpdate(
+        title="Shelly BLU Door/Window 18B2",
+        devices={
+            None: SensorDeviceInfo(
+                name="Shelly BLU Door/Window 18B2",
+                manufacturer="Shelly",
+                model="BLU Door/Window",
+                sw_version="BTHome BLE v2",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            KEY_SIGNAL_STRENGTH: SensorDescription(
+                device_key=KEY_SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
+            KEY_SIGNAL_STRENGTH: SensorValue(
+                device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+        binary_entity_descriptions={
+            KEY_BINARY_WINDOW: BinarySensorDescription(
+                device_key=KEY_BINARY_WINDOW,
+                device_class=BinarySensorDeviceClass.WINDOW,
+            ),
+        },
+        binary_entity_values={
+            KEY_BINARY_WINDOW: BinarySensorValue(
+                device_key=KEY_BINARY_WINDOW, name="Window", native_value=True
+            ),
+        },
+    )
+
+
 def test_bthome_pm(caplog):
     """Test BTHome parser for PM2.5 and PM10 reading without encryption."""
     data_string = b"\x40\x0d\x12\x0c\x0e\x02\x1c"
@@ -1245,7 +1292,7 @@ def test_bthome_moisture(caplog):
             None: SensorDeviceInfo(
                 name="b-parasite 18B2",
                 manufacturer="b-parasite",
-                model="BTHome sensor",
+                model="Plant sensor",
                 sw_version="BTHome BLE v2",
                 hw_version=None,
             )
@@ -1277,18 +1324,18 @@ def test_bthome_event_button_long_press(caplog):
     """Test BTHome parser for an event of a long press on a button without encryption."""
     data_string = b"\x40\x3A\x04"
     advertisement = bytes_to_service_info(
-        data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
+        data_string, local_name="SBBT-002C", address="A4:C1:38:8D:18:B2"
     )
 
     device = BTHomeBluetoothDeviceData()
 
     assert device.update(advertisement) == SensorUpdate(
-        title="TEST DEVICE 18B2",
+        title="Shelly BLU Button1 18B2",
         devices={
             None: SensorDeviceInfo(
-                name="TEST DEVICE 18B2",
-                manufacturer=None,
-                model="BTHome sensor",
+                name="Shelly BLU Button1 18B2",
+                manufacturer="Shelly",
+                model="BLU Button1",
                 sw_version="BTHome BLE v2",
                 hw_version=None,
             )
@@ -2315,7 +2362,7 @@ def test_bthome_multiple_uuids(caplog):
             None: SensorDeviceInfo(
                 name="ATC 18B2",
                 manufacturer="Xiaomi",
-                model="BTHome sensor",
+                model="Temperature/Humidity sensor",
                 sw_version="BTHome BLE v2",
                 hw_version=None,
             )

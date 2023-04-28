@@ -343,3 +343,21 @@ MEAS_TYPES: dict[int, MeasTypes] = {
         factor=0.001,
     ),
 }
+
+
+SLEEPY_BINARY_SENSORS = {
+    "door",
+    "garage_door",
+    "lock",
+    "opening",
+    "presence",
+    "tamper",
+    "vibration",
+    "window",
+}
+
+
+SLEEPY_SENSORS = {
+    "count",
+    "mass",
+}
