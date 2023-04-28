@@ -2,6 +2,13 @@
 
 <!--next-version-placeholder-->
 
+## v2.10.0 (2023-04-28)
+### Feature
+* Add sleepy devices ([`2bcbf38`](https://github.com/Bluetooth-Devices/bthome-ble/commit/2bcbf38e51bb6d1a0791682acceacb721edfc866))
+
+### Fix
+* Typo ([`7ddb135`](https://github.com/Bluetooth-Devices/bthome-ble/commit/7ddb1357421e9f419529955e05cb98915539aeab))
+
 ## v2.9.0 (2023-03-12)
 ### Feature
 * Add water sensor ([`c228d77`](https://github.com/Bluetooth-Devices/bthome-ble/commit/c228d772a4c2757e59697b9b233057d1648f9525))
