@@ -16,7 +16,7 @@ from sensor_state_data import (
 from .const import SLEEPY_BINARY_SENSORS, SLEEPY_SENSORS
 from .parser import BTHomeBluetoothDeviceData
 
-__version__ = "2.10.0"
+__version__ = "2.10.1"
 
 __all__ = [
     "SLEEPY_BINARY_SENSORS",

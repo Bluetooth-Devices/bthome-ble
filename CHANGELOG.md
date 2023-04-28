@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v2.10.1 (2023-04-28)
+### Fix
+* Add sleepy sensors to init ([`7a82a50`](https://github.com/Bluetooth-Devices/bthome-ble/commit/7a82a50f2be23e3c429626fc98f03a6ab80ed7bb))
+
 ## v2.10.0 (2023-04-28)
 ### Feature
 * Add sleepy devices ([`2bcbf38`](https://github.com/Bluetooth-Devices/bthome-ble/commit/2bcbf38e51bb6d1a0791682acceacb721edfc866))
