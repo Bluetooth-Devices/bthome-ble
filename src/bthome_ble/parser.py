@@ -269,11 +269,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             payload = data[1:]
 
         # If True, the device is not updating regularly
-        sleepy_device = adv_info & (1 << 2)  # bit 2
-        if sleepy_device:
-            self.sleepy_device = True
-        else:
-            self.sleepy_device = False
+        self.sleepy_device = bool(adv_info & (1 << 2))  # bit 2
 
         # Check BTHome version
         sw_version = (adv_info >> 5) & 7  # 3 bits (5-7)
