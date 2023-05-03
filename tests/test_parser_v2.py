@@ -120,6 +120,36 @@ def test_encryption_no_key_needed():
     assert not device.bindkey_verified
 
 
+def test_sleepy_device():
+    """Test that we can detect that a device that doesn't update regularly."""
+    data_string = b"\x44\x04\x13\x8a\x01"
+    advertisement = bytes_to_service_info(
+        payload=data_string,
+        local_name="ATC_8D18B2",
+        address="A4:C1:38:8D:18:B2",
+    )
+
+    device = BTHomeBluetoothDeviceData()
+
+    assert device.supported(advertisement)
+    assert device.sleepy_device
+
+
+def test_no_sleepy_device():
+    """Test that we can detect that a device that updates regularly."""
+    data_string = b"\x40\x04\x13\x8a\x01"
+    advertisement = bytes_to_service_info(
+        payload=data_string,
+        local_name="ATC_8D18B2",
+        address="A4:C1:38:8D:18:B2",
+    )
+
+    device = BTHomeBluetoothDeviceData()
+
+    assert device.supported(advertisement)
+    assert not device.sleepy_device
+
+
 def test_mac_as_name():
     """
     A sensor without a name gets its MAC address as name from BluetoothServiceInfo.
