@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v2.11.1 (2023-05-12)
+### Fix
+* Add trigger based device to device type ([`0d0076b`](https://github.com/Bluetooth-Devices/bthome-ble/commit/0d0076ba6ee54fd1d68a67453c549f27fc9e5a2d))
+
 ## v2.11.0 (2023-05-04)
 ### Feature
 * Add sleepy device bit ([`d61e63e`](https://github.com/Bluetooth-Devices/bthome-ble/commit/d61e63ebd68461fae26ef08b05c5d5771dae45fb))
