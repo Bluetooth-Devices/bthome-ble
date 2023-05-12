@@ -268,7 +268,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             mac_readable = service_info.address
             payload = data[1:]
 
-        # If True, the device is not updating regularly
+        # If True, the device is only updating when triggered
         self.sleepy_device = bool(adv_info & (1 << 2))  # bit 2
 
         # Check BTHome version
@@ -308,6 +308,10 @@ class BTHomeBluetoothDeviceData(BluetoothData):
 
         if manufacturer:
             self.set_device_manufacturer(manufacturer)
+
+        # Add the indication of a trigger based device to the device type
+        if self.sleepy_device:
+            device_type = f"{device_type} (trigger based device)"
 
         # Get device information from local name and identifier
         self.set_device_name(f"{name} {identifier}")
