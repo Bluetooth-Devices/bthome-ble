@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v2.11.2 (2023-05-12)
+### Fix
+* Pre-commit bump and bump release ([`97540cc`](https://github.com/Bluetooth-Devices/bthome-ble/commit/97540cccf52e6c49357082917228a1b704579ba0))
+
 ## v2.11.1 (2023-05-12)
 ### Fix
 * Add trigger based device to device type ([`0d0076b`](https://github.com/Bluetooth-Devices/bthome-ble/commit/0d0076ba6ee54fd1d68a67453c549f27fc9e5a2d))
