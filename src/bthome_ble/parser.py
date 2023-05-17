@@ -13,9 +13,11 @@ from __future__ import annotations
 import logging
 import struct
 import sys
+from datetime import datetime
 from enum import Enum
 from typing import Any
 
+import pytz
 from bluetooth_data_tools import short_address
 from bluetooth_sensor_state_data import BluetoothData
 from Cryptodome.Cipher import AES
@@ -32,7 +34,6 @@ _LOGGER = logging.getLogger(__name__)
 
 
 class EncryptionScheme(Enum):
-
     # No encryption is needed to use this device
     NONE = "none"
 
@@ -81,12 +82,18 @@ def parse_string(data_obj: bytes) -> str:
     return data_obj.decode("UTF-8")
 
 
+def parse_timestamp(data_obj: bytes) -> datetime:
+    """Convert bytes to a datetime object."""
+    value = datetime.fromtimestamp(int.from_bytes(data_obj, "little", signed=False))
+    return pytz.utc.localize(value)
+
+
 def parse_event_type(event_device: str, data_obj: int) -> str | None:
     """Convert bytes to event type."""
     if event_device == "dimmer":
-        event_type = DIMMER_EVENTS[data_obj]
+        event_type = DIMMER_EVENTS.get(data_obj)
     elif event_device == "button":
-        event_type = BUTTON_EVENTS[data_obj]
+        event_type = BUTTON_EVENTS.get(data_obj)
     else:
         event_type = None
     return event_type
@@ -431,8 +438,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             else:
                 postfix = ""
 
-            value: None | str | int | float
-
+            value: None | str | int | float | datetime
             if meas["data format"] == 0 or meas["data format"] == "unsigned_integer":
                 value = parse_uint(meas["measurement data"], meas_factor)
             elif meas["data format"] == 1 or meas["data format"] == "signed_integer":
@@ -441,6 +447,8 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                 value = parse_float(meas["measurement data"], meas_factor)
             elif meas["data format"] == 3 or meas["data format"] == "string":
                 value = parse_string(meas["measurement data"])
+            elif meas["data format"] == 5 or meas["data format"] == "timestamp":
+                value = parse_timestamp(meas["measurement data"])
             else:
                 _LOGGER.error(
                     "UNKNOWN dataobject in BTHome BLE payload! Adv: %s",

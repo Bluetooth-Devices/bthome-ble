@@ -1,5 +1,6 @@
 """Tests for the parser of BLE advertisements in BTHome V1 format."""
 import logging
+from datetime import datetime, timezone
 from unittest.mock import patch
 
 import pytest
@@ -40,6 +41,7 @@ KEY_POWER = DeviceKey(key="power", device_id=None)
 KEY_PRESSURE = DeviceKey(key="pressure", device_id=None)
 KEY_SIGNAL_STRENGTH = DeviceKey(key="signal_strength", device_id=None)
 KEY_TEMPERATURE = DeviceKey(key="temperature", device_id=None)
+KEY_TIMESTAMP = DeviceKey(key="timestamp", device_id=None)
 KEY_VOC = DeviceKey(key="volatile_organic_compounds", device_id=None)
 KEY_VOLTAGE = DeviceKey(key="voltage", device_id=None)
 
@@ -427,7 +429,7 @@ def test_bthome_illuminance(caplog):
 
 def test_bthome_mass_kilograms(caplog):
     """Test BTHome parser for mass reading in kilograms without encryption."""
-    data_string = b"\x03\x06\x5E\x1F"
+    data_string = b"\x43\x06\xFE\x70"
     advertisement = bytes_to_service_info(
         data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
     )
@@ -457,7 +459,9 @@ def test_bthome_mass_kilograms(caplog):
             ),
         },
         entity_values={
-            KEY_MASS: SensorValue(device_key=KEY_MASS, name="Mass", native_value=80.3),
+            KEY_MASS: SensorValue(
+                device_key=KEY_MASS, name="Mass", native_value=102.24
+            ),
             KEY_SIGNAL_STRENGTH: SensorValue(
                 device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
             ),
@@ -935,6 +939,51 @@ def test_bthome_co2(caplog):
         entity_values={
             KEY_CO2: SensorValue(
                 device_key=KEY_CO2, name="Carbon Dioxide", native_value=1250
+            ),
+            KEY_SIGNAL_STRENGTH: SensorValue(
+                device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+    )
+
+
+def test_bthome_timestamp(caplog):
+    """Test BTHome parser for Unix timestamp (seconds from 1-1-1970)."""
+    data_string = b"\xA5\x50\x5D\x39\x61\x64"
+    advertisement = bytes_to_service_info(
+        data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
+    )
+
+    device = BTHomeBluetoothDeviceData()
+
+    assert device.update(advertisement) == SensorUpdate(
+        title="TEST DEVICE 18B2",
+        devices={
+            None: SensorDeviceInfo(
+                name="TEST DEVICE 18B2",
+                manufacturer=None,
+                model="BTHome sensor",
+                sw_version="BTHome BLE v1",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            KEY_TIMESTAMP: SensorDescription(
+                device_key=KEY_TIMESTAMP,
+                device_class=SensorDeviceClass.TIMESTAMP,
+                native_unit_of_measurement=None,
+            ),
+            KEY_SIGNAL_STRENGTH: SensorDescription(
+                device_key=KEY_SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
+            KEY_TIMESTAMP: SensorValue(
+                device_key=KEY_TIMESTAMP,
+                name="Timestamp",
+                native_value=datetime(2023, 5, 14, 20, 41, 17, tzinfo=timezone.utc),
             ),
             KEY_SIGNAL_STRENGTH: SensorValue(
                 device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
