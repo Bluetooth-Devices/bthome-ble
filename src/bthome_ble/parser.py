@@ -84,7 +84,8 @@ def parse_string(data_obj: bytes) -> str:
 
 def parse_timestamp(data_obj: bytes) -> datetime:
     """Convert bytes to a datetime object."""
-    value = datetime.fromtimestamp(int.from_bytes(data_obj, "little", signed=False))
+    value = datetime.utcfromtimestamp(int.from_bytes(data_obj, "little", signed=False))
+    _LOGGER.error("time %s", value)
     return pytz.utc.localize(value)
 
 

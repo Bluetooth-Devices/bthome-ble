@@ -2291,7 +2291,7 @@ def test_bthome_timestamp(caplog):
             KEY_TIMESTAMP: SensorValue(
                 device_key=KEY_TIMESTAMP,
                 name="Timestamp",
-                native_value=datetime(2023, 5, 14, 20, 41, 17, tzinfo=timezone.utc),
+                native_value=datetime(2023, 5, 14, 19, 41, 17, tzinfo=timezone.utc),
             ),
             KEY_SIGNAL_STRENGTH: SensorValue(
                 device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
