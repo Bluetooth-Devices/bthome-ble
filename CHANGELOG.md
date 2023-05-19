@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v2.11.3 (2023-05-19)
+### Fix
+* Revert trigger based device name ([`f2b5303`](https://github.com/Bluetooth-Devices/bthome-ble/commit/f2b5303952d5e4ec1ac63307ba43aca7c9262a36))
+
 ## v2.11.2 (2023-05-12)
 ### Fix
 * Pre-commit bump and bump release ([`97540cc`](https://github.com/Bluetooth-Devices/bthome-ble/commit/97540cccf52e6c49357082917228a1b704579ba0))
