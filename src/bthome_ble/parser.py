@@ -309,10 +309,6 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         if manufacturer:
             self.set_device_manufacturer(manufacturer)
 
-        # Add the indication of a trigger based device to the device type
-        if self.sleepy_device:
-            device_type = f"{device_type} (trigger based device)"
-
         # Get device information from local name and identifier
         self.set_device_name(f"{name} {identifier}")
         self.set_title(f"{name} {identifier}")
