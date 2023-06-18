@@ -333,10 +333,10 @@ testing = ["fields", "hunter", "process-tests", "pytest-xdist", "six", "virtuale
 
 [[package]]
 name = "pytz"
-version = "2022.7"
+version = "2023.3"
 description = "World timezone definitions, modern and historical"
 category = "main"
-optional = true
+optional = false
 python-versions = "*"
 
 [[package]]
@@ -367,7 +367,7 @@ use_chardet_on_py3 = ["chardet (>=3.0.2,<6)"]
 
 [[package]]
 name = "sensor-state-data"
-version = "2.14.0"
+version = "2.15.1"
 description = "Models for storing and converting Sensor Data state"
 category = "main"
 optional = false
@@ -549,7 +549,7 @@ docs = ["myst-parser", "Sphinx", "sphinx-rtd-theme"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "ec5a646bdbeb275999c44417f2639ee7f0bd3847d6a383351a65a53426f63eb1"
+content-hash = "322de3bc729d5f7af62b3d2fc8cc56106b57623dfc51b88c4fcca3ddbea6998c"
 
 [metadata.files]
 alabaster = [
@@ -776,8 +776,8 @@ pytest-cov = [
     {file = "pytest_cov-3.0.0-py3-none-any.whl", hash = "sha256:578d5d15ac4a25e5f961c938b85a05b09fdaae9deef3bb6de9a6e766622ca7a6"},
 ]
 pytz = [
-    {file = "pytz-2022.7-py2.py3-none-any.whl", hash = "sha256:93007def75ae22f7cd991c84e02d434876818661f8df9ad5df9e950ff4e52cfd"},
-    {file = "pytz-2022.7.tar.gz", hash = "sha256:7ccfae7b4b2c067464a6733c6261673fdb8fd1be905460396b97a073e9fa683a"},
+    {file = "pytz-2023.3-py2.py3-none-any.whl", hash = "sha256:a151b3abb88eda1d4e34a9814df37de2a80e301e68ba0fd856fb9b46bfbbbffb"},
+    {file = "pytz-2023.3.tar.gz", hash = "sha256:1d8ce29db189191fb55338ee6d0387d82ab59f3d00eac103412d64e0ebd0c588"},
 ]
 pyyaml = [
     {file = "PyYAML-6.0-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:d4db7c7aef085872ef65a8fd7d6d09a14ae91f691dec3e87ee5ee0539d516f53"},
@@ -819,8 +819,8 @@ requests = [
     {file = "requests-2.28.1.tar.gz", hash = "sha256:7c5599b102feddaa661c826c56ab4fee28bfd17f5abca1ebbe3e7f19d7c97983"},
 ]
 sensor-state-data = [
-    {file = "sensor_state_data-2.14.0-py3-none-any.whl", hash = "sha256:c966f8e6ce004ef1f8350dbf380b6eebf93df98af412917f120b70fe1c583e88"},
-    {file = "sensor_state_data-2.14.0.tar.gz", hash = "sha256:48a9aa94d90a5b294aa204d942d55ddfd58285e8cf801dea7e2eb6ca4dee26e2"},
+    {file = "sensor_state_data-2.15.1-py3-none-any.whl", hash = "sha256:348f8618370caae6e2d1d023f267b0e9da2a8f8b04e24d90b369356d6023b2ea"},
+    {file = "sensor_state_data-2.15.1.tar.gz", hash = "sha256:51f9390617529345a5cceb29c7ba7003f9a9f2f170c0572a6e4a4bbe8bf75a7f"},
 ]
 snowballstemmer = [
     {file = "snowballstemmer-2.2.0-py2.py3-none-any.whl", hash = "sha256:c8e1716e83cc398ae16824e5572ae04e0d9fc2c6b985fb0f900f5f0c96ecba1a"},

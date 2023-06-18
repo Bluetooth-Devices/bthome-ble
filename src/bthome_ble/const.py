@@ -342,4 +342,19 @@ MEAS_TYPES: dict[int, MeasTypes] = {
         data_length=4,
         factor=0.001,
     ),
+    0x50: MeasTypes(
+        meas_format=SensorLibrary.TIMESTAMP__NONE,
+        data_length=4,
+        data_format="timestamp",
+    ),
+    0x51: MeasTypes(
+        meas_format=SensorLibrary.ACCELERATION__ACCELERATION_METERS_PER_SQUARE_SECOND,
+        data_length=2,
+        factor=0.001,
+    ),
+    0x52: MeasTypes(
+        meas_format=SensorLibrary.GYROSCOPE__GYROSCOPE_DEGREES_PER_SECOND,
+        data_length=2,
+        factor=0.001,
+    ),
 }
