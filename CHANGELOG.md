@@ -2,6 +2,18 @@
 
 <!--next-version-placeholder-->
 
+## v2.12.0 (2023-06-18)
+
+### Feature
+
+* Timestamp acceleration and gyroscope ([`07c6b40`](https://github.com/Bluetooth-Devices/bthome-ble/commit/07c6b4023dd3e960ab16bb80a5565f91738b55ad))
+
+### Fix
+
+* Bump semantic release ([`ebe3484`](https://github.com/Bluetooth-Devices/bthome-ble/commit/ebe34848db5d3a88ac2023cb26bf2803e51b88fd))
+* Fix failing tests ([`3cf0634`](https://github.com/Bluetooth-Devices/bthome-ble/commit/3cf0634cf2eb91b55990746f161d9605e00d0fde))
+* Use utcfromtimestamp ([`1fea0eb`](https://github.com/Bluetooth-Devices/bthome-ble/commit/1fea0eb3a257c5c4e8070fa40ee221a5a297ef86))
+
 ## v2.11.3 (2023-05-19)
 ### Fix
 * Revert trigger based device name ([`f2b5303`](https://github.com/Bluetooth-Devices/bthome-ble/commit/f2b5303952d5e4ec1ac63307ba43aca7c9262a36))
