@@ -2270,7 +2270,7 @@ def test_bthome_timestamp(caplog):
             None: SensorDeviceInfo(
                 name="TEST DEVICE 18B2",
                 manufacturer=None,
-                model="BTHome sensor (trigger based device)",
+                model="BTHome sensor",
                 sw_version="BTHome BLE v2",
                 hw_version=None,
             )
@@ -2315,7 +2315,7 @@ def test_bthome_acceleration(caplog):
             None: SensorDeviceInfo(
                 name="TEST DEVICE 18B2",
                 manufacturer=None,
-                model="BTHome sensor (trigger based device)",
+                model="BTHome sensor",
                 sw_version="BTHome BLE v2",
                 hw_version=None,
             )
@@ -2358,7 +2358,7 @@ def test_bthome_gyroscope(caplog):
             None: SensorDeviceInfo(
                 name="TEST DEVICE 18B2",
                 manufacturer=None,
-                model="BTHome sensor (trigger based device)",
+                model="BTHome sensor",
                 sw_version="BTHome BLE v2",
                 hw_version=None,
             )
