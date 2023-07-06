@@ -25,7 +25,9 @@ from home_assistant_bluetooth import BluetoothServiceInfo
 from sensor_state_data.description import (
     BaseBinarySensorDescription,
     BaseSensorDescription,
+    DeviceKey,
 )
+from sensor_state_data.value import Event
 
 from .const import MEAS_TYPES
 from .event import BUTTON_EVENTS, DIMMER_EVENTS, EventDeviceKeys
@@ -488,6 +490,9 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                             event_type=event_type,
                             event_properties=event_properties,
                         )
+                    else:
+                        # Clear previous event
+                        self._events_updates: dict[DeviceKey, Event] = {}
                 result = True
             else:
                 _LOGGER.debug(

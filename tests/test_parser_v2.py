@@ -2755,3 +2755,105 @@ def test_bthome_shelly_button(caplog):
             )
         },
     )
+
+
+def test_bthome_shelly_button_no_press(caplog):
+    """Test BTHome parser for button event followed by empty event."""
+    data_string = b"\x44\x00\x21\x01\x5E\x3A\x01"
+    advertisement = bytes_to_service_info(
+        data_string, local_name="SBBT-002C", address="A4:C1:38:8D:18:B2"
+    )
+
+    device = BTHomeBluetoothDeviceData()
+
+    assert device.update(advertisement) == SensorUpdate(
+        title="Shelly BLU Button1 18B2",
+        devices={
+            None: SensorDeviceInfo(
+                name="Shelly BLU Button1 18B2",
+                manufacturer="Shelly",
+                model="BLU Button1",
+                sw_version="BTHome BLE v2",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            KEY_PACKET_ID: SensorDescription(
+                device_key=KEY_PACKET_ID,
+                device_class=SensorDeviceClass.PACKET_ID,
+                native_unit_of_measurement=None,
+            ),
+            KEY_BATTERY: SensorDescription(
+                device_key=KEY_BATTERY,
+                device_class=SensorDeviceClass.BATTERY,
+                native_unit_of_measurement=Units.PERCENTAGE,
+            ),
+            KEY_SIGNAL_STRENGTH: SensorDescription(
+                device_key=KEY_SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
+            KEY_PACKET_ID: SensorValue(
+                device_key=KEY_PACKET_ID, name="Packet Id", native_value=33
+            ),
+            KEY_BATTERY: SensorValue(KEY_BATTERY, name="Battery", native_value=94),
+            KEY_SIGNAL_STRENGTH: SensorValue(
+                device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+        events={
+            DeviceKey(key="button", device_id=None): Event(
+                device_key=DeviceKey(key="button", device_id=None),
+                name="Button",
+                event_type="press",
+                event_properties=None,
+            )
+        },
+    )
+
+    data_string = b"\x44\x00\x23\x01\x5E\x3A\x00"
+    advertisement = bytes_to_service_info(
+        data_string, local_name="SBBT-002C", address="A4:C1:38:8D:18:B2"
+    )
+
+    assert device.update(advertisement) == SensorUpdate(
+        title="Shelly BLU Button1 18B2",
+        devices={
+            None: SensorDeviceInfo(
+                name="Shelly BLU Button1 18B2",
+                manufacturer="Shelly",
+                model="BLU Button1",
+                sw_version="BTHome BLE v2",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            KEY_PACKET_ID: SensorDescription(
+                device_key=KEY_PACKET_ID,
+                device_class=SensorDeviceClass.PACKET_ID,
+                native_unit_of_measurement=None,
+            ),
+            KEY_BATTERY: SensorDescription(
+                device_key=KEY_BATTERY,
+                device_class=SensorDeviceClass.BATTERY,
+                native_unit_of_measurement=Units.PERCENTAGE,
+            ),
+            KEY_SIGNAL_STRENGTH: SensorDescription(
+                device_key=KEY_SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
+            KEY_PACKET_ID: SensorValue(
+                device_key=KEY_PACKET_ID, name="Packet Id", native_value=35
+            ),
+            KEY_BATTERY: SensorValue(KEY_BATTERY, name="Battery", native_value=94),
+            KEY_SIGNAL_STRENGTH: SensorValue(
+                device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+        events={},
+    )
