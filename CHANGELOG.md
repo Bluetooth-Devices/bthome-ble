@@ -2,6 +2,13 @@
 
 <!--next-version-placeholder-->
 
+## v2.12.1 (2023-07-07)
+
+### Fix
+
+* Bump sensor-state-data to 2.16.1 ([`9657a91`](https://github.com/Bluetooth-Devices/bthome-ble/commit/9657a91bd39550b74fe3d822c1e47b407aa25131))
+* Fix for repeated events ([`285da3c`](https://github.com/Bluetooth-Devices/bthome-ble/commit/285da3c76e719043295225f81b9c96279ea7554c))
+
 ## v2.12.0 (2023-06-18)
 
 ### Feature
