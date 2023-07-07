@@ -46,7 +46,7 @@ docs = ["Sphinx (>=5.0,<6.0)", "myst-parser (>=0.18,<0.19)", "sphinx-rtd-theme (
 
 [[package]]
 name = "bluetooth-sensor-state-data"
-version = "1.6.1"
+version = "1.6.2"
 description = "Models for storing and converting Bluetooth Sensor State Data"
 category = "main"
 optional = false
@@ -569,8 +569,8 @@ bluetooth-data-tools = [
     {file = "bluetooth_data_tools-0.3.1.tar.gz", hash = "sha256:247e896ec963bf2204c0e77bc5ec09dafaa4e065afffe38553b9d4d526b71617"},
 ]
 bluetooth-sensor-state-data = [
-    {file = "bluetooth_sensor_state_data-1.6.1-py3-none-any.whl", hash = "sha256:2bd8788c34ab9a3c5b6483d55be412a9002c98c816d26ab7a09d7150e01c2753"},
-    {file = "bluetooth_sensor_state_data-1.6.1.tar.gz", hash = "sha256:529ffce3117f0ee8fc8b348000cc1be6147d96681302e9faf2bf62347355b377"},
+    {file = "bluetooth_sensor_state_data-1.6.2-py3-none-any.whl", hash = "sha256:27104d7888ef571402e06d9a3886ad4bbbe5131e977abd4dd3089052751d463e"},
+    {file = "bluetooth_sensor_state_data-1.6.2.tar.gz", hash = "sha256:08de88540658dbc13184705a1be85d1904efbb17d9f74db94538b26dcb580a1c"},
 ]
 certifi = [
     {file = "certifi-2022.12.7-py3-none-any.whl", hash = "sha256:4ad3232f5e926d6718ec31cfc1fcadfde020920e278684144551c91769c7bc18"},
