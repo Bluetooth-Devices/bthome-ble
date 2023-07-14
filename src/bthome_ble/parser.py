@@ -333,7 +333,9 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             bthome_mac = bytes.fromhex(mac_readable.replace(":", ""))
             # Decode encrypted payload
             try:
-                payload = self._decrypt_bthome(payload, bthome_mac, sw_version)
+                payload = self._decrypt_bthome(
+                    payload, bthome_mac, sw_version, adv_info
+                )
             except (ValueError, TypeError):
                 return True
 
@@ -500,7 +502,9 @@ class BTHomeBluetoothDeviceData(BluetoothData):
 
         return True
 
-    def _decrypt_bthome(self, data: bytes, bthome_mac: bytes, sw_version: int) -> bytes:
+    def _decrypt_bthome(
+        self, data: bytes, bthome_mac: bytes, sw_version: int, adv_info: int = 65
+    ) -> bytes:
         """Decrypt encrypted BTHome BLE advertisements"""
         if not self.bindkey:
             self.bindkey_verified = False
@@ -521,7 +525,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         if sw_version == 1:
             uuid = b"\x1e\x18"
         else:
-            uuid = b"\xd2\xfc\x41"
+            uuid = b"\xd2\xfc" + bytes([adv_info])
         encrypted_payload = data[:-8]
         count_id = data[-8:-4]
         mic = data[-4:]
