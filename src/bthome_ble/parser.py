@@ -117,11 +117,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
 
     def __init__(self, bindkey: bytes | None = None) -> None:
         super().__init__()
-        self.bindkey = bindkey
-        if bindkey:
-            self.cipher: AESCCM | None = AESCCM(bindkey, tag_length=4)
-        else:
-            self.cipher = None
+        self.set_bindkey(bindkey)
 
         # Data that we know how to parse but don't yet map to the SensorData model.
         self.unhandled: dict[str, Any] = {}
@@ -151,6 +147,14 @@ class BTHomeBluetoothDeviceData(BluetoothData):
 
         # If this is True, the device is not sending advertisements in a regular interval
         self.sleepy_device = False
+
+    def set_bindkey(self, bindkey: bytes | None) -> None:
+        """Set the bindkey."""
+        self.bindkey = bindkey
+        if bindkey:
+            self.cipher: AESCCM | None = AESCCM(bindkey, tag_length=4)
+        else:
+            self.cipher = None
 
     def supported(self, data: BluetoothServiceInfo) -> bool:
         if not super().supported(data):
