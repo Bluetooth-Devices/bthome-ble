@@ -15,7 +15,7 @@ from sensor_state_data import (
 
 from .parser import BTHomeBluetoothDeviceData
 
-__version__ = "2.13.0"
+__version__ = "3.0.0"
 
 __all__ = [
     "BinarySensorDeviceClass",

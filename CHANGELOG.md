@@ -2,6 +2,16 @@
 
 <!--next-version-placeholder-->
 
+## v3.0.0 (2023-07-15)
+
+### Feature
+
+* Add ability to set the bind key after init ([#83](https://github.com/Bluetooth-Devices/bthome-ble/issues/83)) ([`1826139`](https://github.com/Bluetooth-Devices/bthome-ble/commit/1826139cc81bbdb0b9fdd616b16fa92b07654f6b))
+
+### Breaking
+
+* the bindkey should no longer be set directly on the object, call `set_bindkey` instead ([`1826139`](https://github.com/Bluetooth-Devices/bthome-ble/commit/1826139cc81bbdb0b9fdd616b16fa92b07654f6b))
+
 ## v2.13.0 (2023-07-15)
 
 ### Feature
