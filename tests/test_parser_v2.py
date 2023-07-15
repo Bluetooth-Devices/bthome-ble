@@ -454,9 +454,9 @@ def test_bthome_with_mac(caplog):
 def test_bthome_with_mac_encrypted():
     """Test BTHome parser with mac address in payload plus encryption."""
     bindkey = "231d39c1d7cc1ab1aee224cd096db932"
-    data_string = b"\x43\xa5\x80\x8f\xe6\x48\x54\xa4\x72\x66\xc9\x5f\x73\x00\x11\x22\x33\x78\x23\x72\x14"  # noqa: E501
+    data = b"\x43\xa5\x80\x8f\xe6\x48\x54\xf1\x96\xc0\x6f\xfb\x49\x00\x11\x22\x33\xf0\x8e\xcb\xde"
     advertisement = bytes_to_service_info(
-        data_string,
+        data,
         local_name="TEST DEVICE",
         address="54:48:E6:8F:80:A5",
     )
@@ -1569,6 +1569,22 @@ def test_bthome_invalid_button_event(caplog):
         },
         events={},
     )
+
+
+def test_encrypted_shelly_blu_button_event(caplog):
+    """Test BTHome parser for an encrypted shelly blu button event."""
+    bindkey = "90bffd73cb6b26ef58a7a8eba9232036"
+    data_string = b"\x45\x0a\xeb\x84\x46\x7f\x85\xba\x01\x00\x00\x31\x88\x78\x8c"
+
+    advertisement = bytes_to_service_info(
+        data_string,
+        local_name="SBBT-002C",
+        address="B4:35:22:F5:3D:A4",
+    )
+
+    device = BTHomeBluetoothDeviceData(bindkey=bytes.fromhex(bindkey))
+    assert device.supported(advertisement)
+    assert device.bindkey_verified
 
 
 def test_bthome_distance_millimeters(caplog):
