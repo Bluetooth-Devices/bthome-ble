@@ -2,6 +2,16 @@
 
 <!--next-version-placeholder-->
 
+## v2.13.0 (2023-07-15)
+
+### Feature
+
+* Switch from pycryptodomex to cryptography ([`0cdc8e6`](https://github.com/Bluetooth-Devices/bthome-ble/commit/0cdc8e674bc5f6d6f8cef64891d30c1e90f415ae))
+
+### Fix
+
+* Lint ([`576342d`](https://github.com/Bluetooth-Devices/bthome-ble/commit/576342d480f7a2f01337e96141dc4db2d896a82e))
+
 ## v2.12.2 (2023-07-15)
 
 ### Fix
