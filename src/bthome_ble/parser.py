@@ -118,10 +118,6 @@ class BTHomeBluetoothDeviceData(BluetoothData):
     def __init__(self, bindkey: bytes | None = None) -> None:
         super().__init__()
         self.bindkey = bindkey
-        if bindkey:
-            self.cipher: AESCCM | None = AESCCM(bindkey, tag_length=4)
-        else:
-            self.cipher = None
 
         # Data that we know how to parse but don't yet map to the SensorData model.
         self.unhandled: dict[str, Any] = {}
@@ -542,10 +538,12 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         if sw_version == 1:
             associated_data = b"\x11"
 
-        assert self.cipher is not None  # nosec
+        cipher: AESCCM | None = AESCCM(self.bindkey, tag_length=4)
+        assert cipher is not None  # nosec
+
         # decrypt the data
         try:
-            decrypted_payload = self.cipher.decrypt(
+            decrypted_payload = cipher.decrypt(
                 nonce, encrypted_payload + mic, associated_data
             )
         except InvalidTag as error:
