@@ -117,7 +117,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
 
     def __init__(self, bindkey: bytes | None = None) -> None:
         super().__init__()
-        self.set_bind_key(bindkey)
+        self.set_bindkey(bindkey)
 
         # Data that we know how to parse but don't yet map to the SensorData model.
         self.unhandled: dict[str, Any] = {}
