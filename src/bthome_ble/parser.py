@@ -9,8 +9,7 @@ to BTHome for the Home Assistant Bluetooth integration.
 MIT License applies.
 """
 from __future__ import annotations
-from cryptography.hazmat.primitives.ciphers.aead import AESCCM
-from cryptography.exceptions import InvalidTag
+
 import logging
 import struct
 import sys
@@ -21,6 +20,8 @@ from typing import Any
 import pytz
 from bluetooth_data_tools import short_address
 from bluetooth_sensor_state_data import BluetoothData
+from cryptography.exceptions import InvalidTag
+from cryptography.hazmat.primitives.ciphers.aead import AESCCM
 from home_assistant_bluetooth import BluetoothServiceInfo
 from sensor_state_data.description import (
     BaseBinarySensorDescription,
@@ -541,6 +542,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         if sw_version == 1:
             associated_data = b"\x11"
 
+        assert self.cipher is not None  # nosec
         # decrypt the data
         try:
             decrypted_payload = self.cipher.decrypt(
