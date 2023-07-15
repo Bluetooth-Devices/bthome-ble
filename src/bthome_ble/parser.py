@@ -9,7 +9,8 @@ to BTHome for the Home Assistant Bluetooth integration.
 MIT License applies.
 """
 from __future__ import annotations
-
+from cryptography.hazmat.primitives.ciphers.aead import AESCCM
+from cryptography.exceptions import InvalidTag
 import logging
 import struct
 import sys
@@ -20,7 +21,6 @@ from typing import Any
 import pytz
 from bluetooth_data_tools import short_address
 from bluetooth_sensor_state_data import BluetoothData
-from Cryptodome.Cipher import AES
 from home_assistant_bluetooth import BluetoothServiceInfo
 from sensor_state_data.description import (
     BaseBinarySensorDescription,
@@ -117,6 +117,10 @@ class BTHomeBluetoothDeviceData(BluetoothData):
     def __init__(self, bindkey: bytes | None = None) -> None:
         super().__init__()
         self.bindkey = bindkey
+        if bindkey:
+            self.cipher: AESCCM | None = AESCCM(bindkey, tag_length=4)
+        else:
+            self.cipher = None
 
         # Data that we know how to parse but don't yet map to the SensorData model.
         self.unhandled: dict[str, Any] = {}
@@ -532,14 +536,17 @@ class BTHomeBluetoothDeviceData(BluetoothData):
 
         # nonce: mac [6], uuid16 [2 (v1) or 3 (v2)], count_id [4]
         nonce = b"".join([bthome_mac, uuid, count_id])
-        cipher = AES.new(self.bindkey, AES.MODE_CCM, nonce=nonce, mac_len=4)
+
+        associated_data = None
         if sw_version == 1:
-            cipher.update(b"\x11")
+            associated_data = b"\x11"
 
         # decrypt the data
         try:
-            decrypted_payload = cipher.decrypt_and_verify(encrypted_payload, mic)
-        except ValueError as error:
+            decrypted_payload = self.cipher.decrypt(
+                nonce, encrypted_payload + mic, associated_data
+            )
+        except InvalidTag as error:
             self.bindkey_verified = False
             _LOGGER.warning("Decryption failed: %s", error)
             _LOGGER.debug("mic: %s", mic.hex())

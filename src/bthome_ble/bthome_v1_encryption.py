@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import binascii
 
-from Cryptodome.Cipher import AES
+from cryptography.hazmat.primitives.ciphers.aead import AESCCM
 
 
 def parse_value(data: bytes) -> dict[str, float]:
@@ -25,12 +25,11 @@ def decrypt_payload(
     print("Nonce:", nonce.hex())
     print("CryptData:", payload.hex())
     print("Mic:", mic.hex())
-    cipher = AES.new(key, AES.MODE_CCM, nonce=nonce, mac_len=4)
-    cipher.update(b"\x11")
+    cipher = AESCCM(key, tag_length=4)
     print()
     print("Starting Decryption data")
     try:
-        data = cipher.decrypt_and_verify(payload, mic)
+        data = cipher.decrypt(nonce, payload + mic, b"\x11")
     except ValueError as error:
         print()
         print("Decryption failed:", error)
@@ -64,9 +63,11 @@ def encrypt_payload(
 ) -> bytes:
     """Encrypt payload."""
     nonce = b"".join([mac, uuid16, count_id])  # 6+2+4 = 12 bytes
-    cipher = AES.new(key, AES.MODE_CCM, nonce=nonce, mac_len=4)
-    cipher.update(b"\x11")
-    ciphertext, mic = cipher.encrypt_and_digest(data)
+    cipher = AESCCM(key, tag_length=4)
+    associated_data = b"\x11"
+    result = cipher.encrypt(nonce, data, associated_data)
+    ciphertext = result[:-4]
+    mic = result[-4:]
     print("MAC:", mac.hex())
     print("Binkey:", key.hex())
     print("Data:", data.hex())
