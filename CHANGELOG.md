@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v2.12.2 (2023-07-15)
+
+### Fix
+
+* Decryption bug fixed ([`dfb12e6`](https://github.com/Bluetooth-Devices/bthome-ble/commit/dfb12e6d46e29cadaff39b5e9d6625a708502d05))
+
 ## v2.12.1 (2023-07-07)
 
 ### Fix
