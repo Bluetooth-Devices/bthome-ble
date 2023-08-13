@@ -18,6 +18,7 @@ from sensor_state_data import (
     Units,
 )
 
+from bthome_ble.const import ExtendedSensorDeviceClass
 from bthome_ble.parser import BTHomeBluetoothDeviceData, EncryptionScheme
 
 KEY_ACCELERATION = DeviceKey(key="acceleration", device_id=None)
@@ -50,6 +51,7 @@ KEY_ROTATION = DeviceKey(key="rotation", device_id=None)
 KEY_SIGNAL_STRENGTH = DeviceKey(key="signal_strength", device_id=None)
 KEY_SPEED = DeviceKey(key="speed", device_id=None)
 KEY_TEMPERATURE = DeviceKey(key="temperature", device_id=None)
+KEY_TEXT = DeviceKey(key="text", device_id=None)
 KEY_TIMESTAMP = DeviceKey(key="timestamp", device_id=None)
 KEY_UV_INDEX = DeviceKey(key="uv_index", device_id=None)
 KEY_VOC = DeviceKey(key="volatile_organic_compounds", device_id=None)
@@ -2451,6 +2453,84 @@ def test_bthome_gyroscope(caplog):
             KEY_GYROSCOPE: SensorValue(
                 device_key=KEY_GYROSCOPE, name="Gyroscope", native_value=22.151
             ),
+            KEY_SIGNAL_STRENGTH: SensorValue(
+                device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+    )
+
+
+def test_bthome_text(caplog):
+    """Test BTHome parser for text."""
+    data_string = b"\x44\x53\x0C\x48\x65\x6C\x6C\x6F\x20\x57\x6F\x72\x6C\x64\x21"
+    advertisement = bytes_to_service_info(
+        data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
+    )
+
+    device = BTHomeBluetoothDeviceData()
+
+    assert device.update(advertisement) == SensorUpdate(
+        title="TEST DEVICE 18B2",
+        devices={
+            None: SensorDeviceInfo(
+                name="TEST DEVICE 18B2",
+                manufacturer=None,
+                model="BTHome sensor",
+                sw_version="BTHome BLE v2",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            KEY_TEXT: SensorDescription(
+                device_key=KEY_TEXT,
+                device_class=ExtendedSensorDeviceClass.TEXT,
+                native_unit_of_measurement=None,
+            ),
+            KEY_SIGNAL_STRENGTH: SensorDescription(
+                device_key=KEY_SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
+            KEY_TEXT: SensorValue(
+                device_key=KEY_TEXT, name="Text", native_value="Hello World!"
+            ),
+            KEY_SIGNAL_STRENGTH: SensorValue(
+                device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+    )
+
+
+def test_bthome_text_invalid(caplog):
+    """Test BTHome parser for text sensor with invalid format."""
+    data_string = b"\x44\x53\x01\x87"
+    advertisement = bytes_to_service_info(
+        data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
+    )
+
+    device = BTHomeBluetoothDeviceData()
+
+    assert device.update(advertisement) == SensorUpdate(
+        title="TEST DEVICE 18B2",
+        devices={
+            None: SensorDeviceInfo(
+                name="TEST DEVICE 18B2",
+                manufacturer=None,
+                model="BTHome sensor",
+                sw_version="BTHome BLE v2",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            KEY_SIGNAL_STRENGTH: SensorDescription(
+                device_key=KEY_SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
             KEY_SIGNAL_STRENGTH: SensorValue(
                 device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
             ),

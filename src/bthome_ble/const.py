@@ -2,7 +2,12 @@
 import dataclasses
 from typing import Union
 
-from sensor_state_data import BinarySensorDeviceClass, SensorLibrary, description
+from sensor_state_data import (
+    BaseDeviceClass,
+    BinarySensorDeviceClass,
+    SensorLibrary,
+    description,
+)
 
 from .event import EventDeviceKeys
 
@@ -17,6 +22,22 @@ class MeasTypes:
     data_length: int = 1
     data_format: str = "unsigned_integer"
     factor: float = 1
+
+
+class ExtendedSensorDeviceClass(BaseDeviceClass):
+    """Device class for additional sensors (compared to sensor-state-data)."""
+
+    # Text
+    TEXT = "text"
+
+
+class ExtendedSensorLibrary(SensorLibrary):
+    """Sensor Library for additional sensors (compared to sensor-state-data)."""
+
+    TEXT__NONE = description.BaseSensorDescription(
+        device_class=ExtendedSensorDeviceClass.TEXT,
+        native_unit_of_measurement=None,
+    )
 
 
 MEAS_TYPES: dict[int, MeasTypes] = {
@@ -356,5 +377,9 @@ MEAS_TYPES: dict[int, MeasTypes] = {
         meas_format=SensorLibrary.GYROSCOPE__GYROSCOPE_DEGREES_PER_SECOND,
         data_length=2,
         factor=0.001,
+    ),
+    0x53: MeasTypes(
+        meas_format=ExtendedSensorLibrary.TEXT__NONE,
+        data_format="string",
     ),
 }
