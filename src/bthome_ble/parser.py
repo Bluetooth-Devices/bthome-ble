@@ -78,9 +78,15 @@ def parse_float(data_obj: bytes, factor: float = 1.0) -> float | None:
     return round(val * factor, decimal_places)
 
 
-def parse_string(data_obj: bytes) -> str:
+def parse_string(data_obj: bytes) -> str | None:
     """Convert bytes to string."""
-    return data_obj.decode("UTF-8")
+    try:
+        return data_obj.decode("UTF-8")
+    except UnicodeDecodeError:
+        _LOGGER.error(
+            "BTHome data contains bytes that can't be decoded to a string (use UTF-8 encoding)"
+        )
+        return None
 
 
 def parse_timestamp(data_obj: bytes) -> datetime:
@@ -388,10 +394,15 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                     )
                     break
                 prev_obj_meas_type = obj_meas_type
-                obj_data_length = MEAS_TYPES[obj_meas_type].data_length
                 obj_data_format = MEAS_TYPES[obj_meas_type].data_format
-                obj_data_start = obj_start + 1
-                next_obj_start = obj_start + obj_data_length + 1
+
+                if obj_data_format == "string":
+                    obj_data_length = payload[obj_start + 1]
+                    obj_data_start = obj_start + 2
+                else:
+                    obj_data_length = MEAS_TYPES[obj_meas_type].data_length
+                    obj_data_start = obj_start + 1
+                next_obj_start = obj_data_start + obj_data_length
 
             if obj_data_length == 0:
                 _LOGGER.debug(
