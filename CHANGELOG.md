@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v3.1.0 (2023-08-13)
+
+### Feature
+
+* Add text sensor ([#86](https://github.com/Bluetooth-Devices/bthome-ble/issues/86)) ([`2bfcd9b`](https://github.com/Bluetooth-Devices/bthome-ble/commit/2bfcd9b9b4a2321eb229298258235b61a97ae9d2))
+
 ## v3.0.0 (2023-07-15)
 
 ### Feature
