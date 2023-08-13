@@ -423,7 +423,6 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                     "device id": None,
                 }
             )
-            _LOGGER.error("data %s", payload[obj_data_start:next_obj_start])
 
         # Get a list of measurement types that are included more than once.
         seen_meas_formats = set()
