@@ -91,9 +91,11 @@ def parse_string(data_obj: bytes) -> str | None:
 
 def parse_timestamp(data_obj: bytes) -> datetime:
     """Convert bytes to a datetime object."""
-    value = datetime.utcfromtimestamp(int.from_bytes(data_obj, "little", signed=False))
+    value = datetime.fromtimestamp(
+        int.from_bytes(data_obj, "little", signed=False), tz=pytz.utc
+    )
     _LOGGER.error("time %s", value)
-    return pytz.utc.localize(value)
+    return value
 
 
 def parse_event_type(event_device: str, data_obj: int) -> str | None:
