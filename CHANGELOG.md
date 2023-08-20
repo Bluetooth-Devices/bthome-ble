@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v3.1.1 (2023-08-20)
+
+### Fix
+
+* Replace datetime.utcfromtimestamp ([#87](https://github.com/Bluetooth-Devices/bthome-ble/issues/87)) ([`0184fe7`](https://github.com/Bluetooth-Devices/bthome-ble/commit/0184fe7b04caabc45fe3e8da1191269a7d19b975))
+
 ## v3.1.0 (2023-08-13)
 
 ### Feature
