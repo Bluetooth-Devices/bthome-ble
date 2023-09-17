@@ -13,11 +13,10 @@ from __future__ import annotations
 import logging
 import struct
 import sys
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum
 from typing import Any
 
-import pytz
 from bluetooth_data_tools import short_address
 from bluetooth_sensor_state_data import BluetoothData
 from cryptography.exceptions import InvalidTag
@@ -92,7 +91,7 @@ def parse_string(data_obj: bytes) -> str | None:
 def parse_timestamp(data_obj: bytes) -> datetime:
     """Convert bytes to a datetime object."""
     value = datetime.fromtimestamp(
-        int.from_bytes(data_obj, "little", signed=False), tz=pytz.utc
+        int.from_bytes(data_obj, "little", signed=False), tz=timezone.utc
     )
     _LOGGER.error("time %s", value)
     return value
