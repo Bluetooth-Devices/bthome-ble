@@ -47,6 +47,7 @@ KEY_PM25 = DeviceKey(key="pm25", device_id=None)
 KEY_PM10 = DeviceKey(key="pm10", device_id=None)
 KEY_POWER = DeviceKey(key="power", device_id=None)
 KEY_PRESSURE = DeviceKey(key="pressure", device_id=None)
+KEY_RAW = DeviceKey(key="raw", device_id=None)
 KEY_ROTATION = DeviceKey(key="rotation", device_id=None)
 KEY_SIGNAL_STRENGTH = DeviceKey(key="signal_strength", device_id=None)
 KEY_SPEED = DeviceKey(key="speed", device_id=None)
@@ -2495,6 +2496,49 @@ def test_bthome_text(caplog):
         entity_values={
             KEY_TEXT: SensorValue(
                 device_key=KEY_TEXT, name="Text", native_value="Hello World!"
+            ),
+            KEY_SIGNAL_STRENGTH: SensorValue(
+                device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+    )
+
+
+def test_bthome_raw(caplog):
+    """Test BTHome parser for raw hex data."""
+    data_string = b"\x44\x54\x0C\x48\x65\x6C\x6C\x6F\x20\x57\x6F\x72\x6C\x64\x21"
+    advertisement = bytes_to_service_info(
+        data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
+    )
+
+    device = BTHomeBluetoothDeviceData()
+
+    assert device.update(advertisement) == SensorUpdate(
+        title="TEST DEVICE 18B2",
+        devices={
+            None: SensorDeviceInfo(
+                name="TEST DEVICE 18B2",
+                manufacturer=None,
+                model="BTHome sensor",
+                sw_version="BTHome BLE v2",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            KEY_RAW: SensorDescription(
+                device_key=KEY_RAW,
+                device_class=ExtendedSensorDeviceClass.RAW,
+                native_unit_of_measurement=None,
+            ),
+            KEY_SIGNAL_STRENGTH: SensorDescription(
+                device_key=KEY_SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
+            KEY_RAW: SensorValue(
+                device_key=KEY_RAW, name="Raw", native_value="48656c6c6f20576f726c6421"
             ),
             KEY_SIGNAL_STRENGTH: SensorValue(
                 device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60

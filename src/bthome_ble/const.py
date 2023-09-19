@@ -27,12 +27,20 @@ class MeasTypes:
 class ExtendedSensorDeviceClass(BaseDeviceClass):
     """Device class for additional sensors (compared to sensor-state-data)."""
 
+    # Raw hex data
+    RAW = "raw"
+
     # Text
     TEXT = "text"
 
 
 class ExtendedSensorLibrary(SensorLibrary):
     """Sensor Library for additional sensors (compared to sensor-state-data)."""
+
+    RAW__NONE = description.BaseSensorDescription(
+        device_class=ExtendedSensorDeviceClass.RAW,
+        native_unit_of_measurement=None,
+    )
 
     TEXT__NONE = description.BaseSensorDescription(
         device_class=ExtendedSensorDeviceClass.TEXT,
@@ -381,5 +389,9 @@ MEAS_TYPES: dict[int, MeasTypes] = {
     0x53: MeasTypes(
         meas_format=ExtendedSensorLibrary.TEXT__NONE,
         data_format="string",
+    ),
+    0x54: MeasTypes(
+        meas_format=ExtendedSensorLibrary.RAW__NONE,
+        data_format="raw",
     ),
 }

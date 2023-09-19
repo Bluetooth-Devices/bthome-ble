@@ -77,6 +77,11 @@ def parse_float(data_obj: bytes, factor: float = 1.0) -> float | None:
     return round(val * factor, decimal_places)
 
 
+def parse_raw(data_obj: bytes) -> str | None:
+    """Convert bytes to raw hex string."""
+    return data_obj.hex()
+
+
 def parse_string(data_obj: bytes) -> str | None:
     """Convert bytes to string."""
     try:
@@ -397,7 +402,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                 prev_obj_meas_type = obj_meas_type
                 obj_data_format = MEAS_TYPES[obj_meas_type].data_format
 
-                if obj_data_format == "string":
+                if obj_data_format in ["raw", "string"]:
                     obj_data_length = payload[obj_start + 1]
                     obj_data_start = obj_start + 2
                 else:
@@ -467,6 +472,8 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                 value = parse_float(meas["measurement data"], meas_factor)
             elif meas["data format"] == 3 or meas["data format"] == "string":
                 value = parse_string(meas["measurement data"])
+            elif meas["data format"] == 4 or meas["data format"] == "raw":
+                value = parse_raw(meas["measurement data"])
             elif meas["data format"] == 5 or meas["data format"] == "timestamp":
                 value = parse_timestamp(meas["measurement data"])
             else:
