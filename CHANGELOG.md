@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v3.2.0 (2023-10-01)
+
+### Feature
+
+* Add raw hex sensor ([#91](https://github.com/Bluetooth-Devices/bthome-ble/issues/91)) ([`6f9969e`](https://github.com/Bluetooth-Devices/bthome-ble/commit/6f9969e73efe0ccaa810d3e7aa136af673eca3c2))
+
 ## v3.1.1 (2023-08-20)
 
 ### Fix
