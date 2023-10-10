@@ -574,7 +574,10 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         assert self.cipher is not None  # nosec
 
         # verify that the encryption counter is increasing compared the previous value
-        if self.encryption_counter < last_encryption_counter:
+        if (
+            self.encryption_counter < last_encryption_counter
+            and last_encryption_counter < b"\xF0\xFF\xFF\xFF"
+        ):
             _LOGGER.warning(
                 "The new encryption counter (%i) is lower than the previous value (%i). "
                 "The data might be compromised",
