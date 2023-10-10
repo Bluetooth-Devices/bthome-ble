@@ -389,6 +389,36 @@ def test_bindkey_verified_can_be_unset():
     assert not device.bindkey_verified
 
 
+def test_encryption_counter(caplog):
+    """Test BTHome parser with correct encryption counter."""
+    bindkey = "231d39c1d7cc1ab1aee224cd096db932"
+    data_string = b"\x41\xa4\x72\x66\xc9\x5f\x73\x00\x11\x22\x33\x78\x23\x72\x14"
+    advertisement = bytes_to_service_info(
+        data_string,
+        local_name="TEST DEVICE",
+        address="54:48:E6:8F:80:A5",
+    )
+
+    device = BTHomeBluetoothDeviceData(bindkey=bytes.fromhex(bindkey))
+    assert device.supported(advertisement)
+    assert device.bindkey_verified
+    assert device.encryption_counter == b"\x00\x11\x22\x33"
+
+    data_string = b"\x41\xec\xfa\xa1\xc0\x7f\xd2\x00\x00\x11\x22\xae\xb3\x64\x34"
+    advertisement = bytes_to_service_info(
+        data_string,
+        local_name="TEST DEVICE",
+        address="54:48:E6:8F:80:A5",
+    )
+    assert device.supported(advertisement)
+    assert device.bindkey_verified
+    assert device.encryption_counter == b"\x00\x00\x11\x22"
+    assert (
+        "The new encryption counter (571539456) is lower than the previous value (857870592)."
+        in caplog.text
+    )
+
+
 def test_bthome_wrong_object_id(caplog):
     """Test BTHome parser for a non-existing Object ID xFE."""
     data_string = b"\x40\xFE\xca\x09"
