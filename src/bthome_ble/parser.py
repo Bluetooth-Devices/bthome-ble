@@ -140,7 +140,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         # The encryption counter can be used to verify that the counter of encrypted
         # advertisements is increasing, to have some replay protection. We always
         # start at zero allow the first message after a restart.
-        self.encryption_counter = b"\x00\x00\x00\x00"
+        self.encryption_counter = 0.0
 
         # If True, then we know the actual MAC of the device.
         # On macOS, we don't unless the device includes it in the advertisement
@@ -561,11 +561,12 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             uuid = b"\xd2\xfc" + bytes([adv_info])
         encrypted_payload = data[:-8]
         last_encryption_counter = self.encryption_counter
-        self.encryption_counter = data[-8:-4]
+        counter = data[-8:-4]
+        self.encryption_counter = parse_uint(counter)
         mic = data[-4:]
 
-        # nonce: mac [6], uuid16 [2 (v1) or 3 (v2)], encryption_counter [4]
-        nonce = b"".join([bthome_mac, uuid, self.encryption_counter])
+        # nonce: mac [6], uuid16 [2 (v1) or 3 (v2)], counter [4]
+        nonce = b"".join([bthome_mac, uuid, counter])
 
         associated_data = None
         if sw_version == 1:
@@ -576,13 +577,13 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         # verify that the encryption counter is increasing compared the previous value
         if (
             self.encryption_counter < last_encryption_counter
-            and last_encryption_counter < b"\xF0\xFF\xFF\xFF"
+            and last_encryption_counter < 4294967280
         ):
             _LOGGER.warning(
                 "The new encryption counter (%i) is lower than the previous value (%i). "
                 "The data might be compromised",
-                parse_uint(self.encryption_counter),
-                parse_uint(last_encryption_counter),
+                self.encryption_counter,
+                last_encryption_counter,
             )
         # decrypt the data
         try:
