@@ -402,7 +402,7 @@ def test_encryption_counter(caplog):
     device = BTHomeBluetoothDeviceData(bindkey=bytes.fromhex(bindkey))
     assert device.supported(advertisement)
     assert device.bindkey_verified
-    assert device.encryption_counter == b"\x00\x11\x22\x33"
+    assert device.encryption_counter == 857870592
 
     data_string = b"\x41\xec\xfa\xa1\xc0\x7f\xd2\x00\x00\x11\x22\xae\xb3\x64\x34"
     advertisement = bytes_to_service_info(
@@ -412,7 +412,7 @@ def test_encryption_counter(caplog):
     )
     assert device.supported(advertisement)
     assert device.bindkey_verified
-    assert device.encryption_counter == b"\x00\x00\x11\x22"
+    assert device.encryption_counter == 571539456
     assert (
         "The new encryption counter (571539456) is lower than the previous value (857870592)."
         in caplog.text
