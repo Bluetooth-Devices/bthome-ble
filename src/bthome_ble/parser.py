@@ -562,7 +562,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         encrypted_payload = data[:-8]
         last_encryption_counter = self.encryption_counter
         counter = data[-8:-4]
-        self.encryption_counter = parse_uint(counter)
+        new_encryption_counter = parse_uint(counter)
         mic = data[-4:]
 
         # nonce: mac [6], uuid16 [2 (v1) or 3 (v2)], counter [4]
@@ -574,17 +574,26 @@ class BTHomeBluetoothDeviceData(BluetoothData):
 
         assert self.cipher is not None  # nosec
 
-        # verify that the encryption counter is increasing compared the previous value
-        if (
-            self.encryption_counter < last_encryption_counter
-            and last_encryption_counter < 4294967280
-        ):
+        # verify that the encryption counter is the same or increasing, compared the previous value
+        if new_encryption_counter < last_encryption_counter:
+            # for now, only show a warning. In the future, we can decide to not parse this data.
             _LOGGER.warning(
                 "The new encryption counter (%i) is lower than the previous value (%i). "
-                "The data might be compromised",
-                self.encryption_counter,
+                "The data might be compromised. In the future, this data won't be processed "
+                "anymore.",
+                new_encryption_counter,
                 last_encryption_counter,
             )
+        else:
+            self.encryption_counter = new_encryption_counter
+        if self.encryption_counter >= 4294967195:
+            _LOGGER.warning(
+                "The encryption counter (%i) is reaching the maximum of 4294967295. "
+                "It is advised to create a new encryption key and restart the counter. "
+                "After reaching the maximum, a restart is required to restart processing the data.",
+                self.encryption_counter,
+            )
+
         # decrypt the data
         try:
             decrypted_payload = self.cipher.decrypt(
