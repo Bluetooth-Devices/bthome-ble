@@ -258,7 +258,9 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             source_mac = bytes.fromhex(mac_readable.replace(":", ""))
 
             try:
-                payload = self._decrypt_bthome(data, source_mac, sw_version)
+                payload = self._decrypt_bthome(
+                    service_info, data, source_mac, sw_version
+                )
             except (ValueError, TypeError):
                 return True
 
@@ -360,7 +362,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             # Decode encrypted payload
             try:
                 payload = self._decrypt_bthome(
-                    payload, bthome_mac, sw_version, adv_info
+                    service_info, payload, bthome_mac, sw_version, adv_info
                 )
             except (ValueError, TypeError):
                 return True
@@ -536,7 +538,12 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         return True
 
     def _decrypt_bthome(
-        self, data: bytes, bthome_mac: bytes, sw_version: int, adv_info: int = 65
+        self,
+        service_info: BluetoothServiceInfo,
+        data: bytes,
+        bthome_mac: bytes,
+        sw_version: int,
+        adv_info: int = 65,
     ) -> bytes:
         """Decrypt encrypted BTHome BLE advertisements"""
         if not self.bindkey:
@@ -575,15 +582,29 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         assert self.cipher is not None  # nosec
 
         # verify that the encryption counter is the same or increasing, compared the previous value
-        if new_encryption_counter < last_encryption_counter:
-            # for now, only show a warning. In the future, we can decide to not parse this data.
-            _LOGGER.warning(
-                "The new encryption counter (%i) is lower than the previous value (%i). "
-                "The data might be compromised. In the future, this data won't be processed "
-                "anymore.",
+        if (
+            self.last_service_info
+            and new_encryption_counter == last_encryption_counter
+            and service_info.service_data == self.last_service_info.service_data
+        ):
+            # the counter and service data are exactly the same as the previous, skipping the adv.
+            _LOGGER.debug(
+                "The new encryption counter (%i) and service data are the same as the previous "
+                "encryption counter (%i) and service data. Skipping this message.",
                 new_encryption_counter,
                 last_encryption_counter,
             )
+            raise ValueError
+        elif new_encryption_counter <= last_encryption_counter:
+            # the counter is lower than the previous counter or equal, but with different
+            # service data. Skipping this adv.
+            _LOGGER.warning(
+                "The new encryption counter (%i) is lower than or equal to the previous value "
+                "(%i). The data might be compromised. BLE advertisement will be skipped.",
+                new_encryption_counter,
+                last_encryption_counter,
+            )
+            raise ValueError
         else:
             self.encryption_counter = new_encryption_counter
         if self.encryption_counter >= 4294967195:
