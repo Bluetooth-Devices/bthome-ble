@@ -596,24 +596,23 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             )
             raise ValueError
         elif new_encryption_counter <= last_encryption_counter:
-            # the counter is lower than the previous counter or equal, but with different
-            # service data. Skipping this adv.
-            _LOGGER.warning(
-                "The new encryption counter (%i) is lower than or equal to the previous value "
-                "(%i). The data might be compromised. BLE advertisement will be skipped.",
-                new_encryption_counter,
-                last_encryption_counter,
-            )
-            raise ValueError
+            # the counter is lower than the previous counter or equal, but with different service
+            # data.
+            if new_encryption_counter < 100 and last_encryption_counter >= 4294967195:
+                # the counter has (most likely) restarted from 0 after reaching the highest number.
+                self.encryption_counter = new_encryption_counter
+            else:
+                # in all other cases, we assume the data has been comprimised and skip the
+                # advertisement
+                _LOGGER.warning(
+                    "The new encryption counter (%i) is lower than or equal to the previous value "
+                    "(%i). The data might be compromised. BLE advertisement will be skipped.",
+                    new_encryption_counter,
+                    last_encryption_counter,
+                )
+                raise ValueError
         else:
             self.encryption_counter = new_encryption_counter
-        if self.encryption_counter >= 4294967195:
-            _LOGGER.warning(
-                "The encryption counter (%i) is reaching the maximum of 4294967295. "
-                "It is advised to create a new encryption key and restart the counter. "
-                "After reaching the maximum, a restart is required to restart processing the data.",
-                self.encryption_counter,
-            )
 
         # decrypt the data
         try:
