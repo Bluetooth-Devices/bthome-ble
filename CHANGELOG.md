@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v3.3.0 (2023-12-13)
+
+### Feature
+
+* Add check for increasing encryption counter ([#92](https://github.com/Bluetooth-Devices/bthome-ble/issues/92)) ([`a58cf7b`](https://github.com/Bluetooth-Devices/bthome-ble/commit/a58cf7bf84bacaf0b8436f03499710d5b83e3add))
+
 ## v3.2.0 (2023-10-01)
 
 ### Feature
