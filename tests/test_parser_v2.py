@@ -389,6 +389,123 @@ def test_bindkey_verified_can_be_unset():
     assert not device.bindkey_verified
 
 
+def test_increasing_encryption_counter(caplog):
+    """Test BTHome parser with increasing encryption counter."""
+    bindkey = "231d39c1d7cc1ab1aee224cd096db932"
+    data_string = b"\x41\xe4\x45\xf3\xc9\x96\x2b\x33\x22\x11\x00\x6c\x7c\x45\x19"
+    advertisement = bytes_to_service_info(
+        data_string,
+        local_name="TEST DEVICE",
+        address="54:48:E6:8F:80:A5",
+    )
+
+    device = BTHomeBluetoothDeviceData(bindkey=bytes.fromhex(bindkey))
+    assert device.supported(advertisement)
+    assert device.bindkey_verified
+    assert device.encryption_counter == 1122867
+
+    data_string = b"\x41\x3e\x93\x2c\xc7\x17\x5f\x34\x22\x11\x00\x55\x38\x76\xaf"
+    advertisement = bytes_to_service_info(
+        data_string,
+        local_name="TEST DEVICE",
+        address="54:48:E6:8F:80:A5",
+    )
+    assert device.supported(advertisement)
+    assert device.bindkey_verified
+    assert device.encryption_counter == 1122868
+
+
+def test_same_encryption_counter_same_data(caplog):
+    """Test BTHome parser with the same encryption counter and service data."""
+    bindkey = "231d39c1d7cc1ab1aee224cd096db932"
+    data_string = b"\x41\xe4\x45\xf3\xc9\x96\x2b\x33\x22\x11\x00\x6c\x7c\x45\x19"
+    advertisement = bytes_to_service_info(
+        data_string,
+        local_name="TEST DEVICE",
+        address="54:48:E6:8F:80:A5",
+    )
+
+    device = BTHomeBluetoothDeviceData(bindkey=bytes.fromhex(bindkey))
+    assert device.supported(advertisement)
+    assert device.bindkey_verified
+    assert device.encryption_counter == 1122867
+
+    data_string = b"\x41\xe4\x45\xf3\xc9\x96\x2b\x33\x22\x11\x00\x6c\x7c\x45\x19"
+    advertisement = bytes_to_service_info(
+        data_string,
+        local_name="TEST DEVICE",
+        address="54:48:E6:8F:80:A5",
+    )
+    assert device.supported(advertisement)
+    assert device.bindkey_verified
+    # encryption counter should not be updated as it is lower
+    assert device.encryption_counter == 1122867
+    assert (
+        "The new encryption counter (1122867) and service data are the same as the previous "
+        "encryption counter (1122867) and service data. Skipping this message."
+        in caplog.text
+    )
+
+
+def test_decreasing_encryption_counter(caplog):
+    """Test BTHome parser with decreasing encryption counter."""
+    bindkey = "231d39c1d7cc1ab1aee224cd096db932"
+    data_string = b"\x41\xe4\x45\xf3\xc9\x96\x2b\x33\x22\x11\x00\x6c\x7c\x45\x19"
+    advertisement = bytes_to_service_info(
+        data_string,
+        local_name="TEST DEVICE",
+        address="54:48:E6:8F:80:A5",
+    )
+
+    device = BTHomeBluetoothDeviceData(bindkey=bytes.fromhex(bindkey))
+    assert device.supported(advertisement)
+    assert device.bindkey_verified
+    assert device.encryption_counter == 1122867
+
+    data_string = b"\x41\x72\x3d\x30\x35\xfb\x88\x32\x22\x11\x00\x9e\x74\x14\xc0"
+    advertisement = bytes_to_service_info(
+        data_string,
+        local_name="TEST DEVICE",
+        address="54:48:E6:8F:80:A5",
+    )
+    assert device.supported(advertisement)
+    assert device.bindkey_verified
+    # encryption counter should not be updated as it is lower
+    assert device.encryption_counter == 1122867
+    assert (
+        "The new encryption counter (1122866) is lower than or equal to the previous value "
+        "(1122867). The data might be compromised. BLE advertisement will be skipped."
+        in caplog.text
+    )
+
+
+def test_reset_encryption_counter(caplog):
+    """Test BTHome parser during reset of the encryption counter."""
+    bindkey = "231d39c1d7cc1ab1aee224cd096db932"
+    # data_string = b"\x41\xba\x0c\xb0\x7a\xee\xf6\xff\xff\xff\xff\x9c\x6d\xbe\xcc"
+    data_string = b"\x41\xba\x0d\xb0\x7a\xee\xf6\xff\xff\xff\xff\x21\xfd\x46\x00"
+    advertisement = bytes_to_service_info(
+        data_string,
+        local_name="TEST DEVICE",
+        address="54:48:E6:8F:80:A5",
+    )
+
+    device = BTHomeBluetoothDeviceData(bindkey=bytes.fromhex(bindkey))
+    assert device.supported(advertisement)
+    assert device.bindkey_verified
+    assert device.encryption_counter == 4294967295
+
+    data_string = b"\x41\xde\x40\xb5\x0e\x67\x66\x00\x00\x00\x00\xd7\xcb\x95\xde"
+    advertisement = bytes_to_service_info(
+        data_string,
+        local_name="TEST DEVICE",
+        address="54:48:E6:8F:80:A5",
+    )
+    assert device.supported(advertisement)
+    assert device.bindkey_verified
+    assert device.encryption_counter == 0
+
+
 def test_bthome_wrong_object_id(caplog):
     """Test BTHome parser for a non-existing Object ID xFE."""
     data_string = b"\x40\xFE\xca\x09"
@@ -3052,4 +3169,66 @@ def test_bthome_shelly_button_no_press(caplog):
             ),
         },
         events={},
+    )
+
+
+def test_bthome_test(caplog):
+    """Test BTHome parser for acceleration in m/s°."""
+    data_string = b"@\x00\xa7\x0cx\x0b\x10\x00"
+    advertisement = bytes_to_service_info(
+        data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
+    )
+
+    device = BTHomeBluetoothDeviceData()
+
+    assert device.update(advertisement) == SensorUpdate(
+        title="TEST DEVICE 18B2",
+        devices={
+            None: SensorDeviceInfo(
+                name="TEST DEVICE 18B2",
+                manufacturer=None,
+                model="BTHome sensor",
+                sw_version="BTHome BLE v2",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            KEY_PACKET_ID: SensorDescription(
+                device_key=KEY_PACKET_ID,
+                device_class=SensorDeviceClass.PACKET_ID,
+                native_unit_of_measurement=None,
+            ),
+            KEY_VOLTAGE: SensorDescription(
+                device_key=KEY_VOLTAGE,
+                device_class=SensorDeviceClass.VOLTAGE,
+                native_unit_of_measurement=Units.ELECTRIC_POTENTIAL_VOLT,
+            ),
+            KEY_SIGNAL_STRENGTH: SensorDescription(
+                device_key=KEY_SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
+            KEY_PACKET_ID: SensorValue(
+                device_key=KEY_PACKET_ID, name="Packet Id", native_value=167
+            ),
+            KEY_VOLTAGE: SensorValue(
+                device_key=KEY_VOLTAGE, name="Voltage", native_value=2.936
+            ),
+            KEY_SIGNAL_STRENGTH: SensorValue(
+                device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+        binary_entity_descriptions={
+            KEY_BINARY_POWER: BinarySensorDescription(
+                device_key=KEY_BINARY_POWER,
+                device_class=BinarySensorDeviceClass.POWER,
+            ),
+        },
+        binary_entity_values={
+            KEY_BINARY_POWER: BinarySensorValue(
+                device_key=KEY_BINARY_POWER, name="Power", native_value=False
+            ),
+        },
     )
