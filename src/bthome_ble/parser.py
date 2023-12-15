@@ -586,6 +586,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             self.last_service_info
             and new_encryption_counter == last_encryption_counter
             and service_info.service_data == self.last_service_info.service_data
+            and self.bindkey_verified is True
         ):
             # the counter and service data are exactly the same as the previous, skipping the adv.
             _LOGGER.debug(
@@ -595,7 +596,10 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                 last_encryption_counter,
             )
             raise ValueError
-        elif new_encryption_counter <= last_encryption_counter:
+        elif (
+            new_encryption_counter <= last_encryption_counter
+            and self.bindkey_verified is True
+        ):
             # the counter is lower than the previous counter or equal, but with different service
             # data.
             if new_encryption_counter < 100 and last_encryption_counter >= 4294967195:
