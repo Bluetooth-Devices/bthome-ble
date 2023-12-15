@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v3.3.1 (2023-12-15)
+
+### Fix
+
+* No check of encryption counter when bindkey has not been verified ([#97](https://github.com/Bluetooth-Devices/bthome-ble/issues/97)) ([`43f1412`](https://github.com/Bluetooth-Devices/bthome-ble/commit/43f14123b68732f41552d2f198dbbf2323763614))
+
 ## v3.3.0 (2023-12-13)
 
 ### Feature
