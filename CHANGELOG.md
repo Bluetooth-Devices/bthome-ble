@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v3.4.0 (2024-01-10)
+
+### Feature
+
+* Add water storage sensor ([#101](https://github.com/Bluetooth-Devices/bthome-ble/issues/101)) ([`6eb80e0`](https://github.com/Bluetooth-Devices/bthome-ble/commit/6eb80e0e120f7c8ef6ce4b7ee5057ae5356192b3))
+
 ## v3.3.1 (2023-12-15)
 
 ### Fix
