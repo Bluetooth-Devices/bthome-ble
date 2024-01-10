@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v3.4.1 (2024-01-10)
+
+### Fix
+
+* Use volume storage instead of water storage ([#102](https://github.com/Bluetooth-Devices/bthome-ble/issues/102)) ([`4cf20bf`](https://github.com/Bluetooth-Devices/bthome-ble/commit/4cf20bfd027286ba7ca842125d3cafbc0797e6c1))
+
 ## v3.4.0 (2024-01-10)
 
 ### Feature
