@@ -59,8 +59,8 @@ KEY_VOC = DeviceKey(key="volatile_organic_compounds", device_id=None)
 KEY_VOLTAGE = DeviceKey(key="voltage", device_id=None)
 KEY_VOLUME = DeviceKey(key="volume", device_id=None)
 KEY_VOLUME_FLOW_RATE = DeviceKey(key="volume_flow_rate", device_id=None)
+KEY_VOLUME_STORAGE = DeviceKey(key="volume_storage", device_id=None)
 KEY_WATER = DeviceKey(key="water", device_id=None)
-KEY_WATER_STORAGE = DeviceKey(key="water_storage", device_id=None)
 
 
 @pytest.fixture(autouse=True)
@@ -2700,8 +2700,8 @@ def test_bthome_text_invalid(caplog):
     )
 
 
-def test_bthome_water_storage(caplog):
-    """Test BTHome parser for water storage in Liters."""
+def test_bthome_volume_storage(caplog):
+    """Test BTHome parser for volume storage in Liters."""
     data_string = b"\x40\x55\x87\x56\x2a\x01"
     advertisement = bytes_to_service_info(
         data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
@@ -2721,9 +2721,9 @@ def test_bthome_water_storage(caplog):
             )
         },
         entity_descriptions={
-            KEY_WATER_STORAGE: SensorDescription(
-                device_key=KEY_WATER_STORAGE,
-                device_class=ExtendedSensorDeviceClass.WATER_STORAGE,
+            KEY_VOLUME_STORAGE: SensorDescription(
+                device_key=KEY_VOLUME_STORAGE,
+                device_class=ExtendedSensorDeviceClass.VOLUME_STORAGE,
                 native_unit_of_measurement=Units.VOLUME_LITERS,
             ),
             KEY_SIGNAL_STRENGTH: SensorDescription(
@@ -2733,9 +2733,9 @@ def test_bthome_water_storage(caplog):
             ),
         },
         entity_values={
-            KEY_WATER_STORAGE: SensorValue(
-                device_key=KEY_WATER_STORAGE,
-                name="Water Storage",
+            KEY_VOLUME_STORAGE: SensorValue(
+                device_key=KEY_VOLUME_STORAGE,
+                name="Volume Storage",
                 native_value=19551.879,
             ),
             KEY_SIGNAL_STRENGTH: SensorValue(

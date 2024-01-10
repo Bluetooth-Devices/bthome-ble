@@ -34,8 +34,8 @@ class ExtendedSensorDeviceClass(BaseDeviceClass):
     # Text
     TEXT = "text"
 
-    # Water storage
-    WATER_STORAGE = "water_storage"
+    # Volume storage
+    VOLUME_STORAGE = "volume_storage"
 
 
 class ExtendedSensorLibrary(SensorLibrary):
@@ -51,8 +51,8 @@ class ExtendedSensorLibrary(SensorLibrary):
         native_unit_of_measurement=None,
     )
 
-    WATER_STORAGE__VOLUME_LITERS = description.BaseSensorDescription(
-        device_class=ExtendedSensorDeviceClass.WATER_STORAGE,
+    VOLUME_STORAGE__VOLUME_LITERS = description.BaseSensorDescription(
+        device_class=ExtendedSensorDeviceClass.VOLUME_STORAGE,
         native_unit_of_measurement=Units.VOLUME_LITERS,
     )
 
@@ -404,7 +404,7 @@ MEAS_TYPES: dict[int, MeasTypes] = {
         data_format="raw",
     ),
     0x55: MeasTypes(
-        meas_format=ExtendedSensorLibrary.WATER_STORAGE__VOLUME_LITERS,
+        meas_format=ExtendedSensorLibrary.VOLUME_STORAGE__VOLUME_LITERS,
         data_length=4,
         factor=0.001,
     ),
