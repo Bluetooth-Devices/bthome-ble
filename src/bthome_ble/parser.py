@@ -492,7 +492,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
 
             if value is not None:
                 if (
-                    type(meas_format) == BaseSensorDescription
+                    isinstance(meas_format, BaseSensorDescription)
                     and meas_format.device_class
                 ):
                     self.update_sensor(
@@ -502,7 +502,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                         device_class=meas_format.device_class,
                     )
                 elif (
-                    type(meas_format) == BaseBinarySensorDescription
+                    isinstance(meas_format, BaseBinarySensorDescription)
                     and meas_format.device_class
                 ):
                     self.update_binary_sensor(
@@ -510,7 +510,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                         device_class=meas_format.device_class,
                         native_value=bool(value),
                     )
-                elif type(meas_format) == EventDeviceKeys:
+                elif isinstance(meas_format, EventDeviceKeys):
                     event_type = parse_event_type(
                         event_device=meas_format,
                         data_obj=meas["measurement data"][0],

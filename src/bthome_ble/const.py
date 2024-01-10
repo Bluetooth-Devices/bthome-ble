@@ -6,6 +6,7 @@ from sensor_state_data import (
     BaseDeviceClass,
     BinarySensorDeviceClass,
     SensorLibrary,
+    Units,
     description,
 )
 
@@ -33,6 +34,9 @@ class ExtendedSensorDeviceClass(BaseDeviceClass):
     # Text
     TEXT = "text"
 
+    # Water storage
+    WATER_STORAGE = "water_storage"
+
 
 class ExtendedSensorLibrary(SensorLibrary):
     """Sensor Library for additional sensors (compared to sensor-state-data)."""
@@ -45,6 +49,11 @@ class ExtendedSensorLibrary(SensorLibrary):
     TEXT__NONE = description.BaseSensorDescription(
         device_class=ExtendedSensorDeviceClass.TEXT,
         native_unit_of_measurement=None,
+    )
+
+    WATER_STORAGE__VOLUME_LITERS = description.BaseSensorDescription(
+        device_class=ExtendedSensorDeviceClass.WATER_STORAGE,
+        native_unit_of_measurement=Units.VOLUME_LITERS,
     )
 
 
@@ -393,5 +402,10 @@ MEAS_TYPES: dict[int, MeasTypes] = {
     0x54: MeasTypes(
         meas_format=ExtendedSensorLibrary.RAW__NONE,
         data_format="raw",
+    ),
+    0x55: MeasTypes(
+        meas_format=ExtendedSensorLibrary.WATER_STORAGE__VOLUME_LITERS,
+        data_length=4,
+        factor=0.001,
     ),
 }
