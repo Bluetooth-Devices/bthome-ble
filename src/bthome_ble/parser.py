@@ -583,34 +583,18 @@ class BTHomeBluetoothDeviceData(BluetoothData):
 
         # verify that the encryption counter is the same or increasing, compared the previous value
         if (
-            self.last_service_info
-            and new_encryption_counter == last_encryption_counter
-            and service_info.service_data == self.last_service_info.service_data
+            new_encryption_counter < last_encryption_counter
             and self.bindkey_verified is True
         ):
-            # the counter and service data are exactly the same as the previous, skipping the adv.
-            _LOGGER.debug(
-                "The new encryption counter (%i) and service data are the same as the previous "
-                "encryption counter (%i) and service data. Skipping this message.",
-                new_encryption_counter,
-                last_encryption_counter,
-            )
-            raise ValueError
-        elif (
-            new_encryption_counter <= last_encryption_counter
-            and self.bindkey_verified is True
-        ):
-            # the counter is lower than the previous counter or equal, but with different service
-            # data.
             if new_encryption_counter < 100 and last_encryption_counter >= 4294967195:
-                # the counter has (most likely) restarted from 0 after reaching the highest number.
+                # the counter has (most likely) restarted from 0 after reaching the highest number
                 self.encryption_counter = new_encryption_counter
             else:
                 # in all other cases, we assume the data has been comprimised and skip the
                 # advertisement
                 _LOGGER.warning(
-                    "The new encryption counter (%i) is lower than or equal to the previous value "
-                    "(%i). The data might be compromised. BLE advertisement will be skipped.",
+                    "The new encryption counter (%i) is lower than the previous value (%i). "
+                    "The data might be compromised. BLE advertisement will be skipped.",
                     new_encryption_counter,
                     last_encryption_counter,
                 )

@@ -416,8 +416,8 @@ def test_increasing_encryption_counter(caplog):
     assert device.encryption_counter == 1122868
 
 
-def test_same_encryption_counter_same_data(caplog):
-    """Test BTHome parser with the same encryption counter and service data."""
+def test_same_encryption_counter(caplog):
+    """Test BTHome parser with the same encryption counter."""
     bindkey = "231d39c1d7cc1ab1aee224cd096db932"
     data_string = b"\x41\xe4\x45\xf3\xc9\x96\x2b\x33\x22\x11\x00\x6c\x7c\x45\x19"
     advertisement = bytes_to_service_info(
@@ -439,13 +439,7 @@ def test_same_encryption_counter_same_data(caplog):
     )
     assert device.supported(advertisement)
     assert device.bindkey_verified
-    # encryption counter should not be updated as it is lower
     assert device.encryption_counter == 1122867
-    assert (
-        "The new encryption counter (1122867) and service data are the same as the previous "
-        "encryption counter (1122867) and service data. Skipping this message."
-        in caplog.text
-    )
 
 
 def test_decreasing_encryption_counter(caplog):
@@ -474,8 +468,8 @@ def test_decreasing_encryption_counter(caplog):
     # encryption counter should not be updated as it is lower
     assert device.encryption_counter == 1122867
     assert (
-        "The new encryption counter (1122866) is lower than or equal to the previous value "
-        "(1122867). The data might be compromised. BLE advertisement will be skipped."
+        "The new encryption counter (1122866) is lower than the previous value (1122867). "
+        "The data might be compromised. BLE advertisement will be skipped."
         in caplog.text
     )
 
