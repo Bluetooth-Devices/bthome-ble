@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v3.4.2 (2024-01-17)
+
+### Fix
+
+* Fix counter verification ([#104](https://github.com/Bluetooth-Devices/bthome-ble/issues/104)) ([`dead672`](https://github.com/Bluetooth-Devices/bthome-ble/commit/dead67297a2a5662d6a9b12fcc8e671ae1d833a1))
+
 ## v3.4.1 (2024-01-10)
 
 ### Fix
