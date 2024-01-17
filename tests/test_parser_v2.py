@@ -390,32 +390,6 @@ def test_bindkey_verified_can_be_unset():
     assert not device.bindkey_verified
 
 
-def test_increasing_encryption_counter(caplog):
-    """Test BTHome parser with increasing encryption counter."""
-    bindkey = "231d39c1d7cc1ab1aee224cd096db932"
-    data_string = b"\x41\xe4\x45\xf3\xc9\x96\x2b\x33\x22\x11\x00\x6c\x7c\x45\x19"
-    advertisement = bytes_to_service_info(
-        data_string,
-        local_name="TEST DEVICE",
-        address="54:48:E6:8F:80:A5",
-    )
-
-    device = BTHomeBluetoothDeviceData(bindkey=bytes.fromhex(bindkey))
-    assert device.supported(advertisement)
-    assert device.bindkey_verified
-    assert device.encryption_counter == 1122867
-
-    data_string = b"\x41\x3e\x93\x2c\xc7\x17\x5f\x34\x22\x11\x00\x55\x38\x76\xaf"
-    advertisement = bytes_to_service_info(
-        data_string,
-        local_name="TEST DEVICE",
-        address="54:48:E6:8F:80:A5",
-    )
-    assert device.supported(advertisement)
-    assert device.bindkey_verified
-    assert device.encryption_counter == 1122868
-
-
 def test_same_service_data(caplog):
     """Test BTHome parser with the same service data."""
     bindkey = "231d39c1d7cc1ab1aee224cd096db932"
@@ -444,6 +418,32 @@ def test_same_service_data(caplog):
         "The service data is the same as the previous service data. Skipping this "
         "BLE advertisement." in caplog.text
     )
+
+
+def test_increasing_encryption_counter(caplog):
+    """Test BTHome parser with increasing encryption counter."""
+    bindkey = "231d39c1d7cc1ab1aee224cd096db932"
+    data_string = b"\x41\xe4\x45\xf3\xc9\x96\x2b\x33\x22\x11\x00\x6c\x7c\x45\x19"
+    advertisement = bytes_to_service_info(
+        data_string,
+        local_name="TEST DEVICE",
+        address="54:48:E6:8F:80:A5",
+    )
+
+    device = BTHomeBluetoothDeviceData(bindkey=bytes.fromhex(bindkey))
+    assert device.supported(advertisement)
+    assert device.bindkey_verified
+    assert device.encryption_counter == 1122867
+
+    data_string = b"\x41\x3e\x93\x2c\xc7\x17\x5f\x34\x22\x11\x00\x55\x38\x76\xaf"
+    advertisement = bytes_to_service_info(
+        data_string,
+        local_name="TEST DEVICE",
+        address="54:48:E6:8F:80:A5",
+    )
+    assert device.supported(advertisement)
+    assert device.bindkey_verified
+    assert device.encryption_counter == 1122868
 
 
 def test_decreasing_encryption_counter(caplog):
@@ -502,6 +502,21 @@ def test_reset_encryption_counter(caplog):
     assert device.supported(advertisement)
     assert device.bindkey_verified
     assert device.encryption_counter == 0
+
+
+def test_too_short_encryption_advertisement(caplog):
+    """Test BTHome parser with a too short encrypted advertisement."""
+    bindkey = "231d39c1d7cc1ab1aee224cd096db932"
+    data_string = b"\x41\xba\x0d\xb0\x7a\xee\xf6\x00"
+    advertisement = bytes_to_service_info(
+        data_string,
+        local_name="TEST DEVICE",
+        address="54:48:E6:8F:80:A5",
+    )
+
+    device = BTHomeBluetoothDeviceData(bindkey=bytes.fromhex(bindkey))
+    assert device.supported(advertisement)
+    assert "Invalid data length (for decryption), adv:" in caplog.text
 
 
 def test_bthome_wrong_object_id(caplog):
