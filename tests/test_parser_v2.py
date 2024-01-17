@@ -519,6 +519,108 @@ def test_too_short_encryption_advertisement(caplog):
     assert "Invalid data length (for decryption), adv:" in caplog.text
 
 
+def test_identical_packet_id(caplog):
+    """Test BTHome parser for skipping BLE advertisement with identical counter_id."""
+    data_string = b"\x40\x00\x09"
+    advertisement = bytes_to_service_info(
+        data_string, local_name="ATC_8D18B2", address="A4:C1:38:8D:18:B2"
+    )
+
+    device = BTHomeBluetoothDeviceData()
+    assert device.update(advertisement) == SensorUpdate(
+        title="ATC 18B2",
+        devices={
+            None: SensorDeviceInfo(
+                name="ATC 18B2",
+                manufacturer="Xiaomi",
+                model="Temperature/Humidity sensor",
+                sw_version="BTHome BLE v2",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            KEY_PACKET_ID: SensorDescription(
+                device_key=KEY_PACKET_ID,
+                device_class=SensorDeviceClass.PACKET_ID,
+                native_unit_of_measurement=None,
+            ),
+            KEY_SIGNAL_STRENGTH: SensorDescription(
+                device_key=KEY_SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
+            KEY_PACKET_ID: SensorValue(
+                device_key=KEY_PACKET_ID, name="Packet Id", native_value=9
+            ),
+            KEY_SIGNAL_STRENGTH: SensorValue(
+                device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+    )
+    assert device.packet_id == 9
+
+    # second advertisement with the same counter_id
+    device.update(advertisement)
+    assert device.packet_id == 9
+    assert (
+        "New counter_id 9 is the same as the previous received counter_id 9. BLE advertisement "
+        "will be skipped" in caplog.text
+    )
+
+
+def test_increasing_packet_id(caplog):
+    """Test BTHome parser for BLE advertisement with increasing counter_id."""
+    data_string = b"\x40\x00\x09"
+    advertisement = bytes_to_service_info(
+        data_string, local_name="ATC_8D18B2", address="A4:C1:38:8D:18:B2"
+    )
+
+    device = BTHomeBluetoothDeviceData()
+    device.update(advertisement)
+    assert device.packet_id == 9
+
+    data_string_2 = b"\x40\x00\x0A"
+    advertisement_2 = bytes_to_service_info(
+        data_string_2, local_name="ATC_8D18B2", address="A4:C1:38:8D:18:B2"
+    )
+
+    assert device.update(advertisement_2) == SensorUpdate(
+        title="ATC 18B2",
+        devices={
+            None: SensorDeviceInfo(
+                name="ATC 18B2",
+                manufacturer="Xiaomi",
+                model="Temperature/Humidity sensor",
+                sw_version="BTHome BLE v2",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            KEY_PACKET_ID: SensorDescription(
+                device_key=KEY_PACKET_ID,
+                device_class=SensorDeviceClass.PACKET_ID,
+                native_unit_of_measurement=None,
+            ),
+            KEY_SIGNAL_STRENGTH: SensorDescription(
+                device_key=KEY_SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
+            KEY_PACKET_ID: SensorValue(
+                device_key=KEY_PACKET_ID, name="Packet Id", native_value=10
+            ),
+            KEY_SIGNAL_STRENGTH: SensorValue(
+                device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+    )
+    assert device.packet_id == 10
+
+
 def test_bthome_wrong_object_id(caplog):
     """Test BTHome parser for a non-existing Object ID xFE."""
     data_string = b"\x40\xFE\xca\x09"
@@ -3068,8 +3170,8 @@ def test_bthome_shelly_button(caplog):
     )
 
     device = BTHomeBluetoothDeviceData()
-    assert device.supported(advertisement) is True
     update = device.update(advertisement)
+    assert device.supported(advertisement) is True
     assert update == SensorUpdate(
         title="BTHome sensor 18B2",
         devices={
