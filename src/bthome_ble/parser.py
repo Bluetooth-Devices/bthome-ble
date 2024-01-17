@@ -194,23 +194,24 @@ class BTHomeBluetoothDeviceData(BluetoothData):
     def _start_update(self, service_info: BluetoothServiceInfo) -> None:
         """Update from BLE advertisement data."""
         _LOGGER.debug("Parsing BTHome BLE advertisement data: %s", service_info)
-        for uuid, data in service_info.service_data.items():
+        for uuid, service_data in service_info.service_data.items():
             if uuid in [
                 "0000181c-0000-1000-8000-00805f9b34fb",
                 "0000181e-0000-1000-8000-00805f9b34fb",
             ]:
-                if self._parse_bthome_v1(service_info, service_info.name, data):
+                if self._parse_bthome_v1(service_info, service_data):
                     self.last_service_info = service_info
             elif uuid == "0000fcd2-0000-1000-8000-00805f9b34fb":
-                if self._parse_bthome_v2(service_info, service_info.name, data):
+                if self._parse_bthome_v2(service_info, service_data):
                     self.last_service_info = service_info
         return None
 
     def _parse_bthome_v1(
-        self, service_info: BluetoothServiceInfo, name: str, data: bytes
+        self, service_info: BluetoothServiceInfo, service_data: bytes
     ) -> bool:
         """Parser for BTHome sensors version V1"""
         identifier = short_address(service_info.address)
+        name = service_info.name
         sw_version = 1
 
         # Remove identifier from ATC sensors.
@@ -241,7 +242,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             # Non-encrypted BTHome BLE format
             self.encryption_scheme = EncryptionScheme.NONE
             self.set_device_sw_version("BTHome BLE v1")
-            payload = data
+            payload = service_data
             packet_id = None  # noqa: F841
         elif "0000181e-0000-1000-8000-00805f9b34fb" in uuid16:
             # Encrypted BTHome BLE format
@@ -259,22 +260,24 @@ class BTHomeBluetoothDeviceData(BluetoothData):
 
             try:
                 payload = self._decrypt_bthome(
-                    service_info, data, source_mac, sw_version
+                    service_info, service_data, source_mac, sw_version
                 )
             except (ValueError, TypeError):
                 return True
 
-            packet_id = parse_uint(data[-8:-4])  # noqa: F841
+            packet_id = parse_uint(service_data[-8:-4])  # noqa: F841
         else:
             return False
 
         return self._parse_payload(payload, sw_version)
 
     def _parse_bthome_v2(
-        self, service_info: BluetoothServiceInfo, name: str, data: bytes
+        self, service_info: BluetoothServiceInfo, service_data: bytes
     ) -> bool:
         """Parser for BTHome sensors version V2"""
         identifier = short_address(service_info.address)
+        name = service_info.name
+
         if name == service_info.address:
             name = "BTHome sensor"
 
@@ -285,7 +288,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         if name[-6:] == atc_identifier:
             name = name[:-6].rstrip(" _")
 
-        adv_info = data[0]
+        adv_info = service_data[0]
 
         # Determine if encryption is used
         encryption = adv_info & (1 << 0)  # bit 0
@@ -297,12 +300,12 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         # If True, the first 6 bytes contain the mac address
         mac_included = adv_info & (1 << 1)  # bit 1
         if mac_included:
-            bthome_mac_reversed = data[1:7]
+            bthome_mac_reversed = service_data[1:7]
             mac_readable = to_mac(bthome_mac_reversed[::-1])
-            payload = data[7:]
+            payload = service_data[7:]
         else:
             mac_readable = service_info.address
-            payload = data[1:]
+            payload = service_data[1:]
 
         # If True, the device is only updating when triggered
         self.sleepy_device = bool(adv_info & (1 << 2))  # bit 2
@@ -540,7 +543,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
     def _decrypt_bthome(
         self,
         service_info: BluetoothServiceInfo,
-        data: bytes,
+        service_data: bytes,
         bthome_mac: bytes,
         sw_version: int,
         adv_info: int = 65,
@@ -557,8 +560,10 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             raise ValueError
 
         # check for minimum length of encrypted advertisement
-        if len(data) < (12 if sw_version == 1 else 11):
-            _LOGGER.debug("Invalid data length (for decryption), adv: %s", data.hex())
+        if len(service_data) < (12 if sw_version == 1 else 11):
+            _LOGGER.debug(
+                "Invalid data length (for decryption), adv: %s", service_data.hex()
+            )
             raise ValueError
 
         # prepare the data for decryption
@@ -566,11 +571,11 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             uuid = b"\x1e\x18"
         else:
             uuid = b"\xd2\xfc" + bytes([adv_info])
-        encrypted_payload = data[:-8]
+        encrypted_payload = service_data[:-8]
         last_encryption_counter = self.encryption_counter
-        counter = data[-8:-4]
+        counter = service_data[-8:-4]
         new_encryption_counter = parse_uint(counter)
-        mic = data[-4:]
+        mic = service_data[-4:]
 
         # nonce: mac [6], uuid16 [2 (v1) or 3 (v2)], counter [4]
         nonce = b"".join([bthome_mac, uuid, counter])
@@ -581,27 +586,23 @@ class BTHomeBluetoothDeviceData(BluetoothData):
 
         assert self.cipher is not None  # nosec
 
-        # verify that the encryption counter is the same or increasing, compared the previous value
+        # filter advertisements that are exactly the same as the previous advertisement
         if (
             self.last_service_info
-            and new_encryption_counter == last_encryption_counter
             and service_info.service_data == self.last_service_info.service_data
             and self.bindkey_verified is True
         ):
-            # the counter and service data are exactly the same as the previous, skipping the adv.
             _LOGGER.debug(
-                "The new encryption counter (%i) and service data are the same as the previous "
-                "encryption counter (%i) and service data. Skipping this message.",
-                new_encryption_counter,
-                last_encryption_counter,
+                "The service data is the same as the previous service data. Skipping "
+                "this BLE advertisement.",
             )
             raise ValueError
-        elif (
-            new_encryption_counter <= last_encryption_counter
+
+        # filter advertisements with decreasing encryption counter.
+        if (
+            new_encryption_counter < last_encryption_counter
             and self.bindkey_verified is True
         ):
-            # the counter is lower than the previous counter or equal, but with different service
-            # data.
             if new_encryption_counter < 100 and last_encryption_counter >= 4294967195:
                 # the counter has (most likely) restarted from 0 after reaching the highest number.
                 self.encryption_counter = new_encryption_counter
@@ -609,8 +610,8 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                 # in all other cases, we assume the data has been comprimised and skip the
                 # advertisement
                 _LOGGER.warning(
-                    "The new encryption counter (%i) is lower than or equal to the previous value "
-                    "(%i). The data might be compromised. BLE advertisement will be skipped.",
+                    "The new encryption counter (%i) is lower than the previous value (%i). "
+                    "The data might be compromised. BLE advertisement will be skipped.",
                     new_encryption_counter,
                     last_encryption_counter,
                 )
