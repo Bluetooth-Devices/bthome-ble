@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v3.5.0 (2024-01-18)
+
+### Feature
+
+* Add verification of the packet id ([#105](https://github.com/Bluetooth-Devices/bthome-ble/issues/105)) ([`c428f92`](https://github.com/Bluetooth-Devices/bthome-ble/commit/c428f927b8dbc4f02ef006c15932aca5fa74877f))
+
 ## v3.4.2 (2024-01-17)
 
 ### Fix
