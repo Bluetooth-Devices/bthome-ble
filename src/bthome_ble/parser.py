@@ -21,7 +21,7 @@ from bluetooth_data_tools import short_address
 from bluetooth_sensor_state_data import BluetoothData
 from cryptography.exceptions import InvalidTag
 from cryptography.hazmat.primitives.ciphers.aead import AESCCM
-from home_assistant_bluetooth import BluetoothServiceInfo
+from home_assistant_bluetooth import BluetoothServiceInfoBleak
 from sensor_state_data.description import (
     BaseBinarySensorDescription,
     BaseSensorDescription,
@@ -163,7 +163,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         # The last service_info we saw that had a payload
         # We keep this to help in reauth flows where we want to reprocess and old
         # value with a new bindkey.
-        self.last_service_info: BluetoothServiceInfo | None = None
+        self.last_service_info: BluetoothServiceInfoBleak | None = None
 
         # If this is True, the device is not sending advertisements in a regular interval
         self.sleepy_device = False
@@ -176,7 +176,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         else:
             self.cipher = None
 
-    def supported(self, data: BluetoothServiceInfo) -> bool:
+    def supported(self, data: BluetoothServiceInfoBleak) -> bool:
         if not super().supported(data):
             return False
 
@@ -194,7 +194,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
 
         return True
 
-    def _start_update(self, service_info: BluetoothServiceInfo) -> None:
+    def _start_update(self, service_info: BluetoothServiceInfoBleak) -> None:
         """Update from BLE advertisement data."""
         _LOGGER.debug("Parsing BTHome BLE advertisement data: %s", service_info)
         for uuid, service_data in service_info.service_data.items():
@@ -210,7 +210,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         return None
 
     def _parse_bthome_v1(
-        self, service_info: BluetoothServiceInfo, service_data: bytes
+        self, service_info: BluetoothServiceInfoBleak, service_data: bytes
     ) -> bool:
         """Parser for BTHome sensors version V1"""
         identifier = short_address(service_info.address)
@@ -269,10 +269,10 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         else:
             return False
 
-        return self._parse_payload(payload, sw_version)
+        return self._parse_payload(payload, sw_version, service_info.time)
 
     def _parse_bthome_v2(
-        self, service_info: BluetoothServiceInfo, service_data: bytes
+        self, service_info: BluetoothServiceInfoBleak, service_data: bytes
     ) -> bool:
         """Parser for BTHome sensors version V2"""
         identifier = short_address(service_info.address)
@@ -370,9 +370,9 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             except (ValueError, TypeError):
                 return True
 
-        return self._parse_payload(payload, sw_version)
+        return self._parse_payload(payload, sw_version, service_info.time)
 
-    def _parse_payload(self, payload: bytes, sw_version: int) -> bool:
+    def _parse_payload(self, payload: bytes, sw_version: int, adv_time: float) -> bool:
         payload_length = len(payload)
         next_obj_start = 0
         prev_obj_meas_type = 0
@@ -435,9 +435,24 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             if obj_meas_type == 0:
                 last_packet_id = self.packet_id
                 new_packet_id = parse_uint(payload[obj_data_start:next_obj_start])
-                if new_packet_id == last_packet_id:
+                if (
+                    self.last_service_info
+                    and adv_time - self.last_service_info.time > 5
+                ):
                     _LOGGER.debug(
-                        "New counter_id %i is the same as the previous received counter_id %i. "
+                        "Not filtering packet_id, new time - old time > 5. "
+                        "New time: %i, Old time: %i",
+                        adv_time,
+                        self.last_service_info.time,
+                    )
+                    break
+                elif (
+                    last_packet_id is not None
+                    and new_packet_id <= last_packet_id
+                    and last_packet_id - new_packet_id < 128
+                ):
+                    _LOGGER.debug(
+                        "New packet_id %i indicates an older packet (previous packet_id %i). "
                         "BLE advertisement will be skipped",
                         new_packet_id,
                         last_packet_id,
@@ -557,7 +572,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
 
     def _decrypt_bthome(
         self,
-        service_info: BluetoothServiceInfo,
+        service_info: BluetoothServiceInfoBleak,
         service_data: bytes,
         bthome_mac: bytes,
         sw_version: int,
