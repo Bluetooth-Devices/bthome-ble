@@ -379,10 +379,10 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         Detect duplicated or older packets
 
         Devices may send duplicated advertisements or advertisements order can change
-        when passthing through a proxy. If more than 4 seconds pass since the last
+        when passing through a proxy. If more than 4 seconds pass since the last
         advertisement assume it is a new packet even if it has the same packet id.
-        Packet id rollover at 255 to 0, validate that the difference between last packet
-        and new packet is less than 64. This assumes device is not sending more than 16
+        Packet id rollover at 255 to 0, validate that the difference between last packet id
+        and new packet id is less than 64. This assumes device is not sending more than 16
         advertisements per second.
         """
         last_packet_id = self.packet_id
