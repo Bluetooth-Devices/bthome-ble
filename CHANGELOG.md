@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v3.6.0 (2024-03-02)
+
+### Feature
+
+* Verify packet is not an older packet ([#112](https://github.com/Bluetooth-Devices/bthome-ble/issues/112)) ([`113e49d`](https://github.com/Bluetooth-Devices/bthome-ble/commit/113e49df1460ea407202e5ca93ff170d6b813b75))
+
 ## v3.5.0 (2024-01-18)
 
 ### Feature
