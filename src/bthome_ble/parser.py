@@ -408,7 +408,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         ):
             return False
 
-        # discard packet (new_packet_id=last_packet_id)
+        # discard packet (new_packet_id=last_packet_id or older packet
         _LOGGER.debug(
             "New packet_id %i indicates an older packet (previous packet_id %i). "
             "BLE advertisement will be skipped",
