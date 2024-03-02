@@ -4,7 +4,8 @@ from datetime import datetime, timezone
 from unittest.mock import patch
 
 import pytest
-from bluetooth_sensor_state_data import BluetoothServiceInfo, SensorUpdate
+from bluetooth_sensor_state_data import SensorUpdate
+from home_assistant_bluetooth import BluetoothServiceInfoBleak
 from sensor_state_data import (
     BinarySensorDescription,
     BinarySensorDeviceClass,
@@ -19,6 +20,8 @@ from sensor_state_data import (
 )
 
 from bthome_ble.parser import BTHomeBluetoothDeviceData, EncryptionScheme
+
+ADVERTISEMENT_TIME = 1709331995.5181565
 
 KEY_BATTERY = DeviceKey(key="battery", device_id=None)
 KEY_BINARY_GENERIC = DeviceKey(key="generic", device_id=None)
@@ -60,9 +63,9 @@ def mock_platform():
 
 def bytes_to_service_info(
     payload: bytes, local_name: str, address: str = "00:00:00:00:00:00"
-) -> BluetoothServiceInfo:
+) -> BluetoothServiceInfoBleak:
     """Convert bytes to service info"""
-    return BluetoothServiceInfo(
+    return BluetoothServiceInfoBleak(
         name=local_name,
         address=address,
         rssi=-60,
@@ -70,14 +73,18 @@ def bytes_to_service_info(
         service_data={"0000181c-0000-1000-8000-00805f9b34fb": payload},
         service_uuids=["0000181c-0000-1000-8000-00805f9b34fb"],
         source="",
+        device=None,
+        advertisement=None,
+        connectable=False,
+        time=ADVERTISEMENT_TIME,
     )
 
 
 def bytes_to_encrypted_service_info(
     payload: bytes, local_name: str, address: str = "00:00:00:00:00:00"
-) -> BluetoothServiceInfo:
+) -> BluetoothServiceInfoBleak:
     """Convert bytes to service info"""
-    return BluetoothServiceInfo(
+    return BluetoothServiceInfoBleak(
         name=local_name,
         address=address,
         rssi=-60,
@@ -85,6 +92,10 @@ def bytes_to_encrypted_service_info(
         service_data={"0000181e-0000-1000-8000-00805f9b34fb": payload},
         service_uuids=["0000181e-0000-1000-8000-00805f9b34fb"],
         source="",
+        device=None,
+        advertisement=None,
+        connectable=False,
+        time=ADVERTISEMENT_TIME,
     )
 
 
@@ -1164,7 +1175,7 @@ def test_bthome_event_dimmer_rotate_left_3_steps(caplog):
 
 def test_bthome_multiple_uuids(caplog):
     """Test BTHome parser for a device that broadcasts multiple uuids."""
-    advertisement = BluetoothServiceInfo(
+    advertisement = BluetoothServiceInfoBleak(
         name="ATC_8D18B2",
         address="A4:C1:38:8D:18:B2",
         rssi=-60,
@@ -1180,6 +1191,10 @@ def test_bthome_multiple_uuids(caplog):
             "0000181c-0000-1000-8000-00805f9b34fb",
         ],
         source="",
+        device=None,
+        advertisement=None,
+        connectable=False,
+        time=ADVERTISEMENT_TIME,
     )
 
     device = BTHomeBluetoothDeviceData()

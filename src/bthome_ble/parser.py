@@ -372,6 +372,51 @@ class BTHomeBluetoothDeviceData(BluetoothData):
 
         return self._parse_payload(payload, sw_version, service_info.time)
 
+    def _skip_old_or_duplicated_advertisement(
+        self, new_packet_id: float, adv_time: float
+    ) -> bool:
+        """
+        Detect duplicated or older packets
+
+        Devices may send duplicated advertisements or advertisements order can change
+        when passthing through a proxy. If more than 4 seconds pass since the last
+        advertisement assume it is a new packet even if it has the same packet id.
+        Packet id rollover at 255 to 0, validate that the difference between last packet
+        and new packet is less than 64. This assumes device is not sending more than 16
+        advertisements per second.
+        """
+        last_packet_id = self.packet_id
+
+        # no history, first packet, don't discard packet
+        if last_packet_id is None or self.last_service_info is None:
+            _LOGGER.debug("First packet, not filtering packet_id %i", new_packet_id)
+            return False
+
+        # more than 4 seconds since last packet, don't discard packet
+        if adv_time - self.last_service_info.time > 4:
+            _LOGGER.debug(
+                "Not filtering packet_id, more than 4 seconds since last packet. "
+                "New time: %i, Old time: %i",
+                adv_time,
+                self.last_service_info.time,
+            )
+            return False
+
+        # distance between new packet and old packet is less then 64
+        if (new_packet_id > last_packet_id and new_packet_id - last_packet_id < 64) or (
+            new_packet_id < last_packet_id and new_packet_id + 256 - last_packet_id < 64
+        ):
+            return False
+
+        # discard packet (new_packet_id=last_packet_id)
+        _LOGGER.debug(
+            "New packet_id %i indicates an older packet (previous packet_id %i). "
+            "BLE advertisement will be skipped",
+            new_packet_id,
+            last_packet_id,
+        )
+        return True
+
     def _parse_payload(self, payload: bytes, sw_version: int, adv_time: float) -> bool:
         payload_length = len(payload)
         next_obj_start = 0
@@ -433,30 +478,8 @@ class BTHomeBluetoothDeviceData(BluetoothData):
 
             # Filter BLE advertisements with packet_id that has already been parsed.
             if obj_meas_type == 0:
-                last_packet_id = self.packet_id
                 new_packet_id = parse_uint(payload[obj_data_start:next_obj_start])
-                if (
-                    self.last_service_info
-                    and adv_time - self.last_service_info.time > 5
-                ):
-                    _LOGGER.debug(
-                        "Not filtering packet_id, new time - old time > 5. "
-                        "New time: %i, Old time: %i",
-                        adv_time,
-                        self.last_service_info.time,
-                    )
-                    break
-                elif (
-                    last_packet_id is not None
-                    and new_packet_id <= last_packet_id
-                    and last_packet_id - new_packet_id < 128
-                ):
-                    _LOGGER.debug(
-                        "New packet_id %i indicates an older packet (previous packet_id %i). "
-                        "BLE advertisement will be skipped",
-                        new_packet_id,
-                        last_packet_id,
-                    )
+                if self._skip_old_or_duplicated_advertisement(new_packet_id, adv_time):
                     break
                 self.packet_id = new_packet_id
 

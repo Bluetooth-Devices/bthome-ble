@@ -4,7 +4,8 @@ from datetime import datetime, timezone
 from unittest.mock import patch
 
 import pytest
-from bluetooth_sensor_state_data import BluetoothServiceInfo, SensorUpdate
+from bluetooth_sensor_state_data import SensorUpdate
+from home_assistant_bluetooth import BluetoothServiceInfoBleak
 from sensor_state_data import (
     BinarySensorDescription,
     BinarySensorDeviceClass,
@@ -20,6 +21,8 @@ from sensor_state_data import (
 
 from bthome_ble.const import ExtendedSensorDeviceClass
 from bthome_ble.parser import BTHomeBluetoothDeviceData, EncryptionScheme
+
+ADVERTISEMENT_TIME = 1709331995.5181565
 
 KEY_ACCELERATION = DeviceKey(key="acceleration", device_id=None)
 KEY_BATTERY = DeviceKey(key="battery", device_id=None)
@@ -76,10 +79,13 @@ def mock_platform():
 
 
 def bytes_to_service_info(
-    payload: bytes, local_name: str, address: str = "00:00:00:00:00:00"
-) -> BluetoothServiceInfo:
+    payload: bytes,
+    local_name: str,
+    address: str = "00:00:00:00:00:00",
+    time: float = ADVERTISEMENT_TIME,
+) -> BluetoothServiceInfoBleak:
     """Convert bytes to service info"""
-    return BluetoothServiceInfo(
+    return BluetoothServiceInfoBleak(
         name=local_name,
         address=address,
         rssi=-60,
@@ -87,6 +93,10 @@ def bytes_to_service_info(
         service_data={"0000fcd2-0000-1000-8000-00805f9b34fb": payload},
         service_uuids=[],
         source="",
+        device=None,
+        advertisement=None,
+        connectable=False,
+        time=time,
     )
 
 
@@ -520,7 +530,8 @@ def test_too_short_encryption_advertisement(caplog):
 
 
 def test_identical_packet_id(caplog):
-    """Test BTHome parser for skipping BLE advertisement with identical counter_id."""
+    """Test BTHome parser for skipping BLE advertisement with identical or older packet id."""
+    # 1st advertisement
     data_string = b"\x40\x00\x09"
     advertisement = bytes_to_service_info(
         data_string, local_name="ATC_8D18B2", address="A4:C1:38:8D:18:B2"
@@ -560,28 +571,58 @@ def test_identical_packet_id(caplog):
         },
     )
     assert device.packet_id == 9
+    assert "First packet, not filtering packet_id 9" in caplog.text
 
-    # second advertisement with the same counter_id
+    # advertisement with the same packet id
     device.update(advertisement)
     assert device.packet_id == 9
     assert (
-        "New counter_id 9 is the same as the previous received counter_id 9. BLE advertisement "
+        "New packet_id 9 indicates an older packet (previous packet_id 9). BLE advertisement "
         "will be skipped" in caplog.text
+    )
+
+    # advertisement packet id decreased by one, should be dropped
+    data_string_2 = b"\x40\x00\x08"
+    advertisement_2 = bytes_to_service_info(
+        data_string_2, local_name="ATC_8D18B2", address="A4:C1:38:8D:18:B2"
+    )
+
+    assert device.update(advertisement_2)
+    assert device.packet_id == 9
+    assert (
+        "New packet_id 8 indicates an older packet (previous packet_id 9). BLE advertisement "
+        "will be skipped" in caplog.text
+    )
+
+    # advertisement more than 4 seconds from last advertisement
+    advertisement_3 = bytes_to_service_info(
+        data_string,
+        local_name="ATC_8D18B2",
+        address="A4:C1:38:8D:18:B2",
+        time=ADVERTISEMENT_TIME + 5,
+    )
+
+    assert device.update(advertisement_3)
+    assert device.packet_id == 9
+    assert (
+        "Not filtering packet_id, more than 4 seconds since last packet." in caplog.text
     )
 
 
 def test_increasing_packet_id(caplog):
-    """Test BTHome parser for BLE advertisement with increasing counter_id."""
-    data_string = b"\x40\x00\x09"
+    """Test BTHome parser for BLE advertisement with increasing packet id."""
+    # start with 189
+    data_string = b"\x40\x00\xBD"
     advertisement = bytes_to_service_info(
         data_string, local_name="ATC_8D18B2", address="A4:C1:38:8D:18:B2"
     )
 
     device = BTHomeBluetoothDeviceData()
     device.update(advertisement)
-    assert device.packet_id == 9
+    assert device.packet_id == 189
 
-    data_string_2 = b"\x40\x00\x0A"
+    # increase by 1 to 190
+    data_string_2 = b"\x40\x00\xBE"
     advertisement_2 = bytes_to_service_info(
         data_string_2, local_name="ATC_8D18B2", address="A4:C1:38:8D:18:B2"
     )
@@ -611,14 +652,32 @@ def test_increasing_packet_id(caplog):
         },
         entity_values={
             KEY_PACKET_ID: SensorValue(
-                device_key=KEY_PACKET_ID, name="Packet Id", native_value=10
+                device_key=KEY_PACKET_ID, name="Packet Id", native_value=190
             ),
             KEY_SIGNAL_STRENGTH: SensorValue(
                 device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
             ),
         },
     )
-    assert device.packet_id == 10
+    assert device.packet_id == 190
+
+    # increast by 63 to 253
+    data_string_3 = b"\x40\x00\xFD"
+    advertisement_3 = bytes_to_service_info(
+        data_string_3, local_name="ATC_8D18B2", address="A4:C1:38:8D:18:B2"
+    )
+
+    device.update(advertisement_3)
+    assert device.packet_id == 253
+
+    # increast by 50, rollover to 47
+    data_string_4 = b"\x40\x00\x2F"
+    advertisement_4 = bytes_to_service_info(
+        data_string_4, local_name="ATC_8D18B2", address="A4:C1:38:8D:18:B2"
+    )
+
+    device.update(advertisement_4)
+    assert device.packet_id == 47
 
 
 def test_bthome_wrong_object_id(caplog):
@@ -3010,7 +3069,7 @@ def test_bthome_triple_temperature_double_humidity_battery(caplog):
 
 def test_bthome_multiple_uuids(caplog):
     """Test BTHome parser for a device that broadcasts multiple uuids."""
-    advertisement = BluetoothServiceInfo(
+    advertisement = BluetoothServiceInfoBleak(
         name="ATC_8D18B2",
         address="A4:C1:38:8D:18:B2",
         rssi=-60,
@@ -3026,6 +3085,10 @@ def test_bthome_multiple_uuids(caplog):
             "0000fcd2-0000-1000-8000-00805f9b34fb",
         ],
         source="",
+        device=None,
+        advertisement=None,
+        connectable=False,
+        time=ADVERTISEMENT_TIME,
     )
 
     device = BTHomeBluetoothDeviceData()
