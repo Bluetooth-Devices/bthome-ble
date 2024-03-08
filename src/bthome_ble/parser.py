@@ -319,8 +319,9 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                 self.set_device_sw_version(f"BTHome BLE v{sw_version}")
         else:
             _LOGGER.error(
-                "Sensor is set to use BTHome version %s, which is not existing. "
+                "%s: Sensor is set to use BTHome version %s, which is not existing. "
                 "Please modify the version in the first byte of the service data",
+                identifier,
                 sw_version,
             )
             return False
@@ -389,14 +390,19 @@ class BTHomeBluetoothDeviceData(BluetoothData):
 
         # no history, first packet, don't discard packet
         if last_packet_id is None or self.last_service_info is None:
-            _LOGGER.debug("First packet, not filtering packet_id %i", new_packet_id)
+            _LOGGER.debug(
+                "%s: First packet, not filtering packet_id %i",
+                self.title,
+                new_packet_id,
+            )
             return False
 
         # more than 4 seconds since last packet, don't discard packet
         if adv_time - self.last_service_info.time > 4:
             _LOGGER.debug(
-                "Not filtering packet_id, more than 4 seconds since last packet. "
+                "%s: Not filtering packet_id, more than 4 seconds since last packet. "
                 "New time: %i, Old time: %i",
+                self.title,
                 adv_time,
                 self.last_service_info.time,
             )
@@ -410,8 +416,9 @@ class BTHomeBluetoothDeviceData(BluetoothData):
 
         # discard packet (new_packet_id=last_packet_id or older packet)
         _LOGGER.debug(
-            "New packet_id %i indicates an older packet (previous packet_id %i). "
+            "%s: New packet_id %i indicates an older packet (previous packet_id %i). "
             "BLE advertisement will be skipped",
+            self.title,
             new_packet_id,
             last_packet_id,
         )
@@ -443,14 +450,16 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                 obj_meas_type = payload[obj_start]
                 if prev_obj_meas_type > obj_meas_type:
                     _LOGGER.warning(
-                        "BTHome device is not sending object ids in numerical order (from low to "
-                        "high object id). This can cause issues with your BTHome receiver, "
+                        "%s: BTHome device is not sending object ids in numerical order (from low "
+                        "to high object id). This can cause issues with your BTHome receiver, "
                         "payload: %s",
+                        self.title,
                         payload.hex(),
                     )
                 if obj_meas_type not in MEAS_TYPES:
                     _LOGGER.debug(
-                        "Invalid Object ID found in payload: %s",
+                        "%s: Invalid Object ID found in payload: %s",
+                        self.title,
                         payload.hex(),
                     )
                     break
@@ -467,13 +476,18 @@ class BTHomeBluetoothDeviceData(BluetoothData):
 
             if obj_data_length == 0:
                 _LOGGER.debug(
-                    "Invalid payload data length found with length 0, payload: %s",
+                    "%s: Invalid payload data length found with length 0, payload: %s",
+                    self.title,
                     payload.hex(),
                 )
                 continue
 
             if payload_length < next_obj_start:
-                _LOGGER.debug("Invalid payload data length, payload: %s", payload.hex())
+                _LOGGER.debug(
+                    "%s: Invalid payload data length, payload: %s",
+                    self.title,
+                    payload.hex(),
+                )
                 break
 
             # Filter BLE advertisements with packet_id that has already been parsed.
@@ -508,7 +522,8 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         for meas in measurements:
             if meas["measurement type"] not in MEAS_TYPES:
                 _LOGGER.debug(
-                    "UNKNOWN measurement type %s in BTHome BLE payload! Adv: %s",
+                    "%s: UNKNOWN measurement type %s in BTHome BLE payload! Adv: %s",
+                    self.title,
                     meas["measurement type"],
                     payload.hex(),
                 )
@@ -541,7 +556,8 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                 value = parse_timestamp(meas["measurement data"])
             else:
                 _LOGGER.error(
-                    "UNKNOWN dataobject in BTHome BLE payload! Adv: %s",
+                    "%s: UNKNOWN dataobject in BTHome BLE payload! Adv: %s",
+                    self.title,
                     payload.hex(),
                 )
                 continue
@@ -584,7 +600,8 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                 result = True
             else:
                 _LOGGER.debug(
-                    "UNKNOWN dataobject in BTHome BLE payload! Adv: %s",
+                    "%s: UNKNOWN dataobject in BTHome BLE payload! Adv: %s",
+                    self.title,
                     payload.hex(),
                 )
 
@@ -604,18 +621,22 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         """Decrypt encrypted BTHome BLE advertisements"""
         if not self.bindkey:
             self.bindkey_verified = False
-            _LOGGER.debug("Encryption key not set and adv is encrypted")
+            _LOGGER.debug("%s: Encryption key not set and adv is encrypted", self.title)
             raise ValueError
 
         if not self.bindkey or len(self.bindkey) != 16:
             self.bindkey_verified = False
-            _LOGGER.error("Encryption key should be 16 bytes (32 characters) long")
+            _LOGGER.error(
+                "%s: Encryption key should be 16 bytes (32 characters) long", self.title
+            )
             raise ValueError
 
         # check for minimum length of encrypted advertisement
         if len(service_data) < (12 if sw_version == 1 else 11):
             _LOGGER.debug(
-                "Invalid data length (for decryption), adv: %s", service_data.hex()
+                "%s: Invalid data length (for decryption), adv: %s",
+                self.title,
+                service_data.hex(),
             )
             raise ValueError
 
@@ -646,8 +667,9 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             and self.bindkey_verified is True
         ):
             _LOGGER.debug(
-                "The service data is the same as the previous service data. Skipping "
+                "%s: The service data is the same as the previous service data. Skipping "
                 "this BLE advertisement.",
+                self.title,
             )
             raise ValueError
 
@@ -663,8 +685,9 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                 # in all other cases, we assume the data has been comprimised and skip the
                 # advertisement
                 _LOGGER.warning(
-                    "The new encryption counter (%i) is lower than the previous value (%i). "
+                    "%s: The new encryption counter (%i) is lower than the previous value (%i). "
                     "The data might be compromised. BLE advertisement will be skipped.",
+                    self.title,
                     new_encryption_counter,
                     last_encryption_counter,
                 )
@@ -679,15 +702,18 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             )
         except InvalidTag as error:
             self.bindkey_verified = False
-            _LOGGER.warning("Decryption failed: %s", error)
-            _LOGGER.debug("mic: %s", mic.hex())
-            _LOGGER.debug("nonce: %s", nonce.hex())
-            _LOGGER.debug("encrypted_payload: %s", encrypted_payload.hex())
+            _LOGGER.warning("%s: Decryption failed: %s", self.title, error)
+            _LOGGER.debug("%s: mic: %s", self.title, mic.hex())
+            _LOGGER.debug("%s: nonce: %s", self.title, nonce.hex())
+            _LOGGER.debug(
+                "%s: encrypted_payload: %s", self.title, encrypted_payload.hex()
+            )
             raise ValueError
         if decrypted_payload is None:
             self.bindkey_verified = False
             _LOGGER.error(
-                "Decryption failed for %s, decrypted payload is None",
+                "%s: Decryption failed for %s, decrypted payload is None",
+                self.title,
                 to_mac(bthome_mac),
             )
             raise ValueError
