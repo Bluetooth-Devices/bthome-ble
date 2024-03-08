@@ -327,6 +327,27 @@ def test_bindkey_correct():
     )
 
 
+def test_incorrect_bindkey_length(caplog):
+    """Test BTHome parser with incorrect encryption key length."""
+    bindkey = (
+        "231d39c1d7cc1ab1aee224cd096db932231d39c1d7cc1ab1"  # 24 bytes instead of 16
+    )
+    data_string = b"\x41\xa4\x72\x66\xc9\x5f\x73\x00\x11\x22\x33\x78\x23\x72\x14"
+    advertisement = bytes_to_service_info(
+        data_string,
+        local_name="TEST DEVICE",
+        address="54:48:E6:8F:80:A5",
+    )
+
+    device = BTHomeBluetoothDeviceData(bindkey=bytes.fromhex(bindkey))
+    assert device.supported(advertisement)
+    assert not device.bindkey_verified
+    assert (
+        "TEST DEVICE 80A5: Encryption key should be 16 bytes (32 characters) long"
+        in caplog.text
+    )
+
+
 def test_bindkey_set_late():
     """Test BTHome parser with correct encryption key set after the device is created."""
     bindkey = "231d39c1d7cc1ab1aee224cd096db932"
@@ -425,7 +446,7 @@ def test_same_service_data(caplog):
     assert device.bindkey_verified
     assert device.encryption_counter == 1122867
     assert (
-        "TEST DEVICE 80A5 The service data is the same as the previous service data. "
+        "TEST DEVICE 80A5: The service data is the same as the previous service data. "
         "Skipping this BLE advertisement." in caplog.text
     )
 
@@ -482,7 +503,7 @@ def test_decreasing_encryption_counter(caplog):
     # encryption counter should not be updated as it is lower
     assert device.encryption_counter == 1122867
     assert (
-        "TEST DEVICE 80A5 The new encryption counter (1122866) is lower than the previous value "
+        "TEST DEVICE 80A5: The new encryption counter (1122866) is lower than the previous value "
         "(1122867). The data might be compromised. BLE advertisement will be skipped."
         in caplog.text
     )
@@ -526,7 +547,7 @@ def test_too_short_encryption_advertisement(caplog):
 
     device = BTHomeBluetoothDeviceData(bindkey=bytes.fromhex(bindkey))
     assert device.supported(advertisement)
-    assert "TEST DEVICE 80A5 Invalid data length (for decryption), adv:" in caplog.text
+    assert "TEST DEVICE 80A5: Invalid data length (for decryption), adv:" in caplog.text
 
 
 def test_identical_packet_id(caplog):
@@ -571,13 +592,13 @@ def test_identical_packet_id(caplog):
         },
     )
     assert device.packet_id == 9
-    assert "ATC 18B2 First packet, not filtering packet_id 9" in caplog.text
+    assert "ATC 18B2: First packet, not filtering packet_id 9" in caplog.text
 
     # advertisement with the same packet id
     device.update(advertisement)
     assert device.packet_id == 9
     assert (
-        "ATC 18B2 New packet_id 9 indicates an older packet (previous packet_id 9). "
+        "ATC 18B2: New packet_id 9 indicates an older packet (previous packet_id 9). "
         "BLE advertisement will be skipped" in caplog.text
     )
 
@@ -590,7 +611,7 @@ def test_identical_packet_id(caplog):
     assert device.update(advertisement_2)
     assert device.packet_id == 9
     assert (
-        "ATC 18B2 New packet_id 8 indicates an older packet (previous packet_id 9). "
+        "ATC 18B2: New packet_id 8 indicates an older packet (previous packet_id 9). "
         "BLE advertisement will be skipped" in caplog.text
     )
 
@@ -605,7 +626,7 @@ def test_identical_packet_id(caplog):
     assert device.update(advertisement_3)
     assert device.packet_id == 9
     assert (
-        "ATC 18B2 Not filtering packet_id, more than 4 seconds since last packet."
+        "ATC 18B2: Not filtering packet_id, more than 4 seconds since last packet."
         in caplog.text
     )
 
@@ -3470,7 +3491,7 @@ def test_incorrect_bthome_version(caplog):
     device.update(advertisement)
     assert device.supported(advertisement) is False
     assert (
-        "18B2 Sensor is set to use BTHome version 0, which is not existing. "
+        "18B2: Sensor is set to use BTHome version 0, which is not existing. "
         "Please modify the version in the first byte of the service data" in caplog.text
     )
 
@@ -3485,7 +3506,19 @@ def test_bthome_not_sending_object_ids_in_numerical_order(caplog):
     device = BTHomeBluetoothDeviceData()
     device.update(advertisement)
     assert (
-        "ATC 18B2 BTHome device is not sending object ids in numerical order "
+        "ATC 18B2: BTHome device is not sending object ids in numerical order "
         "(from low to high object id). This can cause issues with your BTHome receiver, "
         "payload: 03bf1302ca09" in caplog.text
     )
+
+
+def test_bthome_invalid_object_payload_data_length(caplog):
+    """Test BTHome parser for object with invalid payload data length."""
+    data_string = b"\x40\x02\xca\x09\x03\xbf"  # missing 1 byte
+    advertisement = bytes_to_service_info(
+        data_string, local_name="ATC_8D18B2", address="A4:C1:38:8D:18:B2"
+    )
+
+    device = BTHomeBluetoothDeviceData()
+    device.update(advertisement)
+    assert "ATC 18B2: Invalid payload data length, payload: 02ca0903bf" in caplog.text
