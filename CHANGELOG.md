@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v3.7.0 (2024-03-08)
+
+### Feature
+
+* Add device title to log messages ([#113](https://github.com/Bluetooth-Devices/bthome-ble/issues/113)) ([`c47f36f`](https://github.com/Bluetooth-Devices/bthome-ble/commit/c47f36f17698ad48a94db3501a37ae9421c7ff7e))
+
 ## v3.6.0 (2024-03-02)
 
 ### Feature
