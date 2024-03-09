@@ -156,6 +156,10 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         # or encryption is not in use
         self.bindkey_verified = False
 
+        # If True then the decryption has failed or has not been verified yet.
+        # If False then the decryption has succeeded.
+        self.decryption_failed = True
+
         # If this is True, then we have not seen an advertisement with a payload
         # Until we see a payload, we can't tell if this device is encrypted or not
         self.pending = True
@@ -701,7 +705,11 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                 nonce, encrypted_payload + mic, associated_data
             )
         except InvalidTag as error:
-            self.bindkey_verified = False
+            if self.decryption_failed is True:
+                # we only ask for reautentification after the decryption has failed twice.
+                self.bindkey_verified = False
+            else:
+                self.decryption_failed = True
             _LOGGER.warning("%s: Decryption failed: %s", self.title, error)
             _LOGGER.debug("%s: mic: %s", self.title, mic.hex())
             _LOGGER.debug("%s: nonce: %s", self.title, nonce.hex())
@@ -710,13 +718,18 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             )
             raise ValueError
         if decrypted_payload is None:
-            self.bindkey_verified = False
+            if self.decryption_failed is True:
+                # we only ask for reautentification after the decryption has failed twice.
+                self.bindkey_verified = False
+            else:
+                self.decryption_failed = True
             _LOGGER.error(
                 "%s: Decryption failed for %s, decrypted payload is None",
                 self.title,
                 to_mac(bthome_mac),
             )
             raise ValueError
+        self.decryption_failed = False
         self.bindkey_verified = True
 
         return decrypted_payload
