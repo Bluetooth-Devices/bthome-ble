@@ -718,11 +718,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             )
             raise ValueError
         if decrypted_payload is None:
-            if self.decryption_failed is True:
-                # we only ask for reautentification after the decryption has failed twice.
-                self.bindkey_verified = False
-            else:
-                self.decryption_failed = True
+            self.bindkey_verified = False
             _LOGGER.error(
                 "%s: Decryption failed for %s, decrypted payload is None",
                 self.title,
