@@ -246,6 +246,7 @@ def test_bindkey_wrong():
     device = BTHomeBluetoothDeviceData(bindkey=bytes.fromhex(bindkey))
     assert device.supported(advertisement)
     assert not device.bindkey_verified
+    assert device.decryption_failed
     assert device.update(advertisement) == SensorUpdate(
         title="Test Sensor 18B2",
         devices={
@@ -285,6 +286,7 @@ def test_bindkey_correct():
     device = BTHomeBluetoothDeviceData(bindkey=bytes.fromhex(bindkey))
     assert device.supported(advertisement)
     assert device.bindkey_verified
+    assert not device.decryption_failed
     assert device.update(advertisement) == SensorUpdate(
         title="TEST DEVICE 80A5",
         devices={
@@ -342,6 +344,7 @@ def test_incorrect_bindkey_length(caplog):
     device = BTHomeBluetoothDeviceData(bindkey=bytes.fromhex(bindkey))
     assert device.supported(advertisement)
     assert not device.bindkey_verified
+    assert device.decryption_failed
     assert (
         "TEST DEVICE 80A5: Encryption key should be 16 bytes (32 characters) long"
         in caplog.text
@@ -416,8 +419,22 @@ def test_bindkey_verified_can_be_unset():
 
     device = BTHomeBluetoothDeviceData(bindkey=bytes.fromhex(bindkey))
     device.bindkey_verified = True
+    device.decryption_failed = False
 
     assert device.supported(advertisement)
+    # the first advertisement will fail decryption, but we don't ask to reauth yet
+    assert device.bindkey_verified
+    assert device.decryption_failed
+
+    data_string = b"\x41\xa4\x72\x66\xc9\x5f\x73\x01\x11\x22\x33\x78\x23\x72\x14"
+    advertisement = bytes_to_service_info(
+        data_string,
+        local_name="ATC_8D18B2",
+        address="A4:C1:38:8D:18:B2",
+    )
+    assert device.supported(advertisement)
+    # the second advertisement will fail decryption again, but now we ask to reauth
+    assert device.decryption_failed
     assert not device.bindkey_verified
 
 
