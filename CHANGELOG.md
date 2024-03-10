@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v3.8.0 (2024-03-10)
+
+### Feature
+
+* Allow one failed decryption before reauth ([#114](https://github.com/Bluetooth-Devices/bthome-ble/issues/114)) ([`7c499cc`](https://github.com/Bluetooth-Devices/bthome-ble/commit/7c499cce6c15ab6f21b25779bae773e3c00f7841))
+
 ## v3.7.0 (2024-03-08)
 
 ### Feature
