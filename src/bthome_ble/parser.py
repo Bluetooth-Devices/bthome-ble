@@ -12,7 +12,6 @@ from __future__ import annotations
 
 import logging
 import struct
-import sys
 from datetime import datetime, timezone
 from enum import Enum
 from typing import Any
