@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v3.8.1 (2024-03-18)
+
+### Fix
+
+* Remove mac workaround ([#115](https://github.com/Bluetooth-Devices/bthome-ble/issues/115)) ([`303f833`](https://github.com/Bluetooth-Devices/bthome-ble/commit/303f8331dac612f848c875869284be0ca621692e))
+
 ## v3.8.0 (2024-03-10)
 
 ### Feature
