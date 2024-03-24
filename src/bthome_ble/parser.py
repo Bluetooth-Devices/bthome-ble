@@ -647,23 +647,24 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             raise ValueError
 
         # filter advertisements with decreasing encryption counter.
+        self.message_since_last_reset += 1  # Increment messages since last reset
         if (
             new_encryption_counter < last_encryption_counter
             and self.bindkey_verified is True
         ):
-            self.reset_counter += 1  # Increment the reset counter
-            self.message_since_last_reset = 0  # Reset the message counter since the last reset
+            self.reset_counter += 1  # Increment the reset counter            
             # Replay attack protection is two-edged sword: if you don't implement it, you allow attacker to replay a whole bunch of measurements.
             # If you don't give some wiggle room for allowing resets changing batteries becomes a challenge
             # Beware: If attacker manages to record a message with high encryption counter number they can 
             # DoS all of your actual measurements until encryption counter reaches even higher value
-            if (new_encryption_counter < 1000 and last_encryption_counter >= 4294967195) or 
-                (and self.reset_counter <= 1 and self.message_since_last_reset >= 100):
+            if ((new_encryption_counter < 1000 and last_encryption_counter >= 4294967195) or 
+                (self.reset_counter <= 1 and self.message_since_last_reset >= 100)):
                 # Counter reset logic: either it's a legitimate overflow reset, or a reset is allowed per policy
                 self.encryption_counter = new_encryption_counter
+                self.message_since_last_reset = 0  # Reset the message counter since the last reset
                 _LOGGER.warning(
                     "%s: The new encryption counter (%i) is lower than the previous value (%i). "
-                    "Allowing it as it looks like legitimate reset.",
+                    "Treating as a legitimate reset.",
                     self.title,
                     new_encryption_counter,
                     last_encryption_counter,
@@ -678,16 +679,17 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                     new_encryption_counter,
                     last_encryption_counter,
                 )
+                self.message_since_last_reset = 0  # Reset the message counter since the last reset
                 raise ValueError
         else:
             self.encryption_counter = new_encryption_counter
-            self.message_since_last_reset += 1  # Increment messages since last reset
+            
 
             # Reset the reset_counter if a hundred messages have been received since the last reset
-            if self.message_since_last_reset >= 100:
+            if self.message_since_last_reset >= 100 and self.reset_counter >= 1:
                 if self.reset_counter <= 1:
-                    # There has been only one reset. No big deal.
-                    self.reset_couter = 0
+                    # There has been only one reset. No big deal. Clear it out.
+                    self.reset_counter = 0
                 if self.reset_counter > 1:
                      # We're under seige, there has been multiple resets - carry this knowledge over into next hundred block.
                     self.reset_counter = 1
