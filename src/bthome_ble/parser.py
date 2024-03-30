@@ -651,8 +651,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         if (
             new_encryption_counter < last_encryption_counter
             and self.bindkey_verified is True
-        ):
-            self.reset_counter += 1  # Increment the reset counter            
+        ):                   
             # Replay attack protection is two-edged sword: if you don't implement it, you allow attacker to replay a whole bunch of measurements.
             # If you don't give some wiggle room for allowing resets changing batteries becomes a challenge
             # Beware: If attacker manages to record a message with high encryption counter number they can 
@@ -663,6 +662,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                 # Counter reset logic: either it's a legitimate overflow reset, or a reset is allowed per policy
                 self.encryption_counter = new_encryption_counter
                 self.message_since_last_reset = 0  # Reset the message counter since the last reset
+                self.reset_counter += 1  # Increment the reset counter
                 _LOGGER.warning(
                     "%s: The new encryption counter (%i) is lower than the previous value (%i). "
                     "Treating as a legitimate reset.",
@@ -681,6 +681,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                     last_encryption_counter,
                 )
                 self.message_since_last_reset = 0  # Reset the message counter since the last reset
+                self.reset_counter += 1  # Increment the reset counter
                 raise ValueError
         else:
             self.encryption_counter = new_encryption_counter
