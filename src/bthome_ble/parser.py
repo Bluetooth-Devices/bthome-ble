@@ -658,6 +658,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             # Beware: If attacker manages to record a message with high encryption counter number they can 
             # DoS all of your actual measurements until encryption counter reaches even higher value
             if ((new_encryption_counter < 1000 and last_encryption_counter >= 4294967195) or 
+                (self.reset_counter == 0) or
                 (self.reset_counter <= 1 and self.message_since_last_reset >= 100)):
                 # Counter reset logic: either it's a legitimate overflow reset, or a reset is allowed per policy
                 self.encryption_counter = new_encryption_counter
@@ -683,8 +684,6 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                 raise ValueError
         else:
             self.encryption_counter = new_encryption_counter
-            
-
             # Reset the reset_counter if a hundred messages have been received since the last reset
             if self.message_since_last_reset >= 100 and self.reset_counter >= 1:
                 if self.reset_counter <= 1:
