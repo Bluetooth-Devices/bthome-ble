@@ -646,6 +646,26 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             )
             raise ValueError
 
+        # decrypt the data. 
+        # if decryption fails then message is likely corrupted and no need to check the encryption counter.
+        try:
+            decrypted_payload = self.cipher.decrypt(
+                nonce, encrypted_payload + mic, associated_data
+            )
+        except InvalidTag as error:
+            if self.decryption_failed is True:
+                # we only ask for reautentification after the decryption has failed twice.
+                self.bindkey_verified = False
+            else:
+                self.decryption_failed = True
+            _LOGGER.warning("%s: Decryption failed: %s", self.title, error)
+            _LOGGER.debug("%s: mic: %s", self.title, mic.hex())
+            _LOGGER.debug("%s: nonce: %s", self.title, nonce.hex())
+            _LOGGER.debug(
+                "%s: encrypted_payload: %s", self.title, encrypted_payload.hex()
+            )
+            raise ValueError
+        
         # filter advertisements with decreasing encryption counter.
         self.message_since_last_reset += 1  # Increment messages since last reset
         if (
@@ -691,8 +711,6 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                 self.message_since_last_reset = 0  # Reset the message counter since the last reset
                 self.reset_counter += 1  # Increment the reset counter
                 raise ValueError
-        else:
-            self.encryption_counter = new_encryption_counter
         # Reset the reset_counter if a hundred messages have been received since the last reset
         if self.message_since_last_reset >= 100 and self.reset_counter >= 1:
             if self.reset_counter <= 1:
@@ -703,24 +721,6 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                 self.reset_counter = 1
             self.message_since_last_reset = 0
 
-        # decrypt the data
-        try:
-            decrypted_payload = self.cipher.decrypt(
-                nonce, encrypted_payload + mic, associated_data
-            )
-        except InvalidTag as error:
-            if self.decryption_failed is True:
-                # we only ask for reautentification after the decryption has failed twice.
-                self.bindkey_verified = False
-            else:
-                self.decryption_failed = True
-            _LOGGER.warning("%s: Decryption failed: %s", self.title, error)
-            _LOGGER.debug("%s: mic: %s", self.title, mic.hex())
-            _LOGGER.debug("%s: nonce: %s", self.title, nonce.hex())
-            _LOGGER.debug(
-                "%s: encrypted_payload: %s", self.title, encrypted_payload.hex()
-            )
-            raise ValueError
         if decrypted_payload is None:
             self.bindkey_verified = False
             _LOGGER.error(
@@ -731,5 +731,6 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             raise ValueError
         self.decryption_failed = False
         self.bindkey_verified = True
+        self.encryption_counter = new_encryption_counter
 
         return decrypted_payload
