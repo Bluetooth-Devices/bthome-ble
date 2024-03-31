@@ -651,7 +651,15 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         if (
             new_encryption_counter < last_encryption_counter
             and self.bindkey_verified is True
-        ):                   
+        ):
+            _LOGGER.debug(
+                "%s: Encryption counter decrement detected. got counter: %i, had counter: %i, reset counter: %i, message counter: %i",                
+                self.title,
+                new_encryption_counter,
+                last_encryption_counter,
+                self.reset_counter,
+                self.message_since_last_reset
+            )
             # Replay attack protection is two-edged sword: if you don't implement it, you allow attacker to replay a whole bunch of measurements.
             # If you don't give some wiggle room for allowing resets changing batteries becomes a challenge
             # Beware: If attacker manages to record a message with high encryption counter number they can 
@@ -685,15 +693,15 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                 raise ValueError
         else:
             self.encryption_counter = new_encryption_counter
-            # Reset the reset_counter if a hundred messages have been received since the last reset
-            if self.message_since_last_reset >= 100 and self.reset_counter >= 1:
-                if self.reset_counter <= 1:
-                    # There has been only one reset. No big deal. Clear it out.
-                    self.reset_counter = 0
-                if self.reset_counter > 1:
-                     # We're under seige, there has been multiple resets - carry this knowledge over into next hundred block.
-                    self.reset_counter = 1
-                self.message_since_last_reset = 0
+        # Reset the reset_counter if a hundred messages have been received since the last reset
+        if self.message_since_last_reset >= 100 and self.reset_counter >= 1:
+            if self.reset_counter <= 1:
+                # There has been only one reset. No big deal. Clear it out.
+                self.reset_counter = 0
+            if self.reset_counter > 1:
+                 # We're under seige, there has been multiple resets - carry this knowledge over into next hundred block.
+                self.reset_counter = 1
+            self.message_since_last_reset = 0
 
         # decrypt the data
         try:
