@@ -663,8 +663,6 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                     last_encryption_counter,
                 )
                 raise ValueError
-        else:
-            self.encryption_counter = new_encryption_counter
 
         # decrypt the data
         try:
@@ -694,5 +692,6 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             raise ValueError
         self.decryption_failed = False
         self.bindkey_verified = True
+        self.encryption_counter = new_encryption_counter
 
         return decrypted_payload
