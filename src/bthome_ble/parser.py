@@ -645,24 +645,21 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             raise ValueError
 
         # filter advertisements with decreasing encryption counter.
+        # allow the case when the counter has restarted from 0 after reaching the highest number.
+        # in all other cases, we assume the data has been comprimised and skip the advertisement
         if (
             new_encryption_counter < last_encryption_counter
             and self.bindkey_verified is True
-        ):
-            if new_encryption_counter < 100 and last_encryption_counter >= 4294967195:
-                # the counter has (most likely) restarted from 0 after reaching the highest number.
-                self.encryption_counter = new_encryption_counter
-            else:
-                # in all other cases, we assume the data has been comprimised and skip the
-                # advertisement
-                _LOGGER.warning(
-                    "%s: The new encryption counter (%i) is lower than the previous value (%i). "
-                    "The data might be compromised. BLE advertisement will be skipped.",
-                    self.title,
-                    new_encryption_counter,
-                    last_encryption_counter,
-                )
-                raise ValueError
+            and not (new_encryption_counter < 100 and last_encryption_counter >= 4294967195)
+        ):  
+            _LOGGER.warning(
+                "%s: The new encryption counter (%i) is lower than the previous value (%i). "
+                "The data might be compromised. BLE advertisement will be skipped.",
+                self.title,
+                new_encryption_counter,
+                last_encryption_counter,
+            )
+            raise ValueError
 
         # decrypt the data
         try:
