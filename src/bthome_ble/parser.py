@@ -644,13 +644,14 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             )
             raise ValueError
 
-        # filter advertisements with decreasing encryption counter.
-        # allow the case when the counter has restarted from 0 after reaching the highest number.
-        # in all other cases, we assume the data has been comprimised and skip the advertisement
+        # Filter advertisements with a decreasing encryption counter.
+        # Allow cases where the counter has restarted from 0
+        # (after reaching the highest number or due to a battery change).
+        # In all other cases, assume the data has been compromised and skip the advertisement.
         if (
             new_encryption_counter < last_encryption_counter
             and self.bindkey_verified is True
-            and not (new_encryption_counter < 100 and last_encryption_counter >= 4294967195)
+            and new_encryption_counter >= 100
         ):  
             _LOGGER.warning(
                 "%s: The new encryption counter (%i) is lower than the previous value (%i). "
