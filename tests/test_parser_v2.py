@@ -1838,6 +1838,49 @@ def test_bthome_event_triple_button_device(caplog):
     )
 
 
+def test_bthome_event_button_hold_press(caplog):
+    """Test BTHome parser for an event of holding press on a button without encryption."""
+    data_string = b"\x40\x3A\x80"
+    advertisement = bytes_to_service_info(
+        data_string, local_name="SBBT-002C", address="A4:C1:38:8D:18:B2"
+    )
+
+    device = BTHomeBluetoothDeviceData()
+
+    assert device.update(advertisement) == SensorUpdate(
+        title="Shelly BLU Button1 18B2",
+        devices={
+            None: SensorDeviceInfo(
+                name="Shelly BLU Button1 18B2",
+                manufacturer="Shelly",
+                model="BLU Button1",
+                sw_version="BTHome BLE v2",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            KEY_SIGNAL_STRENGTH: SensorDescription(
+                device_key=KEY_SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
+            KEY_SIGNAL_STRENGTH: SensorValue(
+                device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+        events={
+            KEY_BUTTON: Event(
+                device_key=KEY_BUTTON,
+                name="Button",
+                event_type="hold_press",
+                event_properties=None,
+            ),
+        },
+    )
+
+
 def test_bthome_event_dimmer_rotate_left_3_steps(caplog):
     """Test BTHome parser for an event rotating a dimmer 3 steps left."""
     data_string = b"\x40\x3C\x01\x03"
