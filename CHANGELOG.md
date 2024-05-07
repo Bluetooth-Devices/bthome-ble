@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v3.9.0 (2024-05-07)
+
+### Feature
+
+* Add button hold event ([#120](https://github.com/Bluetooth-Devices/bthome-ble/issues/120)) ([`49124ab`](https://github.com/Bluetooth-Devices/bthome-ble/commit/49124ab9db18e179aba9fb731ba4ed08e113eff3))
+
 ## v3.8.1 (2024-03-18)
 
 ### Fix
