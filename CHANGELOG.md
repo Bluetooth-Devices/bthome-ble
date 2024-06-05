@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v3.9.1 (2024-06-05)
+
+### Fix
+
+* Accept new encryption counter only if the message was not corrupted ([#119](https://github.com/Bluetooth-Devices/bthome-ble/issues/119)) ([`bc61824`](https://github.com/Bluetooth-Devices/bthome-ble/commit/bc61824bfe6c1d3c7394e7754f757a0241c14939))
+
 ## v3.9.0 (2024-05-07)
 
 ### Feature
