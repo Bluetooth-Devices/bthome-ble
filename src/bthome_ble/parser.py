@@ -644,27 +644,23 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             )
             raise ValueError
 
-        # filter advertisements with decreasing encryption counter.
+        # Filter advertisements with a decreasing encryption counter.
+        # Allow cases where the counter has restarted from 0
+        # (after reaching the highest number or due to a battery change).
+        # In all other cases, assume the data has been compromised and skip the advertisement.
         if (
             new_encryption_counter < last_encryption_counter
             and self.bindkey_verified is True
+            and new_encryption_counter >= 100
         ):
-            if new_encryption_counter < 100 and last_encryption_counter >= 4294967195:
-                # the counter has (most likely) restarted from 0 after reaching the highest number.
-                self.encryption_counter = new_encryption_counter
-            else:
-                # in all other cases, we assume the data has been comprimised and skip the
-                # advertisement
-                _LOGGER.warning(
-                    "%s: The new encryption counter (%i) is lower than the previous value (%i). "
-                    "The data might be compromised. BLE advertisement will be skipped.",
-                    self.title,
-                    new_encryption_counter,
-                    last_encryption_counter,
-                )
-                raise ValueError
-        else:
-            self.encryption_counter = new_encryption_counter
+            _LOGGER.warning(
+                "%s: The new encryption counter (%i) is lower than the previous value (%i). "
+                "The data might be compromised. BLE advertisement will be skipped.",
+                self.title,
+                new_encryption_counter,
+                last_encryption_counter,
+            )
+            raise ValueError
 
         # decrypt the data
         try:
@@ -694,5 +690,6 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             raise ValueError
         self.decryption_failed = False
         self.bindkey_verified = True
+        self.encryption_counter = new_encryption_counter
 
         return decrypted_payload
