@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v3.9.2 (2024-06-07)
+
+### Fix
+
+* Make tests compatible with habluetooth>=3.0 ([#123](https://github.com/Bluetooth-Devices/bthome-ble/issues/123)) ([`92fceeb`](https://github.com/Bluetooth-Devices/bthome-ble/commit/92fceebf97add809f883039d9954f35f61a17019))
+
 ## v3.9.1 (2024-06-05)
 
 ### Fix
