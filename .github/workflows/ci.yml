@@ -86,7 +86,7 @@ jobs:
         if: steps.release.outputs.released == 'true'
         with:
           user: __token__
-          password: ${{ secrets.PYPI_API_TOKEN }}
+          password: ${{ secrets.PYPI_TOKEN }}
 
       - name: Publish package to GitHub Release
         uses: python-semantic-release/upload-to-gh-release@v9.8.1
