@@ -63,6 +63,7 @@ jobs:
 
     permissions:
       id-token: write
+      contents: write
 
     if: github.ref == 'refs/heads/main'
     needs:
