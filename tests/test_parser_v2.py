@@ -97,6 +97,7 @@ def bytes_to_service_info(
         advertisement=None,
         connectable=False,
         time=time,
+        tx_power=None,
     )
 
 
@@ -3171,6 +3172,7 @@ def test_bthome_multiple_uuids(caplog):
         advertisement=None,
         connectable=False,
         time=ADVERTISEMENT_TIME,
+        tx_power=None,
     )
 
     device = BTHomeBluetoothDeviceData()
