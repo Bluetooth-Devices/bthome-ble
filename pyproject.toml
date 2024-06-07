@@ -23,7 +23,7 @@ packages = [
 "Changelog" = "https://github.com/bluetooth-devices/bthome-ble/blob/main/CHANGELOG.md"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.11,<3.13"
 
 # Documentation Dependencies
 Sphinx = {version = "^5.0", optional = true}
@@ -33,6 +33,7 @@ bluetooth-sensor-state-data = ">=1.6.1"
 sensor-state-data = ">=2.16.1"
 bluetooth-data-tools = ">=0.1.2"
 cryptography = ">=40.0.0"
+home-assistant-bluetooth = ">=1.12.1"
 
 [tool.poetry.extras]
 docs = [
