@@ -1,4 +1,5 @@
 """Parser for BLE advertisements in BTHome format."""
+
 from __future__ import annotations
 
 from sensor_state_data import (

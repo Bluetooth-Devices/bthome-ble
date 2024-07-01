@@ -1,4 +1,5 @@
 """Constants for BTHome measurements."""
+
 import dataclasses
 from typing import Union
 

@@ -1,4 +1,5 @@
 """Tests for the parser of BLE advertisements in BTHome V1 format."""
+
 import binascii
 
 from bthome_ble.bthome_v1_encryption import decrypt_aes_ccm, encrypt_payload

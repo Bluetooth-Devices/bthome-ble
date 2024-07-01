@@ -1,4 +1,5 @@
 """Example showing encoding and decoding of BTHome v2 advertisement"""
+
 from __future__ import annotations
 
 import binascii
