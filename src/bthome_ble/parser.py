@@ -8,6 +8,7 @@ to BTHome for the Home Assistant Bluetooth integration.
 
 MIT License applies.
 """
+
 from __future__ import annotations
 
 import logging

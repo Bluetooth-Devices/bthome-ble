@@ -1,4 +1,5 @@
 """Event constants for BTHome measurements."""
+
 from __future__ import annotations
 
 from sensor_state_data.enum import StrEnum
