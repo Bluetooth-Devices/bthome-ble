@@ -409,4 +409,8 @@ MEAS_TYPES: dict[int, MeasTypes] = {
         data_length=4,
         factor=0.001,
     ),
+    0x56: MeasTypes(
+        meas_format=SensorLibrary.CONDUCTIVITY__CONDUCTIVITY,
+        data_length=2,
+    ),
 }
