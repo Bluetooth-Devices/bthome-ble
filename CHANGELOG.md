@@ -2,6 +2,55 @@
 
 
 
+## v3.10.0 (2024-08-23)
+
+### Chore
+
+* chore(pre-commit.ci): pre-commit autoupdate (#140)
+
+Co-authored-by: pre-commit-ci[bot] &lt;66853113+pre-commit-ci[bot]@users.noreply.github.com&gt; ([`07f4729`](https://github.com/Bluetooth-Devices/bthome-ble/commit/07f4729813086007e04a7c7dd77e7dc240433565))
+
+* chore(pre-commit.ci): pre-commit autoupdate (#139)
+
+updates:
+- [github.com/PyCQA/flake8: 7.1.0 → 7.1.1](https://github.com/PyCQA/flake8/compare/7.1.0...7.1.1)
+- [github.com/pre-commit/mirrors-mypy: v1.11.0 → v1.11.1](https://github.com/pre-commit/mirrors-mypy/compare/v1.11.0...v1.11.1)
+
+Co-authored-by: pre-commit-ci[bot] &lt;66853113+pre-commit-ci[bot]@users.noreply.github.com&gt; ([`e6ab18b`](https://github.com/Bluetooth-Devices/bthome-ble/commit/e6ab18b702735465207df952af1273762081d8e1))
+
+* chore(pre-commit.ci): pre-commit autoupdate (#137)
+
+Co-authored-by: pre-commit-ci[bot] &lt;66853113+pre-commit-ci[bot]@users.noreply.github.com&gt; ([`8305ab4`](https://github.com/Bluetooth-Devices/bthome-ble/commit/8305ab41118aee608b6d5f63453bf1d76dbcae61))
+
+* chore(pre-commit.ci): pre-commit autoupdate (#136)
+
+Co-authored-by: pre-commit-ci[bot] &lt;66853113+pre-commit-ci[bot]@users.noreply.github.com&gt; ([`8de8a22`](https://github.com/Bluetooth-Devices/bthome-ble/commit/8de8a22a154f2228161fdd6d1c9a861004a18148))
+
+* chore(pre-commit.ci): pre-commit autoupdate (#132)
+
+* chore(pre-commit.ci): pre-commit autoupdate
+
+updates:
+- [github.com/commitizen-tools/commitizen: v3.2.2 → v3.27.0](https://github.com/commitizen-tools/commitizen/compare/v3.2.2...v3.27.0)
+- [github.com/pre-commit/pre-commit-hooks: v4.5.0 → v4.6.0](https://github.com/pre-commit/pre-commit-hooks/compare/v4.5.0...v4.6.0)
+- [github.com/asottile/pyupgrade: v3.15.0 → v3.16.0](https://github.com/asottile/pyupgrade/compare/v3.15.0...v3.16.0)
+- [github.com/psf/black-pre-commit-mirror: 23.12.1 → 24.4.2](https://github.com/psf/black-pre-commit-mirror/compare/23.12.1...24.4.2)
+- [github.com/codespell-project/codespell: v2.2.6 → v2.3.0](https://github.com/codespell-project/codespell/compare/v2.2.6...v2.3.0)
+- [github.com/PyCQA/flake8: 7.0.0 → 7.1.0](https://github.com/PyCQA/flake8/compare/7.0.0...7.1.0)
+- [github.com/pre-commit/mirrors-mypy: v1.8.0 → v1.10.1](https://github.com/pre-commit/mirrors-mypy/compare/v1.8.0...v1.10.1)
+- [github.com/PyCQA/bandit: 1.7.6 → 1.7.9](https://github.com/PyCQA/bandit/compare/1.7.6...1.7.9)
+
+* chore(pre-commit.ci): auto fixes
+
+---------
+
+Co-authored-by: pre-commit-ci[bot] &lt;66853113+pre-commit-ci[bot]@users.noreply.github.com&gt; ([`8171fd4`](https://github.com/Bluetooth-Devices/bthome-ble/commit/8171fd41955a8a9a89094c235f8213af1a6b2014))
+
+### Feature
+
+* feat(conductivity): add 0x56 for 16-bit Conductivity measurement type (#142) ([`444eaca`](https://github.com/Bluetooth-Devices/bthome-ble/commit/444eacafb280fffe8ee28abc4e9236b84db15bf6))
+
+
 ## v3.9.3 (2024-06-07)
 
 ### Fix
