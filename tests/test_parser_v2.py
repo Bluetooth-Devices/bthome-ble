@@ -65,6 +65,7 @@ KEY_VOLUME = DeviceKey(key="volume", device_id=None)
 KEY_VOLUME_FLOW_RATE = DeviceKey(key="volume_flow_rate", device_id=None)
 KEY_VOLUME_STORAGE = DeviceKey(key="volume_storage", device_id=None)
 KEY_WATER = DeviceKey(key="water", device_id=None)
+KEY_CONDUCTIVITY = DeviceKey(key="conductivity", device_id=None)
 
 
 @pytest.fixture(autouse=True)
@@ -1737,6 +1738,48 @@ def test_bthome_moisture(caplog):
         entity_values={
             KEY_MOISTURE: SensorValue(
                 device_key=KEY_MOISTURE, name="Moisture", native_value=30.74
+            ),
+            KEY_SIGNAL_STRENGTH: SensorValue(
+                device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+    )
+
+
+def test_bthome_conductivity(caplog):
+    """Test BTHome parser for conductivity reading from SenseNL sensor."""
+    data_string = b"\x40\x56\xe8\x03"
+    advertisement = bytes_to_service_info(
+        data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
+    )
+
+    device = BTHomeBluetoothDeviceData()
+    assert device.update(advertisement) == SensorUpdate(
+        title="TEST DEVICE 18B2",
+        devices={
+            None: SensorDeviceInfo(
+                name="TEST DEVICE 18B2",
+                manufacturer=None,
+                model="BTHome sensor",
+                sw_version="BTHome BLE v2",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            KEY_CONDUCTIVITY: SensorDescription(
+                device_key=KEY_CONDUCTIVITY,
+                device_class=SensorDeviceClass.CONDUCTIVITY,
+                native_unit_of_measurement=Units.CONDUCTIVITY,
+            ),
+            KEY_SIGNAL_STRENGTH: SensorDescription(
+                device_key=KEY_SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
+            KEY_CONDUCTIVITY: SensorValue(
+                device_key=KEY_CONDUCTIVITY, name="Conductivity", native_value=1000
             ),
             KEY_SIGNAL_STRENGTH: SensorValue(
                 device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
