@@ -413,4 +413,42 @@ MEAS_TYPES: dict[int, MeasTypes] = {
         meas_format=SensorLibrary.CONDUCTIVITY__CONDUCTIVITY,
         data_length=2,
     ),
+    0x57: MeasTypes(
+        meas_format=SensorLibrary.TEMPERATURE__CELSIUS,
+        data_length=1,
+        data_format="signed_integer",
+    ),
+    0x58: MeasTypes(
+        meas_format=SensorLibrary.TEMPERATURE__CELSIUS,
+        data_length=1,
+        data_format="signed_integer",
+        factor=0.35,
+    ),
+    0x59: MeasTypes(
+        meas_format=SensorLibrary.COUNT__NONE,
+        data_length=1,
+        data_format="signed_integer",
+    ),
+    0x5A: MeasTypes(
+        meas_format=SensorLibrary.COUNT__NONE,
+        data_length=2,
+        data_format="signed_integer",
+    ),
+    0x5B: MeasTypes(
+        meas_format=SensorLibrary.COUNT__NONE,
+        data_length=4,
+        data_format="signed_integer",
+    ),
+    0x5C: MeasTypes(
+        meas_format=SensorLibrary.POWER__POWER_WATT,
+        data_length=4,
+        factor=0.01,
+        data_format="signed_integer",
+    ),
+    0x5D: MeasTypes(
+        meas_format=SensorLibrary.CURRENT__ELECTRIC_CURRENT_AMPERE,
+        data_length=2,
+        factor=0.001,
+        data_format="signed_integer",
+    ),
 }
