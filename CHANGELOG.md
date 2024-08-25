@@ -2,6 +2,13 @@
 
 
 
+## v3.11.0 (2024-08-25)
+
+### Feature
+
+* feat: add new sensors (#144) ([`25e87a0`](https://github.com/Bluetooth-Devices/bthome-ble/commit/25e87a0e2d7bb0109e148046ed09235a0d3fa596))
+
+
 ## v3.10.0 (2024-08-23)
 
 ### Chore
