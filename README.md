@@ -61,3 +61,5 @@ This package was created with
 [Cookiecutter](https://github.com/audreyr/cookiecutter) and the
 [browniebroke/cookiecutter-pypackage](https://github.com/browniebroke/cookiecutter-pypackage)
 project template.
+
+[![An open standard from the Open Home Foundation](https://www.openhomefoundation.org/badges/ohf-open-standard.png)](https://www.openhomefoundation.org/)
