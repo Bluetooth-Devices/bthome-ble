@@ -196,13 +196,13 @@ docs = ["Sphinx (>=5.0,<6.0)", "myst-parser (>=0.18,<0.19)", "sphinx-rtd-theme (
 
 [[package]]
 name = "bluetooth-sensor-state-data"
-version = "1.7.0"
+version = "1.7.1"
 description = "Models for storing and converting Bluetooth Sensor State Data"
 optional = false
 python-versions = "<4.0,>=3.9"
 files = [
-    {file = "bluetooth_sensor_state_data-1.7.0-py3-none-any.whl", hash = "sha256:611d7e7bddb859dbe4873dcf5ceecb7c5ef74edf1e3c1a27def5bf9ce7b86e00"},
-    {file = "bluetooth_sensor_state_data-1.7.0.tar.gz", hash = "sha256:8f0057c8bd6180eca9bf62d3dbde8c3f958ab79e4db64e5a8a7886d9d5d5eb56"},
+    {file = "bluetooth_sensor_state_data-1.7.1-py3-none-any.whl", hash = "sha256:65df4b1cd1777a5d2aed9e3e16cf00488f62838d745ae095ebc5ce7f7d7966cd"},
+    {file = "bluetooth_sensor_state_data-1.7.1.tar.gz", hash = "sha256:6e89909e72b596917b859673cf37eb37500e3cfdca94f08a121fca86bb2e79a4"},
 ]
 
 [package.dependencies]
