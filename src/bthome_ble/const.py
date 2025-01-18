@@ -1,7 +1,6 @@
 """Constants for BTHome measurements."""
 
 import dataclasses
-from typing import Union
 
 from sensor_state_data import (
     BaseDeviceClass,
@@ -16,11 +15,11 @@ from .event import EventDeviceKeys
 
 @dataclasses.dataclass
 class MeasTypes:
-    meas_format: Union[
-        EventDeviceKeys,
-        description.BaseBinarySensorDescription,
-        description.BaseSensorDescription,
-    ]
+    meas_format: (
+        EventDeviceKeys
+        | description.BaseBinarySensorDescription
+        | description.BaseSensorDescription
+    )
     data_length: int = 1
     data_format: str = "unsigned_integer"
     factor: float = 1
