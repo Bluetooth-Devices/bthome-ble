@@ -3923,3 +3923,60 @@ def test_bthome_invalid_object_payload_data_length(caplog):
     device = BTHomeBluetoothDeviceData()
     device.update(advertisement)
     assert "ATC 18B2: Invalid payload data length, payload: 02ca0903bf" in caplog.text
+
+
+def test_bthome_weather_info(caplog):
+    """Test BTHome parser for for wind direction,
+    precipitation and weather condition without encryption."""
+    data_string = b"\x40\x31\x9f\x8c\x5e\x03\xd9"
+    advertisement = bytes_to_service_info(
+        data_string, local_name="SBWS-90CM", address="A4:C1:55:aa:55:aa"
+    )
+
+    device = BTHomeBluetoothDeviceData()
+    assert device.update(advertisement) == SensorUpdate(
+        title="SBWS-90CM 55AA",
+        devices={
+            None: SensorDeviceInfo(
+                name="SBWS-90CM 55AA",
+                manufacturer=None,
+                model="BTHome sensor",
+                sw_version="BTHome BLE v2",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            DeviceKey(key="direction", device_id=None): SensorDescription(
+                device_key=DeviceKey(key="direction", device_id=None),
+                device_class=ExtendedSensorDeviceClass.DIRECTION,
+                native_unit_of_measurement=Units.DEGREE,
+            ),
+            DeviceKey(key="precipitation", device_id=None): SensorDescription(
+                device_key=DeviceKey(key="precipitation", device_id=None),
+                device_class=ExtendedSensorDeviceClass.PRECIPITATION,
+                native_unit_of_measurement=Units.LENGTH_MILLIMETERS,
+            ),
+            KEY_SIGNAL_STRENGTH: SensorDescription(
+                device_key=KEY_SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
+            DeviceKey(key="direction", device_id=None): SensorValue(
+                device_key=DeviceKey(key="direction", device_id=None),
+                name="Direction",
+                native_value=359.99,
+            ),
+            DeviceKey(key="precipitation", device_id=None): SensorValue(
+                device_key=DeviceKey(key="precipitation", device_id=None),
+                name="Precipitation",
+                native_value=55555,
+            ),
+            KEY_SIGNAL_STRENGTH: SensorValue(
+                device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        }
+    )
+
+

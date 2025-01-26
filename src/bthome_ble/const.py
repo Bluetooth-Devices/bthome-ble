@@ -37,6 +37,12 @@ class ExtendedSensorDeviceClass(BaseDeviceClass):
     # Volume storage
     VOLUME_STORAGE = "volume_storage"
 
+    # Direction
+    DIRECTION = "direction"
+
+    # Precipitation
+    PRECIPITATION = "precipitation"
+
 
 class ExtendedSensorLibrary(SensorLibrary):
     """Sensor Library for additional sensors (compared to sensor-state-data)."""
@@ -54,6 +60,16 @@ class ExtendedSensorLibrary(SensorLibrary):
     VOLUME_STORAGE__VOLUME_LITERS = description.BaseSensorDescription(
         device_class=ExtendedSensorDeviceClass.VOLUME_STORAGE,
         native_unit_of_measurement=Units.VOLUME_LITERS,
+    )
+
+    DIRECTION__DEGREES = description.BaseSensorDescription(
+        device_class=ExtendedSensorDeviceClass.DIRECTION,
+        native_unit_of_measurement=Units.DEGREE,
+    )
+
+    PRECIPITATION__MILLIMETERS = description.BaseSensorDescription(
+        device_class=ExtendedSensorDeviceClass.PRECIPITATION,
+        native_unit_of_measurement=Units.LENGTH_MILLIMETERS,
     )
 
 
@@ -281,6 +297,11 @@ MEAS_TYPES: dict[int, MeasTypes] = {
     ),
     0x2E: MeasTypes(meas_format=SensorLibrary.HUMIDITY__PERCENTAGE),
     0x2F: MeasTypes(meas_format=SensorLibrary.MOISTURE__PERCENTAGE),
+    0x31: MeasTypes(
+        meas_format=ExtendedSensorLibrary.DIRECTION__DEGREES,
+        data_length=2,
+        factor=0.01,
+    ),
     0x3A: MeasTypes(meas_format=EventDeviceKeys.BUTTON),
     0x3C: MeasTypes(
         meas_format=EventDeviceKeys.DIMMER,
@@ -450,4 +471,9 @@ MEAS_TYPES: dict[int, MeasTypes] = {
         factor=0.001,
         data_format="signed_integer",
     ),
+    0x5E: MeasTypes(
+        meas_format=ExtendedSensorLibrary.PRECIPITATION__MILLIMETERS,
+        data_length=2,
+        factor=1,
+    )
 }
