@@ -9,7 +9,7 @@ ci:
 
 repos:
   - repo: https://github.com/commitizen-tools/commitizen
-    rev: v4.1.0
+    rev: v4.1.1
     hooks:
       - id: commitizen
         stages: [commit-msg]
@@ -46,7 +46,7 @@ repos:
     hooks:
       - id: black
   - repo: https://github.com/codespell-project/codespell
-    rev: v2.3.0
+    rev: v2.4.0
     hooks:
       - id: codespell
   - repo: https://github.com/PyCQA/flake8
