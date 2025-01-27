@@ -475,5 +475,5 @@ MEAS_TYPES: dict[int, MeasTypes] = {
         meas_format=ExtendedSensorLibrary.PRECIPITATION__MILLIMETERS,
         data_length=2,
         factor=1,
-    )
+    ),
 }

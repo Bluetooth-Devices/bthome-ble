@@ -3976,7 +3976,5 @@ def test_bthome_weather_info(caplog):
             KEY_SIGNAL_STRENGTH: SensorValue(
                 device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
             ),
-        }
+        },
     )
-
-
