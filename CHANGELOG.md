@@ -1,5 +1,13 @@
 # Changelog
 
+## v3.12.3 (2025-01-31)
+
+### Bug fixes
+
+
+- Update pyproject to allow python 3.13 deps (#198) ([`4c4d9a6`](https://github.com/Bluetooth-Devices/bthome-ble/commit/4c4d9a64be817fad5074aacd90d762e64f843845))
+
+
 ## v3.12.2 (2025-01-31)
 
 ### Bug fixes
