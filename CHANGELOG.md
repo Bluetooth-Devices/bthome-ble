@@ -1,5 +1,13 @@
 # Changelog
 
+## v3.12.2 (2025-01-31)
+
+### Bug fixes
+
+
+- Use little endian in float conversion (#197) ([`ffd8f3c`](https://github.com/Bluetooth-Devices/bthome-ble/commit/ffd8f3c6d959017bc662160cf345d9d49dd60f02))
+
+
 ## v3.12.1 (2025-01-31)
 
 ### Bug fixes
