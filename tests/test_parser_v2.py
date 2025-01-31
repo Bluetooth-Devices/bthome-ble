@@ -3978,6 +3978,7 @@ def test_bthome_direction_precipitation(caplog):
         },
     )
 
+
 def test_bthome_channel(caplog):
     """Test BTHome parser for Channel(0x60) without encryption."""
     data_string = b"\x40\x60\x01"
@@ -4020,4 +4021,3 @@ def test_bthome_channel(caplog):
             ),
         },
     )
-
