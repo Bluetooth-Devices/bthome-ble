@@ -66,11 +66,11 @@ def parse_float(data_obj: bytes, factor: float = 1.0) -> float | None:
     """Convert bytes (as float) and factor to float."""
     decimal_places = -int(f"{factor:e}".split("e")[-1])
     if len(data_obj) == 2:
-        [val] = struct.unpack("e", data_obj)
+        [val] = struct.unpack("<e", data_obj)
     elif len(data_obj) == 4:
-        [val] = struct.unpack("f", data_obj)
+        [val] = struct.unpack("<f", data_obj)
     elif len(data_obj) == 8:
-        [val] = struct.unpack("d", data_obj)
+        [val] = struct.unpack("<d", data_obj)
     else:
         _LOGGER.error("only 2, 4 or 8 byte long floats are supported in BTHome BLE")
         return None
