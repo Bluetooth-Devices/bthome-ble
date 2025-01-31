@@ -2,6 +2,170 @@
 
 
 
+## v3.12.0 (2025-01-31)
+
+### Chore
+
+* chore(pre-commit.ci): pre-commit autoupdate (#185)
+
+Co-authored-by: pre-commit-ci[bot] &lt;66853113+pre-commit-ci[bot]@users.noreply.github.com&gt; ([`1e9f738`](https://github.com/Bluetooth-Devices/bthome-ble/commit/1e9f738b457762e0e4d4eb232e73b077abe10c69))
+
+* chore(deps): bump myst-parser from 1.0.0 to 3.0.1 (#181)
+
+Bumps [myst-parser](https://github.com/executablebooks/MyST-Parser) from 1.0.0 to 3.0.1.
+- [Release notes](https://github.com/executablebooks/MyST-Parser/releases)
+- [Changelog](https://github.com/executablebooks/MyST-Parser/blob/master/CHANGELOG.md)
+- [Commits](https://github.com/executablebooks/MyST-Parser/compare/v1.0.0...v3.0.1)
+
+---
+updated-dependencies:
+- dependency-name: myst-parser
+  dependency-type: direct:production
+  update-type: version-update:semver-major
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt;
+Co-authored-by: dependabot[bot] &lt;49699333+dependabot[bot]@users.noreply.github.com&gt; ([`8ce9658`](https://github.com/Bluetooth-Devices/bthome-ble/commit/8ce9658095518e8fc0450377527e07e5813355ee))
+
+* chore(deps): bump habluetooth from 3.9.2 to 3.12.0 (#182) ([`59d6173`](https://github.com/Bluetooth-Devices/bthome-ble/commit/59d61738228bf7abac0b2e2f8d0081c981698412))
+
+* chore(deps): bump bluetooth-data-tools from 1.19.0 to 1.22.0 (#183) ([`39e3391`](https://github.com/Bluetooth-Devices/bthome-ble/commit/39e33911a4db85de1e1fe4e0423554395dbe067c))
+
+* chore(deps): bump sphinx-rtd-theme from 2.0.0 to 3.0.2 (#184) ([`0c756de`](https://github.com/Bluetooth-Devices/bthome-ble/commit/0c756de2f7cf405b7bcdadd4745694274a133fce))
+
+* chore(deps): bump sphinx from 5.3.0 to 6.2.1 (#177) ([`38eea52`](https://github.com/Bluetooth-Devices/bthome-ble/commit/38eea524022fedbd86106625ce55d673b979f30c))
+
+* chore(deps-dev): bump pytest-cov from 4.1.0 to 6.0.0 (#179) ([`a694d85`](https://github.com/Bluetooth-Devices/bthome-ble/commit/a694d851cfae703c61b03f4e49b67d7b544a8027))
+
+* chore(deps): bump habluetooth from 3.9.0 to 3.9.2 (#178) ([`ab590ff`](https://github.com/Bluetooth-Devices/bthome-ble/commit/ab590ff022c3594d70d597eebfa1d5415a817970))
+
+* chore(deps): bump cryptography from 43.0.1 to 44.0.0 (#175) ([`ebd8e9e`](https://github.com/Bluetooth-Devices/bthome-ble/commit/ebd8e9e4d8140c4ecbc43ac0cc2cbffd1d01c2f0))
+
+* chore(deps-dev): bump pytest from 7.4.4 to 8.3.4 (#176) ([`07e6dad`](https://github.com/Bluetooth-Devices/bthome-ble/commit/07e6dadb58c9f45aaf1f419adcef3f9932274ffa))
+
+* chore(deps): bump jinja2 from 3.1.4 to 3.1.5 (#172)
+
+Co-authored-by: dependabot[bot] &lt;49699333+dependabot[bot]@users.noreply.github.com&gt; ([`4fcc1a1`](https://github.com/Bluetooth-Devices/bthome-ble/commit/4fcc1a1aa8d349e614934580f7a631dc12886095))
+
+* chore(deps): bump cryptography from 42.0.8 to 43.0.1 (#171) ([`bdd449b`](https://github.com/Bluetooth-Devices/bthome-ble/commit/bdd449b68b1865ead298f5a105d53f6afcf51855))
+
+* chore(deps): bump certifi from 2024.6.2 to 2024.7.4 (#173) ([`4bf94dc`](https://github.com/Bluetooth-Devices/bthome-ble/commit/4bf94dcda236145bfdf30ee468e69459ea4ccc72))
+
+* chore(deps): bump urllib3 from 2.2.1 to 2.2.2 (#174)
+
+Co-authored-by: dependabot[bot] &lt;49699333+dependabot[bot]@users.noreply.github.com&gt; ([`77e5493`](https://github.com/Bluetooth-Devices/bthome-ble/commit/77e5493249efe6bb552f8ad98722afcff3d7cbf4))
+
+* chore(deps): bump myst-parser from 0.18.1 to 1.0.0 (#168)
+
+Co-authored-by: dependabot[bot] &lt;49699333+dependabot[bot]@users.noreply.github.com&gt; ([`fa3964d`](https://github.com/Bluetooth-Devices/bthome-ble/commit/fa3964df716baa1f1840b96cf20479e474a1a9d5))
+
+* chore(deps): bump bluetooth-sensor-state-data from 1.7.0 to 1.7.1 (#166)
+
+Co-authored-by: dependabot[bot] &lt;49699333+dependabot[bot]@users.noreply.github.com&gt; ([`d1a0f3a`](https://github.com/Bluetooth-Devices/bthome-ble/commit/d1a0f3aac30eab6f8ba4c27f5d371f00aa24355f))
+
+* chore: update for Python 3.13 (#165) ([`8361b69`](https://github.com/Bluetooth-Devices/bthome-ble/commit/8361b6901f30066634f2a32c987affd42b32b832))
+
+* chore(deps): bump sensor-state-data from 2.18.0 to 2.18.1 (#167)
+
+Co-authored-by: dependabot[bot] &lt;49699333+dependabot[bot]@users.noreply.github.com&gt; ([`4522dc8`](https://github.com/Bluetooth-Devices/bthome-ble/commit/4522dc8efd66eb4ed2f259f1f9a3ee071d55538d))
+
+* chore(deps): bump sphinx-rtd-theme from 1.3.0 to 2.0.0 (#169)
+
+Co-authored-by: dependabot[bot] &lt;49699333+dependabot[bot]@users.noreply.github.com&gt; ([`481ff63`](https://github.com/Bluetooth-Devices/bthome-ble/commit/481ff63bde979f7070755bb2d7174b5bcf4da940))
+
+* chore(deps): bump habluetooth from 3.1.1 to 3.9.0 (#170)
+
+Co-authored-by: dependabot[bot] &lt;49699333+dependabot[bot]@users.noreply.github.com&gt; ([`9d6d360`](https://github.com/Bluetooth-Devices/bthome-ble/commit/9d6d36030281fa4ba6fc3764775663c21b9e52de))
+
+* chore: create dependabot.yml ([`a2988df`](https://github.com/Bluetooth-Devices/bthome-ble/commit/a2988df1f355e887ff4b4a95dccd4b06f92b2200))
+
+* chore(pre-commit.ci): pre-commit autoupdate (#164)
+
+updates:
+- [github.com/PyCQA/bandit: 1.8.0 → 1.8.2](https://github.com/PyCQA/bandit/compare/1.8.0...1.8.2)
+
+Co-authored-by: pre-commit-ci[bot] &lt;66853113+pre-commit-ci[bot]@users.noreply.github.com&gt; ([`0d22035`](https://github.com/Bluetooth-Devices/bthome-ble/commit/0d2203590b4d524e27153351e8ad3e148b8490cb))
+
+* chore(pre-commit.ci): pre-commit autoupdate (#163)
+
+updates:
+- [github.com/pre-commit/mirrors-mypy: v1.14.0 → v1.14.1](https://github.com/pre-commit/mirrors-mypy/compare/v1.14.0...v1.14.1)
+
+Co-authored-by: pre-commit-ci[bot] &lt;66853113+pre-commit-ci[bot]@users.noreply.github.com&gt; ([`ff18462`](https://github.com/Bluetooth-Devices/bthome-ble/commit/ff184624bed27311394863640643a491e25b715c))
+
+* chore(pre-commit.ci): pre-commit autoupdate (#160)
+
+updates:
+- [github.com/asottile/pyupgrade: v3.19.0 → v3.19.1](https://github.com/asottile/pyupgrade/compare/v3.19.0...v3.19.1)
+- [github.com/pre-commit/mirrors-mypy: v1.13.0 → v1.14.0](https://github.com/pre-commit/mirrors-mypy/compare/v1.13.0...v1.14.0)
+
+Co-authored-by: pre-commit-ci[bot] &lt;66853113+pre-commit-ci[bot]@users.noreply.github.com&gt; ([`da60d99`](https://github.com/Bluetooth-Devices/bthome-ble/commit/da60d994355f8c0b2715753600fa791a46a6eb2d))
+
+* chore(pre-commit.ci): pre-commit autoupdate (#158)
+
+Co-authored-by: pre-commit-ci[bot] &lt;66853113+pre-commit-ci[bot]@users.noreply.github.com&gt; ([`c07015a`](https://github.com/Bluetooth-Devices/bthome-ble/commit/c07015aa64b1d6997fca27871a6a19060d66a1c5))
+
+* chore(pre-commit.ci): pre-commit autoupdate (#157)
+
+updates:
+- [github.com/commitizen-tools/commitizen: v3.30.1 → v3.31.0](https://github.com/commitizen-tools/commitizen/compare/v3.30.1...v3.31.0)
+
+Co-authored-by: pre-commit-ci[bot] &lt;66853113+pre-commit-ci[bot]@users.noreply.github.com&gt; ([`354359a`](https://github.com/Bluetooth-Devices/bthome-ble/commit/354359a0b59c4bd7c6c621341c089238f8a03993))
+
+* chore(pre-commit.ci): pre-commit autoupdate (#155)
+
+updates:
+- [github.com/commitizen-tools/commitizen: v3.30.0 → v3.30.1](https://github.com/commitizen-tools/commitizen/compare/v3.30.0...v3.30.1)
+
+Co-authored-by: pre-commit-ci[bot] &lt;66853113+pre-commit-ci[bot]@users.noreply.github.com&gt; ([`f1216c3`](https://github.com/Bluetooth-Devices/bthome-ble/commit/f1216c3e338a67663d1436207c9db16e38f23d18))
+
+* chore(pre-commit.ci): pre-commit autoupdate (#154)
+
+updates:
+- [github.com/commitizen-tools/commitizen: v3.29.1 → v3.30.0](https://github.com/commitizen-tools/commitizen/compare/v3.29.1...v3.30.0)
+- [github.com/asottile/pyupgrade: v3.18.0 → v3.19.0](https://github.com/asottile/pyupgrade/compare/v3.18.0...v3.19.0)
+- [github.com/pre-commit/mirrors-mypy: v1.12.1 → v1.13.0](https://github.com/pre-commit/mirrors-mypy/compare/v1.12.1...v1.13.0)
+
+Co-authored-by: pre-commit-ci[bot] &lt;66853113+pre-commit-ci[bot]@users.noreply.github.com&gt; ([`6f550fa`](https://github.com/Bluetooth-Devices/bthome-ble/commit/6f550fae80fc75677c2adfed57d04d5b2d6e9966))
+
+* chore(pre-commit.ci): pre-commit autoupdate (#151)
+
+updates:
+- [github.com/pre-commit/mirrors-mypy: v1.11.2 → v1.12.1](https://github.com/pre-commit/mirrors-mypy/compare/v1.11.2...v1.12.1)
+
+Co-authored-by: pre-commit-ci[bot] &lt;66853113+pre-commit-ci[bot]@users.noreply.github.com&gt; ([`c165c5e`](https://github.com/Bluetooth-Devices/bthome-ble/commit/c165c5e25ee554ce631227c744a3ceb7d5665b5c))
+
+* chore(pre-commit.ci): pre-commit autoupdate (#150)
+
+updates:
+- [github.com/commitizen-tools/commitizen: v3.29.0 → v3.29.1](https://github.com/commitizen-tools/commitizen/compare/v3.29.0...v3.29.1)
+- [github.com/pre-commit/pre-commit-hooks: v4.6.0 → v5.0.0](https://github.com/pre-commit/pre-commit-hooks/compare/v4.6.0...v5.0.0)
+- [github.com/asottile/pyupgrade: v3.17.0 → v3.18.0](https://github.com/asottile/pyupgrade/compare/v3.17.0...v3.18.0)
+- [github.com/psf/black-pre-commit-mirror: 24.8.0 → 24.10.0](https://github.com/psf/black-pre-commit-mirror/compare/24.8.0...24.10.0)
+- [github.com/PyCQA/bandit: 1.7.9 → 1.7.10](https://github.com/PyCQA/bandit/compare/1.7.9...1.7.10)
+
+Co-authored-by: pre-commit-ci[bot] &lt;66853113+pre-commit-ci[bot]@users.noreply.github.com&gt; ([`ef50709`](https://github.com/Bluetooth-Devices/bthome-ble/commit/ef50709e00d0b6506ddda30f5eb203f63e012bae))
+
+* chore: add OHF logo to README (#149) ([`5cc4215`](https://github.com/Bluetooth-Devices/bthome-ble/commit/5cc42155a7e90b0ce73c05312304801554a02212))
+
+* chore(pre-commit.ci): pre-commit autoupdate (#145)
+
+updates:
+- [github.com/pre-commit/mirrors-mypy: v1.11.1 → v1.11.2](https://github.com/pre-commit/mirrors-mypy/compare/v1.11.1...v1.11.2)
+
+Co-authored-by: pre-commit-ci[bot] &lt;66853113+pre-commit-ci[bot]@users.noreply.github.com&gt; ([`e1b850d`](https://github.com/Bluetooth-Devices/bthome-ble/commit/e1b850dcc1c68ffb10179a6796c7bd4f9d121eeb))
+
+### Feature
+
+* feat(bthome): add direction and precipitation support (#187)
+
+Co-authored-by: Ben Maximov &lt;benyamin.maksimov@shelly.com&gt; ([`8c0df91`](https://github.com/Bluetooth-Devices/bthome-ble/commit/8c0df91b7647b3fc2985edfd2382199f4d321665))
+
+### Unknown
+
+* Remove FUNDING.yml (#152) ([`6a06c1e`](https://github.com/Bluetooth-Devices/bthome-ble/commit/6a06c1e2df1b80bb71f25fd44f0fc6f7a8ba419e))
+
+
 ## v3.11.0 (2024-08-25)
 
 ### Feature
