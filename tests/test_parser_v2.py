@@ -3977,3 +3977,47 @@ def test_bthome_direction_precipitation(caplog):
             ),
         },
     )
+
+
+def test_bthome_channel(caplog):
+    """Test BTHome parser for Channel(0x60) without encryption."""
+    data_string = b"\x40\x60\x01"
+    advertisement = bytes_to_service_info(
+        data_string, local_name="SBRC-005B", address="28:DB:A7:B5:D4:03"
+    )
+
+    device = BTHomeBluetoothDeviceData()
+    assert device.update(advertisement) == SensorUpdate(
+        title="SBRC-005B D403",
+        devices={
+            None: SensorDeviceInfo(
+                name="SBRC-005B D403",
+                manufacturer=None,
+                model="BTHome sensor",
+                sw_version="BTHome BLE v2",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            DeviceKey(key="channel", device_id=None): SensorDescription(
+                device_key=DeviceKey(key="channel", device_id=None),
+                device_class=ExtendedSensorDeviceClass.CHANNEL,
+                native_unit_of_measurement=None,
+            ),
+            KEY_SIGNAL_STRENGTH: SensorDescription(
+                device_key=KEY_SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
+            DeviceKey(key="channel", device_id=None): SensorValue(
+                device_key=DeviceKey(key="channel", device_id=None),
+                name="Channel",
+                native_value=1,
+            ),
+            KEY_SIGNAL_STRENGTH: SensorValue(
+                device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+    )

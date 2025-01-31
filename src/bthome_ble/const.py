@@ -28,6 +28,9 @@ class MeasTypes:
 class ExtendedSensorDeviceClass(BaseDeviceClass):
     """Device class for additional sensors (compared to sensor-state-data)."""
 
+    # Data channel
+    CHANNEL = "channel"
+
     # Raw hex data
     RAW = "raw"
 
@@ -70,6 +73,10 @@ class ExtendedSensorLibrary(SensorLibrary):
     PRECIPITATION__LENGTH_MILLIMETERS = description.BaseSensorDescription(
         device_class=ExtendedSensorDeviceClass.PRECIPITATION,
         native_unit_of_measurement=Units.LENGTH_MILLIMETERS,
+    )
+    CHANNEL__NONE = description.BaseSensorDescription(
+        device_class=ExtendedSensorDeviceClass.CHANNEL,
+        native_unit_of_measurement=None,
     )
 
 
@@ -476,4 +483,5 @@ MEAS_TYPES: dict[int, MeasTypes] = {
         data_length=2,
         factor=1,
     ),
+    0x60: MeasTypes(meas_format=ExtendedSensorLibrary.CHANNEL__NONE),
 }
