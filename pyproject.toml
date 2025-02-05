@@ -1,12 +1,20 @@
-[tool.poetry]
+[project]
 name = "bthome-ble"
 version = "3.12.3"
 description = "BThome BLE support"
-authors = ["Ernst Klamer <e.klamer@gmail.com>"]
+authors = [{ name = "Ernst Klamer", email = "e.klamer@gmail.com" }]
 license = "MIT"
 readme = "README.md"
-repository = "https://github.com/bluetooth-devices/bthome-ble"
-documentation = "https://bthome-ble.readthedocs.io"
+requires-python = ">=3.11"
+dynamic = ["classifiers", "dependencies", "optional-dependencies"]
+
+[project.urls]
+"Repository" = "https://github.com/bluetooth-devices/bthome-ble"
+"Documentation" = "https://bthome-ble.readthedocs.io"
+"Bug Tracker" = "https://github.com/bluetooth-devices/bthome-ble/issues"
+"Changelog" = "https://github.com/bluetooth-devices/bthome-ble/blob/main/CHANGELOG.md"
+
+[tool.poetry]
 classifiers = [
     "Development Status :: 2 - Pre-Alpha",
     "Intended Audience :: Developers",
@@ -17,10 +25,6 @@ classifiers = [
 packages = [
     { include = "bthome_ble", from = "src" },
 ]
-
-[tool.poetry.urls]
-"Bug Tracker" = "https://github.com/bluetooth-devices/bthome-ble/issues"
-"Changelog" = "https://github.com/bluetooth-devices/bthome-ble/blob/main/CHANGELOG.md"
 
 [tool.poetry.dependencies]
 python = "^3.11,<3.14"
@@ -42,13 +46,13 @@ docs = [
     "sphinx-rtd-theme",
 ]
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 pytest = "^8.3"
 pytest-cov = "^6.0"
 
 [tool.semantic_release]
 branch = "main"
-version_toml = ["pyproject.toml:tool.poetry.version"]
+version_toml = ["pyproject.toml:project.version"]
 version_variable = "src/bthome_ble/__init__.py:__version__"
 build_command = "pip install poetry && poetry build"
 
@@ -95,5 +99,5 @@ module = "docs.*"
 ignore_errors = true
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
+requires = ["poetry-core>=2.0.0"]
 build-backend = "poetry.core.masonry.api"
