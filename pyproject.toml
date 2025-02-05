@@ -1,6 +1,6 @@
 [project]
 name = "bthome-ble"
-version = "3.12.3"
+version = "3.12.4"
 description = "BThome BLE support"
 authors = [{ name = "Ernst Klamer", email = "e.klamer@gmail.com" }]
 license = "MIT"

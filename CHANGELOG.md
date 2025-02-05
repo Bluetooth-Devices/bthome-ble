@@ -1,5 +1,28 @@
 # Changelog
 
+## v3.12.4 (2025-02-05)
+
+### Bug fixes
+
+
+- Update poetry to v2 (#203) ([`cd6cf77`](https://github.com/Bluetooth-Devices/bthome-ble/commit/cd6cf77f75db1b43a4e9fde215e9ee97000d8884))
+
+
+### Chores
+
+
+- Pre-commit autoupdate (#202) ([`c69055f`](https://github.com/Bluetooth-Devices/bthome-ble/commit/c69055fab999304246d29f565d435f241f846b6c))
+
+
+- Bump bluetooth-data-tools from 1.22.0 to 1.23.3 (#200) ([`a8e2428`](https://github.com/Bluetooth-Devices/bthome-ble/commit/a8e242850636980f8f98190f19b3aa6260e6b18a))
+
+
+- Bump myst-parser from 3.0.1 to 4.0.0 (#201) ([`167b88a`](https://github.com/Bluetooth-Devices/bthome-ble/commit/167b88a1d4aeb54be0badfbc48aeda56b0387be8))
+
+
+- Bump habluetooth from 3.17.0 to 3.21.0 (#199) ([`b64b747`](https://github.com/Bluetooth-Devices/bthome-ble/commit/b64b74729ad31d85b10f92163a0f25cc8956be12))
+
+
 ## v3.12.3 (2025-01-31)
 
 ### Bug fixes
