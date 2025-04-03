@@ -1,5 +1,37 @@
 # Changelog
 
+## v3.12.5 (2025-04-03)
+
+### Bug fixes
+
+
+- Replace python-semantic-release/upload-to-gh-release with python-semantic-release/publish-action (#211) ([`412545f`](https://github.com/Bluetooth-Devices/bthome-ble/commit/412545f38c2a847b6c0a71a950c18528406d097b))
+
+
+### Chores
+
+
+- Update deps (#212) ([`8b966ee`](https://github.com/Bluetooth-Devices/bthome-ble/commit/8b966ee10444b9dffca84f32cf06e13dd824466e))
+
+
+- Pre-commit autoupdate (#210) ([`05685d5`](https://github.com/Bluetooth-Devices/bthome-ble/commit/05685d50c755af654b54d26dfa33ef888244946a))
+
+
+- Pre-commit autoupdate (#208) ([`ca34d81`](https://github.com/Bluetooth-Devices/bthome-ble/commit/ca34d8172e5a7bd4de8642ba5a9f134e48be7e9b))
+
+
+- Bump python-semantic-release/python-semantic-release from 9.17.0 to 9.21.0 in the github-actions group (#207) ([`8679b94`](https://github.com/Bluetooth-Devices/bthome-ble/commit/8679b942a1ea188e0168194ee4bc32462e34f251))
+
+
+- Pre-commit autoupdate (#206) ([`f011cb3`](https://github.com/Bluetooth-Devices/bthome-ble/commit/f011cb3d4ffb93dfbe25835ed7d9da6eb00082b7))
+
+
+- Pre-commit autoupdate (#205) ([`d73e81a`](https://github.com/Bluetooth-Devices/bthome-ble/commit/d73e81a20624aaf825336aa65284c6b0efeb91af))
+
+
+- Pre-commit autoupdate (#204) ([`031f55f`](https://github.com/Bluetooth-Devices/bthome-ble/commit/031f55faf9b720094942bcf001f22f6706585ab7))
+
+
 ## v3.12.4 (2025-02-05)
 
 ### Bug fixes
