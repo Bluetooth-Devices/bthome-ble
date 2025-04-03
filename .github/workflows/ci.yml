@@ -86,12 +86,9 @@ jobs:
       - name: Publish package to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         if: steps.release.outputs.released == 'true'
-        with:
-          user: __token__
-          password: ${{ secrets.PYPI_TOKEN }}
 
       - name: Publish package to GitHub Release
-        uses: python-semantic-release/upload-to-gh-release@v9.8.9
+        uses: python-semantic-release/publish-action@v9.21.0
         if: steps.release.outputs.released == 'true'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
