@@ -481,7 +481,7 @@ MEAS_TYPES: dict[int, MeasTypes] = {
     0x5F: MeasTypes(
         meas_format=ExtendedSensorLibrary.PRECIPITATION__LENGTH_MILLIMETERS,
         data_length=2,
-        factor=1,
+        factor=0.1,
     ),
     0x60: MeasTypes(meas_format=ExtendedSensorLibrary.CHANNEL__NONE),
 }
