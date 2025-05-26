@@ -232,22 +232,23 @@ docs = ["Sphinx (>=5,<9)", "myst-parser (>=0.18,<4.1)", "sphinx-rtd-theme (>=1,<
 
 [[package]]
 name = "bluetooth-sensor-state-data"
-version = "1.7.5"
+version = "1.9.0"
 description = "Models for storing and converting Bluetooth Sensor State Data"
 optional = false
-python-versions = ">=3.9"
+python-versions = ">=3.11"
 groups = ["main"]
 files = [
-    {file = "bluetooth_sensor_state_data-1.7.5-py3-none-any.whl", hash = "sha256:a4ce3cce9839422299209e5427a6ce24061ff844fbdb61af2a485e480b8d7e23"},
-    {file = "bluetooth_sensor_state_data-1.7.5.tar.gz", hash = "sha256:be9319a3d70745e11689e91c013bf71d0d5570d303a49d21668777ea7854227a"},
+    {file = "bluetooth_sensor_state_data-1.9.0-py3-none-any.whl", hash = "sha256:adf3b17774011f188b8002c54b669e24cd60d3332ef42facd18baa60c56077e3"},
+    {file = "bluetooth_sensor_state_data-1.9.0.tar.gz", hash = "sha256:d289b86e4a65a5bccce6310f686d6f3e4ac4a2c56a13c2fccb475a6894667139"},
 ]
 
 [package.dependencies]
-home-assistant-bluetooth = ">=1.3.0"
+bluetooth-data-tools = ">=1.28.0"
+habluetooth = ">=3.42.0"
 sensor-state-data = ">=2.0"
 
 [package.extras]
-docs = ["Sphinx (>=5,<7)", "myst-parser (>=0.18,<3.1)", "sphinx-rtd-theme (>=1,<4)"]
+docs = ["Sphinx (>=5,<8)", "myst-parser (>=0.18,<4.1)", "sphinx-rtd-theme (>=1,<4)"]
 
 [[package]]
 name = "btsocket"
@@ -738,21 +739,6 @@ bluetooth-adapters = ">=0.16.1"
 bluetooth-auto-recovery = ">=1.5.1"
 bluetooth-data-tools = ">=1.28.0"
 dbus-fast = {version = ">=2.30.2", markers = "platform_system == \"Linux\""}
-
-[[package]]
-name = "home-assistant-bluetooth"
-version = "1.13.1"
-description = "Home Assistant Bluetooth Models and Helpers"
-optional = false
-python-versions = ">=3.11"
-groups = ["main"]
-files = [
-    {file = "home_assistant_bluetooth-1.13.1-py3-none-any.whl", hash = "sha256:cdf13b5b45f7744165677831e309ee78fbaf0c2866c6b5931e14d1e4e7dae5d7"},
-    {file = "home_assistant_bluetooth-1.13.1.tar.gz", hash = "sha256:0ae0e2a8491cc762ee9e694b8bc7665f1e2b4618926f63969a23a2e3a48ce55e"},
-]
-
-[package.dependencies]
-habluetooth = ">=3.0"
 
 [[package]]
 name = "idna"
