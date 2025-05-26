@@ -21,7 +21,7 @@ from bluetooth_data_tools import short_address
 from bluetooth_sensor_state_data import BluetoothData
 from cryptography.exceptions import InvalidTag
 from cryptography.hazmat.primitives.ciphers.aead import AESCCM
-from home_assistant_bluetooth import BluetoothServiceInfoBleak
+from habluetooth import BluetoothServiceInfoBleak
 from sensor_state_data.description import (
     BaseBinarySensorDescription,
     BaseSensorDescription,

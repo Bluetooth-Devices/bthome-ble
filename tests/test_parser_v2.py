@@ -6,7 +6,7 @@ from unittest.mock import patch
 
 import pytest
 from bluetooth_sensor_state_data import SensorUpdate
-from home_assistant_bluetooth import BluetoothServiceInfoBleak
+from habluetooth import BluetoothServiceInfoBleak
 from sensor_state_data import (
     BinarySensorDescription,
     BinarySensorDeviceClass,
