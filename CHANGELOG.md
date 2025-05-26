@@ -1,5 +1,55 @@
 # Changelog
 
+## v3.12.6 (2025-05-26)
+
+### Bug fixes
+
+
+- Update service info imports to use habluetooth (#229) ([`e9bf187`](https://github.com/Bluetooth-Devices/bthome-ble/commit/e9bf187fb5597db1efc2dd647047b44ba47b853e))
+
+
+### Chores
+
+
+- Bump cryptography from 45.0.2 to 45.0.3 (#228) ([`8c1269a`](https://github.com/Bluetooth-Devices/bthome-ble/commit/8c1269aecae5d89517abb3730f5f80e904c91073))
+
+
+- Pre-commit autoupdate (#225) ([`489e184`](https://github.com/Bluetooth-Devices/bthome-ble/commit/489e184933a617c99adb0c5572ffd24725096430))
+
+
+- Bump habluetooth from 3.39.0 to 3.48.2 (#221) ([`3483e36`](https://github.com/Bluetooth-Devices/bthome-ble/commit/3483e36f9ba36d0db5c11c9787f1e3ce8a7a9009))
+
+
+- Bump sphinx from 7.4.7 to 8.2.3 (#216) ([`8fcd6ac`](https://github.com/Bluetooth-Devices/bthome-ble/commit/8fcd6ac7805a7069c436f528f128249e09d883e4))
+
+
+- Bump cryptography from 44.0.3 to 45.0.2 (#224) ([`50684c1`](https://github.com/Bluetooth-Devices/bthome-ble/commit/50684c132ca79337e460838571185cd5a40233df))
+
+
+- Pre-commit autoupdate (#223) ([`3701abe`](https://github.com/Bluetooth-Devices/bthome-ble/commit/3701abee343102b719c5511a3a12da59542a4672))
+
+
+- Pre-commit autoupdate (#222) ([`e0db35d`](https://github.com/Bluetooth-Devices/bthome-ble/commit/e0db35daa5963a9ddee86702aa9eb00df770d5aa))
+
+
+- Bump cryptography from 44.0.2 to 44.0.3 (#220) ([`26a4ca1`](https://github.com/Bluetooth-Devices/bthome-ble/commit/26a4ca1c192bcc8636d15616f708e11c34b195b1))
+
+
+- Bump habluetooth from 3.38.0 to 3.39.0 (#219) ([`9d05b88`](https://github.com/Bluetooth-Devices/bthome-ble/commit/9d05b8874fce036fa32641b1dc4523baf2ac97bb))
+
+
+- Bump pytest-cov from 6.1.0 to 6.1.1 (#218) ([`7de4cbb`](https://github.com/Bluetooth-Devices/bthome-ble/commit/7de4cbbca3b3663b8c50d16235ebfebc1a39ea27))
+
+
+- Bump bluetooth-data-tools from 1.26.5 to 1.28.1 (#217) ([`c869fe5`](https://github.com/Bluetooth-Devices/bthome-ble/commit/c869fe5f2c443f54e947829303d14bf78795f785))
+
+
+- Pre-commit autoupdate (#214) ([`8081aa0`](https://github.com/Bluetooth-Devices/bthome-ble/commit/8081aa06008cf2b6d8161348e92fab22c9d9503e))
+
+
+- Pre-commit autoupdate (#213) ([`68e9c2d`](https://github.com/Bluetooth-Devices/bthome-ble/commit/68e9c2db77fb3f5c0b9e655a3cbbee2858e3025b))
+
+
 ## v3.12.5 (2025-04-03)
 
 ### Bug fixes
