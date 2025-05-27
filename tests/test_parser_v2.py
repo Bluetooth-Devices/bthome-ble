@@ -3970,7 +3970,7 @@ def test_bthome_direction_precipitation(caplog):
             DeviceKey(key="precipitation", device_id=None): SensorValue(
                 device_key=DeviceKey(key="precipitation", device_id=None),
                 name="Precipitation",
-                native_value=54545,
+                native_value=5454.5,
             ),
             KEY_SIGNAL_STRENGTH: SensorValue(
                 device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
