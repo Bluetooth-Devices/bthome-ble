@@ -1,5 +1,22 @@
 # Changelog
 
+## v3.13.0 (2025-05-27)
+
+### Features
+
+
+- Correct precipitation multiplier (#226) ([`c90145b`](https://github.com/Bluetooth-Devices/bthome-ble/commit/c90145bd749b3dfe6adf27efda85d6aab92fc8a4))
+
+
+### Chores
+
+
+- Pre-commit autoupdate (#230) ([`e53f6d0`](https://github.com/Bluetooth-Devices/bthome-ble/commit/e53f6d0b128cbbc63751f08df9d4616be1fba3c9))
+
+
+- Bump bluetooth-sensor-state-data from 1.7.5 to 1.9.0 (#227) ([`ef62856`](https://github.com/Bluetooth-Devices/bthome-ble/commit/ef628564d2039bf7e3e6d9ae80cc6e33f7708e43))
+
+
 ## v3.12.6 (2025-05-26)
 
 ### Bug fixes
