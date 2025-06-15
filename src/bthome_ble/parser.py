@@ -93,12 +93,17 @@ def parse_string(data_obj: bytes) -> str | None:
         return None
 
 
-def parse_timestamp(data_obj: bytes) -> datetime:
+def parse_timestamp(data_obj: bytes) -> datetime | None:
     """Convert bytes to a datetime object."""
-    value = datetime.fromtimestamp(
-        int.from_bytes(data_obj, "little", signed=False), tz=timezone.utc
-    )
-    _LOGGER.error("time %s", value)
+    try:
+        value = datetime.fromtimestamp(
+            int.from_bytes(data_obj, "little", signed=False), tz=timezone.utc
+        )
+    except ValueError:
+        _LOGGER.error(
+            "BTHome data contains bytes that can't be decoded to a datetime object"
+        )
+        return None
     return value
 
 
