@@ -1,20 +1,49 @@
 # Changelog
 
+## v3.13.1 (2025-06-15)
+
+### Chores
+
+
+- Bump the github-actions group with 2 updates ([`0db3849`](https://github.com/Bluetooth-Devices/bthome-ble/commit/0db38493e89f627a2f3918ecd2850a80f51818eb))
+
+
+- Pre-commit autoupdate ([`231b484`](https://github.com/Bluetooth-Devices/bthome-ble/commit/231b48406b0619992f2ce110e16cf0737db5f189))
+
+
+- Bump requests from 2.32.3 to 2.32.4 ([`8ac957b`](https://github.com/Bluetooth-Devices/bthome-ble/commit/8ac957b973a573377e1b1410644b420ceeacd7d9))
+
+
+- Bump habluetooth from 3.48.2 to 3.49.0 ([`169b677`](https://github.com/Bluetooth-Devices/bthome-ble/commit/169b677cd57e910a2a371bf26e798c819a3830c7))
+
+
+- Bump pytest from 8.3.5 to 8.4.0 ([`9b3b265`](https://github.com/Bluetooth-Devices/bthome-ble/commit/9b3b26574d7a883e9163753bc5fc97bb1188eb7b))
+
+
+### Bug fixes
+
+
+- Remove errors while parsing timestamp ([`4b99dee`](https://github.com/Bluetooth-Devices/bthome-ble/commit/4b99deea1061bdeb970463d1f7e3b2dfe12b53f7))
+
+
 ## v3.13.0 (2025-05-27)
 
 ### Features
 
 
-- Correct precipitation multiplier (#226) ([`c90145b`](https://github.com/Bluetooth-Devices/bthome-ble/commit/c90145bd749b3dfe6adf27efda85d6aab92fc8a4))
+- Correct precipitation multiplier ([`c90145b`](https://github.com/Bluetooth-Devices/bthome-ble/commit/c90145bd749b3dfe6adf27efda85d6aab92fc8a4))
+
+
+- Precipitation multiplier change to 0.1 ([`c90145b`](https://github.com/Bluetooth-Devices/bthome-ble/commit/c90145bd749b3dfe6adf27efda85d6aab92fc8a4))
 
 
 ### Chores
 
 
-- Pre-commit autoupdate (#230) ([`e53f6d0`](https://github.com/Bluetooth-Devices/bthome-ble/commit/e53f6d0b128cbbc63751f08df9d4616be1fba3c9))
+- Pre-commit autoupdate ([`e53f6d0`](https://github.com/Bluetooth-Devices/bthome-ble/commit/e53f6d0b128cbbc63751f08df9d4616be1fba3c9))
 
 
-- Bump bluetooth-sensor-state-data from 1.7.5 to 1.9.0 (#227) ([`ef62856`](https://github.com/Bluetooth-Devices/bthome-ble/commit/ef628564d2039bf7e3e6d9ae80cc6e33f7708e43))
+- Bump bluetooth-sensor-state-data from 1.7.5 to 1.9.0 ([`ef62856`](https://github.com/Bluetooth-Devices/bthome-ble/commit/ef628564d2039bf7e3e6d9ae80cc6e33f7708e43))
 
 
 ## v3.12.6 (2025-05-26)
@@ -22,49 +51,49 @@
 ### Bug fixes
 
 
-- Update service info imports to use habluetooth (#229) ([`e9bf187`](https://github.com/Bluetooth-Devices/bthome-ble/commit/e9bf187fb5597db1efc2dd647047b44ba47b853e))
+- Update service info imports to use habluetooth ([`e9bf187`](https://github.com/Bluetooth-Devices/bthome-ble/commit/e9bf187fb5597db1efc2dd647047b44ba47b853e))
 
 
 ### Chores
 
 
-- Bump cryptography from 45.0.2 to 45.0.3 (#228) ([`8c1269a`](https://github.com/Bluetooth-Devices/bthome-ble/commit/8c1269aecae5d89517abb3730f5f80e904c91073))
+- Bump cryptography from 45.0.2 to 45.0.3 ([`8c1269a`](https://github.com/Bluetooth-Devices/bthome-ble/commit/8c1269aecae5d89517abb3730f5f80e904c91073))
 
 
-- Pre-commit autoupdate (#225) ([`489e184`](https://github.com/Bluetooth-Devices/bthome-ble/commit/489e184933a617c99adb0c5572ffd24725096430))
+- Pre-commit autoupdate ([`489e184`](https://github.com/Bluetooth-Devices/bthome-ble/commit/489e184933a617c99adb0c5572ffd24725096430))
 
 
-- Bump habluetooth from 3.39.0 to 3.48.2 (#221) ([`3483e36`](https://github.com/Bluetooth-Devices/bthome-ble/commit/3483e36f9ba36d0db5c11c9787f1e3ce8a7a9009))
+- Bump habluetooth from 3.39.0 to 3.48.2 ([`3483e36`](https://github.com/Bluetooth-Devices/bthome-ble/commit/3483e36f9ba36d0db5c11c9787f1e3ce8a7a9009))
 
 
-- Bump sphinx from 7.4.7 to 8.2.3 (#216) ([`8fcd6ac`](https://github.com/Bluetooth-Devices/bthome-ble/commit/8fcd6ac7805a7069c436f528f128249e09d883e4))
+- Bump sphinx from 7.4.7 to 8.2.3 ([`8fcd6ac`](https://github.com/Bluetooth-Devices/bthome-ble/commit/8fcd6ac7805a7069c436f528f128249e09d883e4))
 
 
-- Bump cryptography from 44.0.3 to 45.0.2 (#224) ([`50684c1`](https://github.com/Bluetooth-Devices/bthome-ble/commit/50684c132ca79337e460838571185cd5a40233df))
+- Bump cryptography from 44.0.3 to 45.0.2 ([`50684c1`](https://github.com/Bluetooth-Devices/bthome-ble/commit/50684c132ca79337e460838571185cd5a40233df))
 
 
-- Pre-commit autoupdate (#223) ([`3701abe`](https://github.com/Bluetooth-Devices/bthome-ble/commit/3701abee343102b719c5511a3a12da59542a4672))
+- Pre-commit autoupdate ([`3701abe`](https://github.com/Bluetooth-Devices/bthome-ble/commit/3701abee343102b719c5511a3a12da59542a4672))
 
 
-- Pre-commit autoupdate (#222) ([`e0db35d`](https://github.com/Bluetooth-Devices/bthome-ble/commit/e0db35daa5963a9ddee86702aa9eb00df770d5aa))
+- Pre-commit autoupdate ([`e0db35d`](https://github.com/Bluetooth-Devices/bthome-ble/commit/e0db35daa5963a9ddee86702aa9eb00df770d5aa))
 
 
-- Bump cryptography from 44.0.2 to 44.0.3 (#220) ([`26a4ca1`](https://github.com/Bluetooth-Devices/bthome-ble/commit/26a4ca1c192bcc8636d15616f708e11c34b195b1))
+- Bump cryptography from 44.0.2 to 44.0.3 ([`26a4ca1`](https://github.com/Bluetooth-Devices/bthome-ble/commit/26a4ca1c192bcc8636d15616f708e11c34b195b1))
 
 
-- Bump habluetooth from 3.38.0 to 3.39.0 (#219) ([`9d05b88`](https://github.com/Bluetooth-Devices/bthome-ble/commit/9d05b8874fce036fa32641b1dc4523baf2ac97bb))
+- Bump habluetooth from 3.38.0 to 3.39.0 ([`9d05b88`](https://github.com/Bluetooth-Devices/bthome-ble/commit/9d05b8874fce036fa32641b1dc4523baf2ac97bb))
 
 
-- Bump pytest-cov from 6.1.0 to 6.1.1 (#218) ([`7de4cbb`](https://github.com/Bluetooth-Devices/bthome-ble/commit/7de4cbbca3b3663b8c50d16235ebfebc1a39ea27))
+- Bump pytest-cov from 6.1.0 to 6.1.1 ([`7de4cbb`](https://github.com/Bluetooth-Devices/bthome-ble/commit/7de4cbbca3b3663b8c50d16235ebfebc1a39ea27))
 
 
-- Bump bluetooth-data-tools from 1.26.5 to 1.28.1 (#217) ([`c869fe5`](https://github.com/Bluetooth-Devices/bthome-ble/commit/c869fe5f2c443f54e947829303d14bf78795f785))
+- Bump bluetooth-data-tools from 1.26.5 to 1.28.1 ([`c869fe5`](https://github.com/Bluetooth-Devices/bthome-ble/commit/c869fe5f2c443f54e947829303d14bf78795f785))
 
 
-- Pre-commit autoupdate (#214) ([`8081aa0`](https://github.com/Bluetooth-Devices/bthome-ble/commit/8081aa06008cf2b6d8161348e92fab22c9d9503e))
+- Pre-commit autoupdate ([`8081aa0`](https://github.com/Bluetooth-Devices/bthome-ble/commit/8081aa06008cf2b6d8161348e92fab22c9d9503e))
 
 
-- Pre-commit autoupdate (#213) ([`68e9c2d`](https://github.com/Bluetooth-Devices/bthome-ble/commit/68e9c2db77fb3f5c0b9e655a3cbbee2858e3025b))
+- Pre-commit autoupdate ([`68e9c2d`](https://github.com/Bluetooth-Devices/bthome-ble/commit/68e9c2db77fb3f5c0b9e655a3cbbee2858e3025b))
 
 
 ## v3.12.5 (2025-04-03)
@@ -72,31 +101,31 @@
 ### Bug fixes
 
 
-- Replace python-semantic-release/upload-to-gh-release with python-semantic-release/publish-action (#211) ([`412545f`](https://github.com/Bluetooth-Devices/bthome-ble/commit/412545f38c2a847b6c0a71a950c18528406d097b))
+- Replace python-semantic-release/upload-to-gh-release with python-semantic-release/publish-action ([`412545f`](https://github.com/Bluetooth-Devices/bthome-ble/commit/412545f38c2a847b6c0a71a950c18528406d097b))
 
 
 ### Chores
 
 
-- Update deps (#212) ([`8b966ee`](https://github.com/Bluetooth-Devices/bthome-ble/commit/8b966ee10444b9dffca84f32cf06e13dd824466e))
+- Update deps ([`8b966ee`](https://github.com/Bluetooth-Devices/bthome-ble/commit/8b966ee10444b9dffca84f32cf06e13dd824466e))
 
 
-- Pre-commit autoupdate (#210) ([`05685d5`](https://github.com/Bluetooth-Devices/bthome-ble/commit/05685d50c755af654b54d26dfa33ef888244946a))
+- Pre-commit autoupdate ([`05685d5`](https://github.com/Bluetooth-Devices/bthome-ble/commit/05685d50c755af654b54d26dfa33ef888244946a))
 
 
-- Pre-commit autoupdate (#208) ([`ca34d81`](https://github.com/Bluetooth-Devices/bthome-ble/commit/ca34d8172e5a7bd4de8642ba5a9f134e48be7e9b))
+- Pre-commit autoupdate ([`ca34d81`](https://github.com/Bluetooth-Devices/bthome-ble/commit/ca34d8172e5a7bd4de8642ba5a9f134e48be7e9b))
 
 
-- Bump python-semantic-release/python-semantic-release from 9.17.0 to 9.21.0 in the github-actions group (#207) ([`8679b94`](https://github.com/Bluetooth-Devices/bthome-ble/commit/8679b942a1ea188e0168194ee4bc32462e34f251))
+- Bump python-semantic-release/python-semantic-release from 9.17.0 to 9.21.0 in the github-actions group ([`8679b94`](https://github.com/Bluetooth-Devices/bthome-ble/commit/8679b942a1ea188e0168194ee4bc32462e34f251))
 
 
-- Pre-commit autoupdate (#206) ([`f011cb3`](https://github.com/Bluetooth-Devices/bthome-ble/commit/f011cb3d4ffb93dfbe25835ed7d9da6eb00082b7))
+- Pre-commit autoupdate ([`f011cb3`](https://github.com/Bluetooth-Devices/bthome-ble/commit/f011cb3d4ffb93dfbe25835ed7d9da6eb00082b7))
 
 
-- Pre-commit autoupdate (#205) ([`d73e81a`](https://github.com/Bluetooth-Devices/bthome-ble/commit/d73e81a20624aaf825336aa65284c6b0efeb91af))
+- Pre-commit autoupdate ([`d73e81a`](https://github.com/Bluetooth-Devices/bthome-ble/commit/d73e81a20624aaf825336aa65284c6b0efeb91af))
 
 
-- Pre-commit autoupdate (#204) ([`031f55f`](https://github.com/Bluetooth-Devices/bthome-ble/commit/031f55faf9b720094942bcf001f22f6706585ab7))
+- Pre-commit autoupdate ([`031f55f`](https://github.com/Bluetooth-Devices/bthome-ble/commit/031f55faf9b720094942bcf001f22f6706585ab7))
 
 
 ## v3.12.4 (2025-02-05)
@@ -104,22 +133,22 @@
 ### Bug fixes
 
 
-- Update poetry to v2 (#203) ([`cd6cf77`](https://github.com/Bluetooth-Devices/bthome-ble/commit/cd6cf77f75db1b43a4e9fde215e9ee97000d8884))
+- Update poetry to v2 ([`cd6cf77`](https://github.com/Bluetooth-Devices/bthome-ble/commit/cd6cf77f75db1b43a4e9fde215e9ee97000d8884))
 
 
 ### Chores
 
 
-- Pre-commit autoupdate (#202) ([`c69055f`](https://github.com/Bluetooth-Devices/bthome-ble/commit/c69055fab999304246d29f565d435f241f846b6c))
+- Pre-commit autoupdate ([`c69055f`](https://github.com/Bluetooth-Devices/bthome-ble/commit/c69055fab999304246d29f565d435f241f846b6c))
 
 
-- Bump bluetooth-data-tools from 1.22.0 to 1.23.3 (#200) ([`a8e2428`](https://github.com/Bluetooth-Devices/bthome-ble/commit/a8e242850636980f8f98190f19b3aa6260e6b18a))
+- Bump bluetooth-data-tools from 1.22.0 to 1.23.3 ([`a8e2428`](https://github.com/Bluetooth-Devices/bthome-ble/commit/a8e242850636980f8f98190f19b3aa6260e6b18a))
 
 
-- Bump myst-parser from 3.0.1 to 4.0.0 (#201) ([`167b88a`](https://github.com/Bluetooth-Devices/bthome-ble/commit/167b88a1d4aeb54be0badfbc48aeda56b0387be8))
+- Bump myst-parser from 3.0.1 to 4.0.0 ([`167b88a`](https://github.com/Bluetooth-Devices/bthome-ble/commit/167b88a1d4aeb54be0badfbc48aeda56b0387be8))
 
 
-- Bump habluetooth from 3.17.0 to 3.21.0 (#199) ([`b64b747`](https://github.com/Bluetooth-Devices/bthome-ble/commit/b64b74729ad31d85b10f92163a0f25cc8956be12))
+- Bump habluetooth from 3.17.0 to 3.21.0 ([`b64b747`](https://github.com/Bluetooth-Devices/bthome-ble/commit/b64b74729ad31d85b10f92163a0f25cc8956be12))
 
 
 ## v3.12.3 (2025-01-31)
@@ -127,7 +156,7 @@
 ### Bug fixes
 
 
-- Update pyproject to allow python 3.13 deps (#198) ([`4c4d9a6`](https://github.com/Bluetooth-Devices/bthome-ble/commit/4c4d9a64be817fad5074aacd90d762e64f843845))
+- Update pyproject to allow python 3.13 deps ([`4c4d9a6`](https://github.com/Bluetooth-Devices/bthome-ble/commit/4c4d9a64be817fad5074aacd90d762e64f843845))
 
 
 ## v3.12.2 (2025-01-31)
@@ -135,7 +164,7 @@
 ### Bug fixes
 
 
-- Use little endian in float conversion (#197) ([`ffd8f3c`](https://github.com/Bluetooth-Devices/bthome-ble/commit/ffd8f3c6d959017bc662160cf345d9d49dd60f02))
+- Use little endian in float conversion ([`ffd8f3c`](https://github.com/Bluetooth-Devices/bthome-ble/commit/ffd8f3c6d959017bc662160cf345d9d49dd60f02))
 
 
 ## v3.12.1 (2025-01-31)
@@ -143,25 +172,25 @@
 ### Bug fixes
 
 
-- Add changelog template (#196) ([`7ba1380`](https://github.com/Bluetooth-Devices/bthome-ble/commit/7ba138083f8cbf578b7c947fdf0320b29e5173cb))
+- Add changelog template ([`7ba1380`](https://github.com/Bluetooth-Devices/bthome-ble/commit/7ba138083f8cbf578b7c947fdf0320b29e5173cb))
 
 
 ### Chores
 
 
-- Bump the github-actions group across 1 directory with 7 updates (#195) ([`3bf607e`](https://github.com/Bluetooth-Devices/bthome-ble/commit/3bf607e24585e262aa8bba4b071f47f4c18c4bc7))
+- Bump the github-actions group across 1 directory with 7 updates ([`3bf607e`](https://github.com/Bluetooth-Devices/bthome-ble/commit/3bf607e24585e262aa8bba4b071f47f4c18c4bc7))
 
 
-- Bump habluetooth from 3.12.0 to 3.15.0 (#194) ([`e23edab`](https://github.com/Bluetooth-Devices/bthome-ble/commit/e23edabef18641e4b6e2594ceeb451fb67c65b56))
+- Bump habluetooth from 3.12.0 to 3.15.0 ([`e23edab`](https://github.com/Bluetooth-Devices/bthome-ble/commit/e23edabef18641e4b6e2594ceeb451fb67c65b56))
 
 
-- Bump sphinx from 6.2.1 to 7.4.7 (#193) ([`ebf9c3b`](https://github.com/Bluetooth-Devices/bthome-ble/commit/ebf9c3bae5dbca4c5946a0bff541f40e3faa7a38))
+- Bump sphinx from 6.2.1 to 7.4.7 ([`ebf9c3b`](https://github.com/Bluetooth-Devices/bthome-ble/commit/ebf9c3bae5dbca4c5946a0bff541f40e3faa7a38))
 
 
-- Update lint and commitlint (#190) ([`33b4e85`](https://github.com/Bluetooth-Devices/bthome-ble/commit/33b4e855e9e822da366175d1e1c2cbe4637bdc5a))
+- Update lint and commitlint ([`33b4e85`](https://github.com/Bluetooth-Devices/bthome-ble/commit/33b4e855e9e822da366175d1e1c2cbe4637bdc5a))
 
 
-- Update dependabot.yml to include gha (#191) ([`e73268c`](https://github.com/Bluetooth-Devices/bthome-ble/commit/e73268c84ce99fe8795ce38664242a4e3925eaa9))
+- Update dependabot.yml to include gha ([`e73268c`](https://github.com/Bluetooth-Devices/bthome-ble/commit/e73268c84ce99fe8795ce38664242a4e3925eaa9))
 
 
 ### Unknown
@@ -173,106 +202,106 @@
 ### Features
 
 
-- Add direction and precipitation support (#187) ([`8c0df91`](https://github.com/Bluetooth-Devices/bthome-ble/commit/8c0df91b7647b3fc2985edfd2382199f4d321665))
+- Add direction and precipitation support ([`8c0df91`](https://github.com/Bluetooth-Devices/bthome-ble/commit/8c0df91b7647b3fc2985edfd2382199f4d321665))
 
 
 ### Chores
 
 
-- Pre-commit autoupdate (#185) ([`1e9f738`](https://github.com/Bluetooth-Devices/bthome-ble/commit/1e9f738b457762e0e4d4eb232e73b077abe10c69))
+- Pre-commit autoupdate ([`1e9f738`](https://github.com/Bluetooth-Devices/bthome-ble/commit/1e9f738b457762e0e4d4eb232e73b077abe10c69))
 
 
-- Bump myst-parser from 1.0.0 to 3.0.1 (#181) ([`8ce9658`](https://github.com/Bluetooth-Devices/bthome-ble/commit/8ce9658095518e8fc0450377527e07e5813355ee))
+- Bump myst-parser from 1.0.0 to 3.0.1 ([`8ce9658`](https://github.com/Bluetooth-Devices/bthome-ble/commit/8ce9658095518e8fc0450377527e07e5813355ee))
 
 
-- Bump habluetooth from 3.9.2 to 3.12.0 (#182) ([`59d6173`](https://github.com/Bluetooth-Devices/bthome-ble/commit/59d61738228bf7abac0b2e2f8d0081c981698412))
+- Bump habluetooth from 3.9.2 to 3.12.0 ([`59d6173`](https://github.com/Bluetooth-Devices/bthome-ble/commit/59d61738228bf7abac0b2e2f8d0081c981698412))
 
 
-- Bump bluetooth-data-tools from 1.19.0 to 1.22.0 (#183) ([`39e3391`](https://github.com/Bluetooth-Devices/bthome-ble/commit/39e33911a4db85de1e1fe4e0423554395dbe067c))
+- Bump bluetooth-data-tools from 1.19.0 to 1.22.0 ([`39e3391`](https://github.com/Bluetooth-Devices/bthome-ble/commit/39e33911a4db85de1e1fe4e0423554395dbe067c))
 
 
-- Bump sphinx-rtd-theme from 2.0.0 to 3.0.2 (#184) ([`0c756de`](https://github.com/Bluetooth-Devices/bthome-ble/commit/0c756de2f7cf405b7bcdadd4745694274a133fce))
+- Bump sphinx-rtd-theme from 2.0.0 to 3.0.2 ([`0c756de`](https://github.com/Bluetooth-Devices/bthome-ble/commit/0c756de2f7cf405b7bcdadd4745694274a133fce))
 
 
-- Bump sphinx from 5.3.0 to 6.2.1 (#177) ([`38eea52`](https://github.com/Bluetooth-Devices/bthome-ble/commit/38eea524022fedbd86106625ce55d673b979f30c))
+- Bump sphinx from 5.3.0 to 6.2.1 ([`38eea52`](https://github.com/Bluetooth-Devices/bthome-ble/commit/38eea524022fedbd86106625ce55d673b979f30c))
 
 
-- Bump pytest-cov from 4.1.0 to 6.0.0 (#179) ([`a694d85`](https://github.com/Bluetooth-Devices/bthome-ble/commit/a694d851cfae703c61b03f4e49b67d7b544a8027))
+- Bump pytest-cov from 4.1.0 to 6.0.0 ([`a694d85`](https://github.com/Bluetooth-Devices/bthome-ble/commit/a694d851cfae703c61b03f4e49b67d7b544a8027))
 
 
-- Bump habluetooth from 3.9.0 to 3.9.2 (#178) ([`ab590ff`](https://github.com/Bluetooth-Devices/bthome-ble/commit/ab590ff022c3594d70d597eebfa1d5415a817970))
+- Bump habluetooth from 3.9.0 to 3.9.2 ([`ab590ff`](https://github.com/Bluetooth-Devices/bthome-ble/commit/ab590ff022c3594d70d597eebfa1d5415a817970))
 
 
-- Bump cryptography from 43.0.1 to 44.0.0 (#175) ([`ebd8e9e`](https://github.com/Bluetooth-Devices/bthome-ble/commit/ebd8e9e4d8140c4ecbc43ac0cc2cbffd1d01c2f0))
+- Bump cryptography from 43.0.1 to 44.0.0 ([`ebd8e9e`](https://github.com/Bluetooth-Devices/bthome-ble/commit/ebd8e9e4d8140c4ecbc43ac0cc2cbffd1d01c2f0))
 
 
-- Bump pytest from 7.4.4 to 8.3.4 (#176) ([`07e6dad`](https://github.com/Bluetooth-Devices/bthome-ble/commit/07e6dadb58c9f45aaf1f419adcef3f9932274ffa))
+- Bump pytest from 7.4.4 to 8.3.4 ([`07e6dad`](https://github.com/Bluetooth-Devices/bthome-ble/commit/07e6dadb58c9f45aaf1f419adcef3f9932274ffa))
 
 
-- Bump jinja2 from 3.1.4 to 3.1.5 (#172) ([`4fcc1a1`](https://github.com/Bluetooth-Devices/bthome-ble/commit/4fcc1a1aa8d349e614934580f7a631dc12886095))
+- Bump jinja2 from 3.1.4 to 3.1.5 ([`4fcc1a1`](https://github.com/Bluetooth-Devices/bthome-ble/commit/4fcc1a1aa8d349e614934580f7a631dc12886095))
 
 
-- Bump cryptography from 42.0.8 to 43.0.1 (#171) ([`bdd449b`](https://github.com/Bluetooth-Devices/bthome-ble/commit/bdd449b68b1865ead298f5a105d53f6afcf51855))
+- Bump cryptography from 42.0.8 to 43.0.1 ([`bdd449b`](https://github.com/Bluetooth-Devices/bthome-ble/commit/bdd449b68b1865ead298f5a105d53f6afcf51855))
 
 
-- Bump certifi from 2024.6.2 to 2024.7.4 (#173) ([`4bf94dc`](https://github.com/Bluetooth-Devices/bthome-ble/commit/4bf94dcda236145bfdf30ee468e69459ea4ccc72))
+- Bump certifi from 2024.6.2 to 2024.7.4 ([`4bf94dc`](https://github.com/Bluetooth-Devices/bthome-ble/commit/4bf94dcda236145bfdf30ee468e69459ea4ccc72))
 
 
-- Bump urllib3 from 2.2.1 to 2.2.2 (#174) ([`77e5493`](https://github.com/Bluetooth-Devices/bthome-ble/commit/77e5493249efe6bb552f8ad98722afcff3d7cbf4))
+- Bump urllib3 from 2.2.1 to 2.2.2 ([`77e5493`](https://github.com/Bluetooth-Devices/bthome-ble/commit/77e5493249efe6bb552f8ad98722afcff3d7cbf4))
 
 
-- Bump myst-parser from 0.18.1 to 1.0.0 (#168) ([`fa3964d`](https://github.com/Bluetooth-Devices/bthome-ble/commit/fa3964df716baa1f1840b96cf20479e474a1a9d5))
+- Bump myst-parser from 0.18.1 to 1.0.0 ([`fa3964d`](https://github.com/Bluetooth-Devices/bthome-ble/commit/fa3964df716baa1f1840b96cf20479e474a1a9d5))
 
 
-- Bump bluetooth-sensor-state-data from 1.7.0 to 1.7.1 (#166) ([`d1a0f3a`](https://github.com/Bluetooth-Devices/bthome-ble/commit/d1a0f3aac30eab6f8ba4c27f5d371f00aa24355f))
+- Bump bluetooth-sensor-state-data from 1.7.0 to 1.7.1 ([`d1a0f3a`](https://github.com/Bluetooth-Devices/bthome-ble/commit/d1a0f3aac30eab6f8ba4c27f5d371f00aa24355f))
 
 
-- Update for python 3.13 (#165) ([`8361b69`](https://github.com/Bluetooth-Devices/bthome-ble/commit/8361b6901f30066634f2a32c987affd42b32b832))
+- Update for python 3.13 ([`8361b69`](https://github.com/Bluetooth-Devices/bthome-ble/commit/8361b6901f30066634f2a32c987affd42b32b832))
 
 
-- Bump sensor-state-data from 2.18.0 to 2.18.1 (#167) ([`4522dc8`](https://github.com/Bluetooth-Devices/bthome-ble/commit/4522dc8efd66eb4ed2f259f1f9a3ee071d55538d))
+- Bump sensor-state-data from 2.18.0 to 2.18.1 ([`4522dc8`](https://github.com/Bluetooth-Devices/bthome-ble/commit/4522dc8efd66eb4ed2f259f1f9a3ee071d55538d))
 
 
-- Bump sphinx-rtd-theme from 1.3.0 to 2.0.0 (#169) ([`481ff63`](https://github.com/Bluetooth-Devices/bthome-ble/commit/481ff63bde979f7070755bb2d7174b5bcf4da940))
+- Bump sphinx-rtd-theme from 1.3.0 to 2.0.0 ([`481ff63`](https://github.com/Bluetooth-Devices/bthome-ble/commit/481ff63bde979f7070755bb2d7174b5bcf4da940))
 
 
-- Bump habluetooth from 3.1.1 to 3.9.0 (#170) ([`9d6d360`](https://github.com/Bluetooth-Devices/bthome-ble/commit/9d6d36030281fa4ba6fc3764775663c21b9e52de))
+- Bump habluetooth from 3.1.1 to 3.9.0 ([`9d6d360`](https://github.com/Bluetooth-Devices/bthome-ble/commit/9d6d36030281fa4ba6fc3764775663c21b9e52de))
 
 
 - Create dependabot.yml ([`a2988df`](https://github.com/Bluetooth-Devices/bthome-ble/commit/a2988df1f355e887ff4b4a95dccd4b06f92b2200))
 
 
-- Pre-commit autoupdate (#164) ([`0d22035`](https://github.com/Bluetooth-Devices/bthome-ble/commit/0d2203590b4d524e27153351e8ad3e148b8490cb))
+- Pre-commit autoupdate ([`0d22035`](https://github.com/Bluetooth-Devices/bthome-ble/commit/0d2203590b4d524e27153351e8ad3e148b8490cb))
 
 
-- Pre-commit autoupdate (#163) ([`ff18462`](https://github.com/Bluetooth-Devices/bthome-ble/commit/ff184624bed27311394863640643a491e25b715c))
+- Pre-commit autoupdate ([`ff18462`](https://github.com/Bluetooth-Devices/bthome-ble/commit/ff184624bed27311394863640643a491e25b715c))
 
 
-- Pre-commit autoupdate (#160) ([`da60d99`](https://github.com/Bluetooth-Devices/bthome-ble/commit/da60d994355f8c0b2715753600fa791a46a6eb2d))
+- Pre-commit autoupdate ([`da60d99`](https://github.com/Bluetooth-Devices/bthome-ble/commit/da60d994355f8c0b2715753600fa791a46a6eb2d))
 
 
-- Pre-commit autoupdate (#158) ([`c07015a`](https://github.com/Bluetooth-Devices/bthome-ble/commit/c07015aa64b1d6997fca27871a6a19060d66a1c5))
+- Pre-commit autoupdate ([`c07015a`](https://github.com/Bluetooth-Devices/bthome-ble/commit/c07015aa64b1d6997fca27871a6a19060d66a1c5))
 
 
-- Pre-commit autoupdate (#157) ([`354359a`](https://github.com/Bluetooth-Devices/bthome-ble/commit/354359a0b59c4bd7c6c621341c089238f8a03993))
+- Pre-commit autoupdate ([`354359a`](https://github.com/Bluetooth-Devices/bthome-ble/commit/354359a0b59c4bd7c6c621341c089238f8a03993))
 
 
-- Pre-commit autoupdate (#155) ([`f1216c3`](https://github.com/Bluetooth-Devices/bthome-ble/commit/f1216c3e338a67663d1436207c9db16e38f23d18))
+- Pre-commit autoupdate ([`f1216c3`](https://github.com/Bluetooth-Devices/bthome-ble/commit/f1216c3e338a67663d1436207c9db16e38f23d18))
 
 
-- Pre-commit autoupdate (#154) ([`6f550fa`](https://github.com/Bluetooth-Devices/bthome-ble/commit/6f550fae80fc75677c2adfed57d04d5b2d6e9966))
+- Pre-commit autoupdate ([`6f550fa`](https://github.com/Bluetooth-Devices/bthome-ble/commit/6f550fae80fc75677c2adfed57d04d5b2d6e9966))
 
 
-- Pre-commit autoupdate (#151) ([`c165c5e`](https://github.com/Bluetooth-Devices/bthome-ble/commit/c165c5e25ee554ce631227c744a3ceb7d5665b5c))
+- Pre-commit autoupdate ([`c165c5e`](https://github.com/Bluetooth-Devices/bthome-ble/commit/c165c5e25ee554ce631227c744a3ceb7d5665b5c))
 
 
-- Pre-commit autoupdate (#150) ([`ef50709`](https://github.com/Bluetooth-Devices/bthome-ble/commit/ef50709e00d0b6506ddda30f5eb203f63e012bae))
+- Pre-commit autoupdate ([`ef50709`](https://github.com/Bluetooth-Devices/bthome-ble/commit/ef50709e00d0b6506ddda30f5eb203f63e012bae))
 
 
-- Add ohf logo to readme (#149) ([`5cc4215`](https://github.com/Bluetooth-Devices/bthome-ble/commit/5cc42155a7e90b0ce73c05312304801554a02212))
+- Add ohf logo to readme ([`5cc4215`](https://github.com/Bluetooth-Devices/bthome-ble/commit/5cc42155a7e90b0ce73c05312304801554a02212))
 
 
-- Pre-commit autoupdate (#145) ([`e1b850d`](https://github.com/Bluetooth-Devices/bthome-ble/commit/e1b850dcc1c68ffb10179a6796c7bd4f9d121eeb))
+- Pre-commit autoupdate ([`e1b850d`](https://github.com/Bluetooth-Devices/bthome-ble/commit/e1b850dcc1c68ffb10179a6796c7bd4f9d121eeb))
 
 
 ### Unknown
@@ -284,7 +313,7 @@
 ### Features
 
 
-- Add new sensors (#144) ([`25e87a0`](https://github.com/Bluetooth-Devices/bthome-ble/commit/25e87a0e2d7bb0109e148046ed09235a0d3fa596))
+- Add new sensors ([`25e87a0`](https://github.com/Bluetooth-Devices/bthome-ble/commit/25e87a0e2d7bb0109e148046ed09235a0d3fa596))
 
 
 ## v3.10.0 (2024-08-23)
@@ -292,25 +321,31 @@
 ### Features
 
 
-- Add 0x56 for 16-bit conductivity measurement type (#142) ([`444eaca`](https://github.com/Bluetooth-Devices/bthome-ble/commit/444eacafb280fffe8ee28abc4e9236b84db15bf6))
+- Add 0x56 for 16-bit conductivity measurement type ([`444eaca`](https://github.com/Bluetooth-Devices/bthome-ble/commit/444eacafb280fffe8ee28abc4e9236b84db15bf6))
 
 
 ### Chores
 
 
-- Pre-commit autoupdate (#140) ([`07f4729`](https://github.com/Bluetooth-Devices/bthome-ble/commit/07f4729813086007e04a7c7dd77e7dc240433565))
+- Pre-commit autoupdate ([`07f4729`](https://github.com/Bluetooth-Devices/bthome-ble/commit/07f4729813086007e04a7c7dd77e7dc240433565))
 
 
-- Pre-commit autoupdate (#139) ([`e6ab18b`](https://github.com/Bluetooth-Devices/bthome-ble/commit/e6ab18b702735465207df952af1273762081d8e1))
+- Pre-commit autoupdate ([`e6ab18b`](https://github.com/Bluetooth-Devices/bthome-ble/commit/e6ab18b702735465207df952af1273762081d8e1))
 
 
-- Pre-commit autoupdate (#137) ([`8305ab4`](https://github.com/Bluetooth-Devices/bthome-ble/commit/8305ab41118aee608b6d5f63453bf1d76dbcae61))
+- Pre-commit autoupdate ([`8305ab4`](https://github.com/Bluetooth-Devices/bthome-ble/commit/8305ab41118aee608b6d5f63453bf1d76dbcae61))
 
 
-- Pre-commit autoupdate (#136) ([`8de8a22`](https://github.com/Bluetooth-Devices/bthome-ble/commit/8de8a22a154f2228161fdd6d1c9a861004a18148))
+- Pre-commit autoupdate ([`8de8a22`](https://github.com/Bluetooth-Devices/bthome-ble/commit/8de8a22a154f2228161fdd6d1c9a861004a18148))
 
 
-- Pre-commit autoupdate (#132) ([`8171fd4`](https://github.com/Bluetooth-Devices/bthome-ble/commit/8171fd41955a8a9a89094c235f8213af1a6b2014))
+- Pre-commit autoupdate ([`8171fd4`](https://github.com/Bluetooth-Devices/bthome-ble/commit/8171fd41955a8a9a89094c235f8213af1a6b2014))
+
+
+- Pre-commit autoupdate ([`8171fd4`](https://github.com/Bluetooth-Devices/bthome-ble/commit/8171fd41955a8a9a89094c235f8213af1a6b2014))
+
+
+- Auto fixes ([`8171fd4`](https://github.com/Bluetooth-Devices/bthome-ble/commit/8171fd41955a8a9a89094c235f8213af1a6b2014))
 
 
 ## v3.9.3 (2024-06-07)
@@ -318,25 +353,46 @@
 ### Bug fixes
 
 
-- Allow contents permission to workflow (#131) ([`eda9bfd`](https://github.com/Bluetooth-Devices/bthome-ble/commit/eda9bfd454af3a0fd58d11fd951bebc28374e89d))
+- Allow contents permission to workflow ([`eda9bfd`](https://github.com/Bluetooth-Devices/bthome-ble/commit/eda9bfd454af3a0fd58d11fd951bebc28374e89d))
 
 
-- Rename pypi token (#130) ([`03a9d90`](https://github.com/Bluetooth-Devices/bthome-ble/commit/03a9d90c33582b773f0737daf95495b9d123bafd))
+- Allow contents permission to workflow ([`eda9bfd`](https://github.com/Bluetooth-Devices/bthome-ble/commit/eda9bfd454af3a0fd58d11fd951bebc28374e89d))
 
 
-- Use list for version_toml (#129) ([`0fc3d45`](https://github.com/Bluetooth-Devices/bthome-ble/commit/0fc3d453d8b31723668daf6720c80adf71821b9c))
+- Rename pypi token ([`03a9d90`](https://github.com/Bluetooth-Devices/bthome-ble/commit/03a9d90c33582b773f0737daf95495b9d123bafd))
 
 
-- Reference to gh action pypi push (#128) ([`88b1fe9`](https://github.com/Bluetooth-Devices/bthome-ble/commit/88b1fe968ee3f9e62bf2e1c49d445db079013235))
+- Rename pypi token ([`03a9d90`](https://github.com/Bluetooth-Devices/bthome-ble/commit/03a9d90c33582b773f0737daf95495b9d123bafd))
 
 
-- Fix pypi workflow (#127) ([`53c8e0d`](https://github.com/Bluetooth-Devices/bthome-ble/commit/53c8e0dc34af2ef86f4fbc67617dc35a3d951962))
+- Use list for version_toml ([`0fc3d45`](https://github.com/Bluetooth-Devices/bthome-ble/commit/0fc3d453d8b31723668daf6720c80adf71821b9c))
 
 
-- Fix release workflow (#126) ([`4d985e9`](https://github.com/Bluetooth-Devices/bthome-ble/commit/4d985e91edfb01be2df83b6074758e88b288da39))
+- Use list for version_toml ([`0fc3d45`](https://github.com/Bluetooth-Devices/bthome-ble/commit/0fc3d453d8b31723668daf6720c80adf71821b9c))
 
 
-- Bump python-semantic-release (#124) ([`bbef3a7`](https://github.com/Bluetooth-Devices/bthome-ble/commit/bbef3a7f7ba4b77949a60cbaba6d2e64889e8b1b))
+- Reference to gh action pypi push ([`88b1fe9`](https://github.com/Bluetooth-Devices/bthome-ble/commit/88b1fe968ee3f9e62bf2e1c49d445db079013235))
+
+
+- Reference to gh action pypi push ([`88b1fe9`](https://github.com/Bluetooth-Devices/bthome-ble/commit/88b1fe968ee3f9e62bf2e1c49d445db079013235))
+
+
+- Fix pypi workflow ([`53c8e0d`](https://github.com/Bluetooth-Devices/bthome-ble/commit/53c8e0dc34af2ef86f4fbc67617dc35a3d951962))
+
+
+- Fix pypi workflow ([`53c8e0d`](https://github.com/Bluetooth-Devices/bthome-ble/commit/53c8e0dc34af2ef86f4fbc67617dc35a3d951962))
+
+
+- Fix release workflow ([`4d985e9`](https://github.com/Bluetooth-Devices/bthome-ble/commit/4d985e91edfb01be2df83b6074758e88b288da39))
+
+
+- Fix release workflow ([`4d985e9`](https://github.com/Bluetooth-Devices/bthome-ble/commit/4d985e91edfb01be2df83b6074758e88b288da39))
+
+
+- Fix release workflow ([`4d985e9`](https://github.com/Bluetooth-Devices/bthome-ble/commit/4d985e91edfb01be2df83b6074758e88b288da39))
+
+
+- Bump python-semantic-release ([`bbef3a7`](https://github.com/Bluetooth-Devices/bthome-ble/commit/bbef3a7f7ba4b77949a60cbaba6d2e64889e8b1b))
 
 
 ## v3.9.2 (2024-06-07)
@@ -344,7 +400,22 @@
 ### Bug fixes
 
 
-- Make tests compatible with habluetooth>=3.0 (#123) ([`92fceeb`](https://github.com/Bluetooth-Devices/bthome-ble/commit/92fceebf97add809f883039d9954f35f61a17019))
+- Make tests compatible with habluetooth>=3.0 ([`92fceeb`](https://github.com/Bluetooth-Devices/bthome-ble/commit/92fceebf97add809f883039d9954f35f61a17019))
+
+
+- Make tests compatible with habluetooth>=3.0 ([`92fceeb`](https://github.com/Bluetooth-Devices/bthome-ble/commit/92fceebf97add809f883039d9954f35f61a17019))
+
+
+- Poetry lock ([`92fceeb`](https://github.com/Bluetooth-Devices/bthome-ble/commit/92fceebf97add809f883039d9954f35f61a17019))
+
+
+- Poetry update ([`92fceeb`](https://github.com/Bluetooth-Devices/bthome-ble/commit/92fceebf97add809f883039d9954f35f61a17019))
+
+
+- Use habluetooth ([`92fceeb`](https://github.com/Bluetooth-Devices/bthome-ble/commit/92fceebf97add809f883039d9954f35f61a17019))
+
+
+- Remove py3.10 since its no longer supported upstream ([`92fceeb`](https://github.com/Bluetooth-Devices/bthome-ble/commit/92fceebf97add809f883039d9954f35f61a17019))
 
 
 ## v3.9.1 (2024-06-05)
@@ -352,7 +423,19 @@
 ### Bug fixes
 
 
-- Accept new encryption counter only if the message was not corrupted (#119) ([`bc61824`](https://github.com/Bluetooth-Devices/bthome-ble/commit/bc61824bfe6c1d3c7394e7754f757a0241c14939))
+- Accept new encryption counter only if the message was not corrupted ([`bc61824`](https://github.com/Bluetooth-Devices/bthome-ble/commit/bc61824bfe6c1d3c7394e7754f757a0241c14939))
+
+
+- Accept new encryption counter only if the message was not corrupted ([`bc61824`](https://github.com/Bluetooth-Devices/bthome-ble/commit/bc61824bfe6c1d3c7394e7754f757a0241c14939))
+
+
+- Check that message is not corrupted during wraparound too ([`bc61824`](https://github.com/Bluetooth-Devices/bthome-ble/commit/bc61824bfe6c1d3c7394e7754f757a0241c14939))
+
+
+### Features
+
+
+- Allow battery replacement caused resets ([`bc61824`](https://github.com/Bluetooth-Devices/bthome-ble/commit/bc61824bfe6c1d3c7394e7754f757a0241c14939))
 
 
 ## v3.9.0 (2024-05-07)
@@ -360,7 +443,7 @@
 ### Features
 
 
-- Add button hold event (#120) ([`49124ab`](https://github.com/Bluetooth-Devices/bthome-ble/commit/49124ab9db18e179aba9fb731ba4ed08e113eff3))
+- Add button hold event ([`49124ab`](https://github.com/Bluetooth-Devices/bthome-ble/commit/49124ab9db18e179aba9fb731ba4ed08e113eff3))
 
 
 ## v3.8.1 (2024-03-18)
@@ -368,7 +451,10 @@
 ### Bug fixes
 
 
-- Remove mac workaround (#115) ([`303f833`](https://github.com/Bluetooth-Devices/bthome-ble/commit/303f8331dac612f848c875869284be0ca621692e))
+- Remove mac workaround ([`303f833`](https://github.com/Bluetooth-Devices/bthome-ble/commit/303f8331dac612f848c875869284be0ca621692e))
+
+
+- Remove mac workaround ([`303f833`](https://github.com/Bluetooth-Devices/bthome-ble/commit/303f8331dac612f848c875869284be0ca621692e))
 
 
 ## v3.8.0 (2024-03-10)
@@ -376,7 +462,16 @@
 ### Features
 
 
-- Allow one failed decryption before reauth (#114) ([`7c499cc`](https://github.com/Bluetooth-Devices/bthome-ble/commit/7c499cce6c15ab6f21b25779bae773e3c00f7841))
+- Allow one failed decryption before reauth ([`7c499cc`](https://github.com/Bluetooth-Devices/bthome-ble/commit/7c499cce6c15ab6f21b25779bae773e3c00f7841))
+
+
+- Allow one failed decryption before reauth ([`7c499cc`](https://github.com/Bluetooth-Devices/bthome-ble/commit/7c499cce6c15ab6f21b25779bae773e3c00f7841))
+
+
+### Bug fixes
+
+
+- Revert change for empty payload after decryption ([`7c499cc`](https://github.com/Bluetooth-Devices/bthome-ble/commit/7c499cce6c15ab6f21b25779bae773e3c00f7841))
 
 
 ## v3.7.0 (2024-03-08)
@@ -384,7 +479,13 @@
 ### Features
 
 
-- Add device title to log messages (#113) ([`c47f36f`](https://github.com/Bluetooth-Devices/bthome-ble/commit/c47f36f17698ad48a94db3501a37ae9421c7ff7e))
+- Add device title to log messages ([`c47f36f`](https://github.com/Bluetooth-Devices/bthome-ble/commit/c47f36f17698ad48a94db3501a37ae9421c7ff7e))
+
+
+- Add device title to log messages ([`c47f36f`](https://github.com/Bluetooth-Devices/bthome-ble/commit/c47f36f17698ad48a94db3501a37ae9421c7ff7e))
+
+
+- Add colon after device title ([`c47f36f`](https://github.com/Bluetooth-Devices/bthome-ble/commit/c47f36f17698ad48a94db3501a37ae9421c7ff7e))
 
 
 ## v3.6.0 (2024-03-02)
@@ -392,7 +493,25 @@
 ### Features
 
 
-- Verify packet is not an older packet (#112) ([`113e49d`](https://github.com/Bluetooth-Devices/bthome-ble/commit/113e49df1460ea407202e5ca93ff170d6b813b75))
+- Verify packet is not an older packet ([`113e49d`](https://github.com/Bluetooth-Devices/bthome-ble/commit/113e49df1460ea407202e5ca93ff170d6b813b75))
+
+
+- Verfiy packet is not an older packet ([`113e49d`](https://github.com/Bluetooth-Devices/bthome-ble/commit/113e49df1460ea407202e5ca93ff170d6b813b75))
+
+
+- Move to function and fix tests ([`113e49d`](https://github.com/Bluetooth-Devices/bthome-ble/commit/113e49df1460ea407202e5ca93ff170d6b813b75))
+
+
+### Chores
+
+
+- Revise discard comment ([`113e49d`](https://github.com/Bluetooth-Devices/bthome-ble/commit/113e49df1460ea407202e5ca93ff170d6b813b75))
+
+
+- Revise discard comment ([`113e49d`](https://github.com/Bluetooth-Devices/bthome-ble/commit/113e49df1460ea407202e5ca93ff170d6b813b75))
+
+
+- Apply suggestions from code review ([`113e49d`](https://github.com/Bluetooth-Devices/bthome-ble/commit/113e49df1460ea407202e5ca93ff170d6b813b75))
 
 
 ## v3.5.0 (2024-01-18)
@@ -400,7 +519,7 @@
 ### Features
 
 
-- Add verification of the packet id (#105) ([`c428f92`](https://github.com/Bluetooth-Devices/bthome-ble/commit/c428f927b8dbc4f02ef006c15932aca5fa74877f))
+- Add verification of the packet id ([`c428f92`](https://github.com/Bluetooth-Devices/bthome-ble/commit/c428f927b8dbc4f02ef006c15932aca5fa74877f))
 
 
 ## v3.4.2 (2024-01-17)
@@ -408,7 +527,16 @@
 ### Bug fixes
 
 
-- Fix counter verification (#104) ([`dead672`](https://github.com/Bluetooth-Devices/bthome-ble/commit/dead67297a2a5662d6a9b12fcc8e671ae1d833a1))
+- Fix counter verification ([`dead672`](https://github.com/Bluetooth-Devices/bthome-ble/commit/dead67297a2a5662d6a9b12fcc8e671ae1d833a1))
+
+
+- Fix counter verification ([`dead672`](https://github.com/Bluetooth-Devices/bthome-ble/commit/dead67297a2a5662d6a9b12fcc8e671ae1d833a1))
+
+
+### Chores
+
+
+- Improve coverage ([`dead672`](https://github.com/Bluetooth-Devices/bthome-ble/commit/dead67297a2a5662d6a9b12fcc8e671ae1d833a1))
 
 
 ## v3.4.1 (2024-01-10)
@@ -416,7 +544,7 @@
 ### Bug fixes
 
 
-- Use volume storage instead of water storage (#102) ([`4cf20bf`](https://github.com/Bluetooth-Devices/bthome-ble/commit/4cf20bfd027286ba7ca842125d3cafbc0797e6c1))
+- Use volume storage instead of water storage ([`4cf20bf`](https://github.com/Bluetooth-Devices/bthome-ble/commit/4cf20bfd027286ba7ca842125d3cafbc0797e6c1))
 
 
 ## v3.4.0 (2024-01-10)
@@ -424,7 +552,7 @@
 ### Features
 
 
-- Add water storage sensor (#101) ([`6eb80e0`](https://github.com/Bluetooth-Devices/bthome-ble/commit/6eb80e0e120f7c8ef6ce4b7ee5057ae5356192b3))
+- Add water storage sensor ([`6eb80e0`](https://github.com/Bluetooth-Devices/bthome-ble/commit/6eb80e0e120f7c8ef6ce4b7ee5057ae5356192b3))
 
 
 ## v3.3.1 (2023-12-15)
@@ -432,7 +560,10 @@
 ### Bug fixes
 
 
-- No check of encryption counter when bindkey has not been verified (#97) ([`43f1412`](https://github.com/Bluetooth-Devices/bthome-ble/commit/43f14123b68732f41552d2f198dbbf2323763614))
+- No check of encryption counter when bindkey has not been verified ([`43f1412`](https://github.com/Bluetooth-Devices/bthome-ble/commit/43f14123b68732f41552d2f198dbbf2323763614))
+
+
+- No check of encryption counter when bindkey has not been verified yet ([`43f1412`](https://github.com/Bluetooth-Devices/bthome-ble/commit/43f14123b68732f41552d2f198dbbf2323763614))
 
 
 ## v3.3.0 (2023-12-13)
@@ -440,7 +571,34 @@
 ### Features
 
 
-- Add check for increasing encryption counter (#92) ([`a58cf7b`](https://github.com/Bluetooth-Devices/bthome-ble/commit/a58cf7bf84bacaf0b8436f03499710d5b83e3add))
+- Add check for increasing encryption counter ([`a58cf7b`](https://github.com/Bluetooth-Devices/bthome-ble/commit/a58cf7bf84bacaf0b8436f03499710d5b83e3add))
+
+
+- Add check for increasing encryption counter ([`a58cf7b`](https://github.com/Bluetooth-Devices/bthome-ble/commit/a58cf7bf84bacaf0b8436f03499710d5b83e3add))
+
+
+- Add check for increasing encryption counter ([`a58cf7b`](https://github.com/Bluetooth-Devices/bthome-ble/commit/a58cf7bf84bacaf0b8436f03499710d5b83e3add))
+
+
+- Add check for increasing encryption counter ([`a58cf7b`](https://github.com/Bluetooth-Devices/bthome-ble/commit/a58cf7bf84bacaf0b8436f03499710d5b83e3add))
+
+
+### Bug fixes
+
+
+- Verification of counter ([`a58cf7b`](https://github.com/Bluetooth-Devices/bthome-ble/commit/a58cf7bf84bacaf0b8436f03499710d5b83e3add))
+
+
+- Verification of counter ([`a58cf7b`](https://github.com/Bluetooth-Devices/bthome-ble/commit/a58cf7bf84bacaf0b8436f03499710d5b83e3add))
+
+
+- Do not update encryption counter if not increasing ([`a58cf7b`](https://github.com/Bluetooth-Devices/bthome-ble/commit/a58cf7bf84bacaf0b8436f03499710d5b83e3add))
+
+
+- Add exceptions for equal counter ([`a58cf7b`](https://github.com/Bluetooth-Devices/bthome-ble/commit/a58cf7bf84bacaf0b8436f03499710d5b83e3add))
+
+
+- Allow reset of the counter ([`a58cf7b`](https://github.com/Bluetooth-Devices/bthome-ble/commit/a58cf7bf84bacaf0b8436f03499710d5b83e3add))
 
 
 ## v3.2.0 (2023-10-01)
@@ -448,13 +606,13 @@
 ### Features
 
 
-- Add raw hex sensor (#91) ([`6f9969e`](https://github.com/Bluetooth-Devices/bthome-ble/commit/6f9969e73efe0ccaa810d3e7aa136af673eca3c2))
+- Add raw hex sensor ([`6f9969e`](https://github.com/Bluetooth-Devices/bthome-ble/commit/6f9969e73efe0ccaa810d3e7aa136af673eca3c2))
 
 
 ### Refactoring
 
 
-- Remove dependency on pytz (#90) ([`4619caa`](https://github.com/Bluetooth-Devices/bthome-ble/commit/4619caa03eab37c7e992b1cf8caaf253818ff816))
+- Remove dependency on pytz ([`4619caa`](https://github.com/Bluetooth-Devices/bthome-ble/commit/4619caa03eab37c7e992b1cf8caaf253818ff816))
 
 
 ## v3.1.1 (2023-08-20)
@@ -462,7 +620,7 @@
 ### Bug fixes
 
 
-- Replace datetime.utcfromtimestamp (#87) ([`0184fe7`](https://github.com/Bluetooth-Devices/bthome-ble/commit/0184fe7b04caabc45fe3e8da1191269a7d19b975))
+- Replace datetime.utcfromtimestamp ([`0184fe7`](https://github.com/Bluetooth-Devices/bthome-ble/commit/0184fe7b04caabc45fe3e8da1191269a7d19b975))
 
 
 ## v3.1.0 (2023-08-13)
@@ -470,7 +628,10 @@
 ### Features
 
 
-- Add text sensor (#86) ([`2bfcd9b`](https://github.com/Bluetooth-Devices/bthome-ble/commit/2bfcd9b9b4a2321eb229298258235b61a97ae9d2))
+- Add text sensor ([`2bfcd9b`](https://github.com/Bluetooth-Devices/bthome-ble/commit/2bfcd9b9b4a2321eb229298258235b61a97ae9d2))
+
+
+- Add text sensor ([`2bfcd9b`](https://github.com/Bluetooth-Devices/bthome-ble/commit/2bfcd9b9b4a2321eb229298258235b61a97ae9d2))
 
 
 ## v3.0.0 (2023-07-15)
@@ -478,14 +639,10 @@
 ### Features
 
 
-- Add ability to set the bind key after init (#83) ([`1826139`](https://github.com/Bluetooth-Devices/bthome-ble/commit/1826139cc81bbdb0b9fdd616b16fa92b07654f6b))
+- Add ability to set the bind key after init ([`1826139`](https://github.com/Bluetooth-Devices/bthome-ble/commit/1826139cc81bbdb0b9fdd616b16fa92b07654f6b))
 
 
 ## v2.13.0 (2023-07-15)
-
-### Unknown
-
-
 
 ### Bug fixes
 
@@ -501,10 +658,6 @@
 
 ## v2.12.2 (2023-07-15)
 
-### Unknown
-
-
-
 ### Bug fixes
 
 
@@ -512,10 +665,6 @@
 
 
 ## v2.12.1 (2023-07-07)
-
-### Unknown
-
-
 
 ### Chores
 
@@ -533,12 +682,6 @@
 
 
 ## v2.12.0 (2023-06-18)
-
-### Unknown
-
-
-
-
 
 ### Bug fixes
 
@@ -560,10 +703,6 @@
 
 ## v2.11.3 (2023-05-19)
 
-### Unknown
-
-
-
 ### Bug fixes
 
 
@@ -571,10 +710,6 @@
 
 
 ## v2.11.2 (2023-05-12)
-
-### Unknown
-
-
 
 ### Bug fixes
 
@@ -584,10 +719,6 @@
 
 ## v2.11.1 (2023-05-12)
 
-### Unknown
-
-
-
 ### Bug fixes
 
 
@@ -595,10 +726,6 @@
 
 
 ## v2.11.0 (2023-05-04)
-
-### Unknown
-
-
 
 ### Bug fixes
 
@@ -614,10 +741,6 @@
 
 ## v2.10.1 (2023-04-28)
 
-### Unknown
-
-
-
 ### Bug fixes
 
 
@@ -625,11 +748,6 @@
 
 
 ## v2.10.0 (2023-04-28)
-
-### Unknown
-
-
-
 
 ### Bug fixes
 
@@ -651,10 +769,6 @@
 
 ## v2.9.0 (2023-03-12)
 
-### Unknown
-
-
-
 ### Features
 
 
@@ -662,10 +776,6 @@
 
 
 ## v2.8.0 (2023-03-05)
-
-### Unknown
-
-
 
 ### Features
 
@@ -675,10 +785,6 @@
 
 ## v2.7.0 (2023-02-25)
 
-### Unknown
-
-
-
 ### Features
 
 
@@ -686,10 +792,6 @@
 
 
 ## v2.6.0 (2023-02-17)
-
-### Unknown
-
-
 
 ### Bug fixes
 
@@ -708,14 +810,16 @@
 ### Bug fixes
 
 
-- Parse objects of the same time correctly (#47) ([`27e5982`](https://github.com/Bluetooth-Devices/bthome-ble/commit/27e5982214ee34cca6243532dff4e9b2e65e0da9))
+- Parse objects of the same time correctly ([`27e5982`](https://github.com/Bluetooth-Devices/bthome-ble/commit/27e5982214ee34cca6243532dff4e9b2e65e0da9))
+
+
+- Parse objects of the same time correctly ([`27e5982`](https://github.com/Bluetooth-Devices/bthome-ble/commit/27e5982214ee34cca6243532dff4e9b2e65e0da9))
+
+
+- Readd previous fix for short advertisement decryption ([`27e5982`](https://github.com/Bluetooth-Devices/bthome-ble/commit/27e5982214ee34cca6243532dff4e9b2e65e0da9))
 
 
 ## v2.5.1 (2023-01-24)
-
-### Unknown
-
-
 
 ### Bug fixes
 
@@ -725,10 +829,6 @@
 
 ## v2.5.0 (2023-01-11)
 
-### Unknown
-
-
-
 ### Features
 
 
@@ -736,10 +836,6 @@
 
 
 ## v2.4.1 (2023-01-04)
-
-### Unknown
-
-
 
 ### Bug fixes
 
@@ -755,10 +851,6 @@
 
 ## v2.4.0 (2022-12-17)
 
-### Unknown
-
-
-
 ### Bug fixes
 
 
@@ -773,10 +865,6 @@
 
 ## v2.3.1 (2022-11-19)
 
-### Unknown
-
-
-
 ### Bug fixes
 
 
@@ -784,10 +872,6 @@
 
 
 ## v2.3.0 (2022-11-18)
-
-### Unknown
-
-
 
 ### Features
 
@@ -797,10 +881,6 @@
 
 ## v2.2.1 (2022-11-07)
 
-### Unknown
-
-
-
 ### Bug fixes
 
 
@@ -808,10 +888,6 @@
 
 
 ## v2.2.0 (2022-11-06)
-
-### Unknown
-
-
 
 ### Bug fixes
 
@@ -830,11 +906,6 @@
 
 ## v2.1.0 (2022-11-03)
 
-### Unknown
-
-
-
-
 ### Bug fixes
 
 
@@ -845,6 +916,10 @@
 
 
 - New sensor types ([`1bbf778`](https://github.com/Bluetooth-Devices/bthome-ble/commit/1bbf778887cb411d710a7787c3ae0f68a9a9eac2))
+
+
+### Unknown
+
 
 
 ## v2.0.0 (2022-11-01)
@@ -864,20 +939,10 @@
 
 ## v1.4.0 (2022-11-01)
 
-### Unknown
-
-
-
-
-
-
-
-
-
 ### Bug fixes
 
 
-- Parser not parsing multiple uuids (#21) ([`e8d2646`](https://github.com/Bluetooth-Devices/bthome-ble/commit/e8d2646bb73d39e7920a04243d862c9ed68ed2c0))
+- Parser not parsing multiple uuids ([`e8d2646`](https://github.com/Bluetooth-Devices/bthome-ble/commit/e8d2646bb73d39e7920a04243d862c9ed68ed2c0))
 
 
 - Adjust button events ([`b796cdb`](https://github.com/Bluetooth-Devices/bthome-ble/commit/b796cdb9d18703c12bfbc1a03602edae823df6f0))
@@ -942,10 +1007,6 @@
 
 ## v1.2.3 (2022-09-29)
 
-### Unknown
-
-
-
 ### Bug fixes
 
 
@@ -975,10 +1036,6 @@
 
 ## v1.2.2 (2022-09-14)
 
-### Unknown
-
-
-
 ### Bug fixes
 
 
@@ -986,10 +1043,6 @@
 
 
 ## v1.2.1 (2022-09-13)
-
-### Unknown
-
-
 
 ### Bug fixes
 
@@ -1004,12 +1057,6 @@
 
 
 ## v1.2.0 (2022-09-09)
-
-### Unknown
-
-
-
-
 
 ### Bug fixes
 
@@ -1042,11 +1089,6 @@
 
 ## v1.1.0 (2022-09-06)
 
-### Unknown
-
-
-
-
 ### Bug fixes
 
 
@@ -1062,12 +1104,11 @@
 - Binary sensor support ([`35ec5e1`](https://github.com/Bluetooth-Devices/bthome-ble/commit/35ec5e1d328038b328c4b793e9fe70c354d731dd))
 
 
-## v1.0.0 (2022-09-01)
-
 ### Unknown
 
 
 
+## v1.0.0 (2022-09-01)
 
 ### Features
 
@@ -1076,6 +1117,10 @@
 
 
 - Bthome with capital h ([`c307462`](https://github.com/Bluetooth-Devices/bthome-ble/commit/c3074628da771ce78810538e8776797aae4df147))
+
+
+### Unknown
+
 
 
 ## v0.5.2 (2022-08-30)
@@ -1098,10 +1143,6 @@
 
 
 ## v0.5.0 (2022-08-28)
-
-### Unknown
-
-
 
 ### Bug fixes
 
@@ -1139,10 +1180,6 @@
 
 ## v0.3.7 (2022-08-25)
 
-### Unknown
-
-
-
 ### Bug fixes
 
 
@@ -1176,15 +1213,14 @@
 
 ## v0.3.4 (2022-08-23)
 
-### Unknown
-
-
-
-
 ### Bug fixes
 
 
 - Length check ([`9817c84`](https://github.com/Bluetooth-Devices/bthome-ble/commit/9817c84f78993c743c354a09789354c6fa600a18))
+
+
+### Unknown
+
 
 
 ## v0.3.3 (2022-08-23)
@@ -1199,12 +1235,7 @@
 
 
 
-
 ## v0.3.2 (2022-08-21)
-
-### Unknown
-
-
 
 ## v0.3.1 (2022-08-21)
 
@@ -1212,10 +1243,6 @@
 
 
 - Supported sensor fix ([`0bc45bf`](https://github.com/Bluetooth-Devices/bthome-ble/commit/0bc45bf822da65d705823daff57881c917b9c8fc))
-
-
-### Unknown
-
 
 
 ## v0.3.0 (2022-08-19)
@@ -1237,10 +1264,6 @@
 
 ## v0.2.2 (2022-08-18)
 
-### Unknown
-
-
-
 ## v0.2.1 (2022-08-18)
 
 ### Bug fixes
@@ -1253,10 +1276,6 @@
 
 
 ## v0.2.0 (2022-08-18)
-
-### Unknown
-
-
 
 ### Bug fixes
 
