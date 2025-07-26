@@ -1,5 +1,43 @@
 # Changelog
 
+## v3.14.0 (2025-07-26)
+
+### Features
+
+
+- Add revolutions per minute (rpm) data type ([`67511c8`](https://github.com/Bluetooth-Devices/bthome-ble/commit/67511c848d0fd4ce2000f87b196f8cf260c57551))
+
+
+- Add revolutions per minute (rpm) data type ([`67511c8`](https://github.com/Bluetooth-Devices/bthome-ble/commit/67511c848d0fd4ce2000f87b196f8cf260c57551))
+
+
+### Chores
+
+
+- Bump the github-actions group with 2 updates ([`91d4f91`](https://github.com/Bluetooth-Devices/bthome-ble/commit/91d4f9142e1713551cec4030feb667f4247fedac))
+
+
+- Bump bluetooth-data-tools from 1.28.1 to 1.28.2 ([`1d0c4da`](https://github.com/Bluetooth-Devices/bthome-ble/commit/1d0c4dadc716e7653f38390afd80987d4744d185))
+
+
+- Bump pytest from 8.4.0 to 8.4.1 ([`96f50a2`](https://github.com/Bluetooth-Devices/bthome-ble/commit/96f50a2c8055a88fee9c02348ae25121419ec25c))
+
+
+- Bump cryptography from 45.0.4 to 45.0.5 ([`be86d48`](https://github.com/Bluetooth-Devices/bthome-ble/commit/be86d482ad24d8e89ff257c1ed2d1ba1e655aa40))
+
+
+- Bump urllib3 from 2.3.0 to 2.5.0 ([`1c3d0ab`](https://github.com/Bluetooth-Devices/bthome-ble/commit/1c3d0aba9c54cdab02c81d49899369b437f5e26c))
+
+
+- Bump cryptography from 45.0.3 to 45.0.4 ([`3b8289a`](https://github.com/Bluetooth-Devices/bthome-ble/commit/3b8289ac550523a0c044a1b941589b4d07e0bad3))
+
+
+- Pre-commit autoupdate ([`ccc6ae1`](https://github.com/Bluetooth-Devices/bthome-ble/commit/ccc6ae18643926a6f9818b799aabc2eaa93ebef4))
+
+
+- Bump pytest-cov from 6.1.1 to 6.2.1 ([`44b3daf`](https://github.com/Bluetooth-Devices/bthome-ble/commit/44b3daf0c30191c450bcd0abb55cba63a2a282c4))
+
+
 ## v3.13.1 (2025-06-15)
 
 ### Chores
