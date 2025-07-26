@@ -4021,3 +4021,47 @@ def test_bthome_channel(caplog):
             ),
         },
     )
+
+
+def test_bthome_revolutions_per_minute(caplog):
+    """Test BTHome parser for Revolutions Per Minute(0x61) without encryption."""
+    data_string = b"\x40\x61\xac\x0d"
+    advertisement = bytes_to_service_info(
+        data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
+    )
+
+    device = BTHomeBluetoothDeviceData()
+    assert device.update(advertisement) == SensorUpdate(
+        title="TEST DEVICE 18B2",
+        devices={
+            None: SensorDeviceInfo(
+                name="TEST DEVICE 18B2",
+                manufacturer=None,
+                model="BTHome sensor",
+                sw_version="BTHome BLE v2",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            DeviceKey(key="rotational_speed", device_id=None): SensorDescription(
+                device_key=DeviceKey(key="rotational_speed", device_id=None),
+                device_class=ExtendedSensorDeviceClass.ROTATIONAL_SPEED,
+                native_unit_of_measurement=Units.REVOLUTIONS_PER_MINUTE,
+            ),
+            KEY_SIGNAL_STRENGTH: SensorDescription(
+                device_key=KEY_SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
+            DeviceKey(key="rotational_speed", device_id=None): SensorValue(
+                device_key=DeviceKey(key="rotational_speed", device_id=None),
+                name="Rotational Speed",
+                native_value=3500,
+            ),
+            KEY_SIGNAL_STRENGTH: SensorValue(
+                device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+    )

@@ -46,6 +46,9 @@ class ExtendedSensorDeviceClass(BaseDeviceClass):
     # Precipitation
     PRECIPITATION = "precipitation"
 
+    # Rotational speed
+    ROTATIONAL_SPEED = "rotational_speed"
+
 
 class ExtendedSensorLibrary(SensorLibrary):
     """Sensor Library for additional sensors (compared to sensor-state-data)."""
@@ -74,9 +77,15 @@ class ExtendedSensorLibrary(SensorLibrary):
         device_class=ExtendedSensorDeviceClass.PRECIPITATION,
         native_unit_of_measurement=Units.LENGTH_MILLIMETERS,
     )
+
     CHANNEL__NONE = description.BaseSensorDescription(
         device_class=ExtendedSensorDeviceClass.CHANNEL,
         native_unit_of_measurement=None,
+    )
+
+    ROTATIONAL_SPEED__REVOLUTIONS_PER_MINUTE = description.BaseSensorDescription(
+        device_class=ExtendedSensorDeviceClass.ROTATIONAL_SPEED,
+        native_unit_of_measurement=Units.REVOLUTIONS_PER_MINUTE,
     )
 
 
@@ -484,4 +493,8 @@ MEAS_TYPES: dict[int, MeasTypes] = {
         factor=0.1,
     ),
     0x60: MeasTypes(meas_format=ExtendedSensorLibrary.CHANNEL__NONE),
+    0x61: MeasTypes(
+        meas_format=ExtendedSensorLibrary.ROTATIONAL_SPEED__REVOLUTIONS_PER_MINUTE,
+        data_length=2,
+    ),
 }
