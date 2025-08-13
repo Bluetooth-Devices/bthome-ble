@@ -1,5 +1,31 @@
 # Changelog
 
+## v3.14.1 (2025-08-13)
+
+### Bug fixes
+
+
+- Bump sensor-state-data requirement to 2.19.0 ([`7cddfa7`](https://github.com/Bluetooth-Devices/bthome-ble/commit/7cddfa7057b3c10b06c176d621862e421ba25331))
+
+
+- Bump sensor-state-data requirement ([`7cddfa7`](https://github.com/Bluetooth-Devices/bthome-ble/commit/7cddfa7057b3c10b06c176d621862e421ba25331))
+
+
+### Chores
+
+
+- Pre-commit autoupdate ([`55002b1`](https://github.com/Bluetooth-Devices/bthome-ble/commit/55002b19b4830edccd384c947e6e8f74cc0095cf))
+
+
+- Bump cryptography from 45.0.5 to 45.0.6 ([`7b0ec13`](https://github.com/Bluetooth-Devices/bthome-ble/commit/7b0ec1378a98c31295dbdf83b3caf50c22f843e4))
+
+
+- Bump habluetooth from 4.0.1 to 5.0.1 ([`d3c7f0b`](https://github.com/Bluetooth-Devices/bthome-ble/commit/d3c7f0b14cd7e9d3717208bd2a5af74064046ea7))
+
+
+- Bump habluetooth from 3.49.0 to 4.0.1 ([`d5f60a0`](https://github.com/Bluetooth-Devices/bthome-ble/commit/d5f60a0ca34c9bff81684a8aa7551a0902ad384e))
+
+
 ## v3.14.0 (2025-07-26)
 
 ### Features
