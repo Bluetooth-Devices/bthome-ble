@@ -6,7 +6,7 @@ from unittest.mock import patch
 
 import pytest
 from bluetooth_sensor_state_data import SensorUpdate
-from home_assistant_bluetooth import BluetoothServiceInfoBleak
+from habluetooth import BluetoothServiceInfoBleak
 from sensor_state_data import (
     BinarySensorDescription,
     BinarySensorDeviceClass,
@@ -443,7 +443,7 @@ def test_bthome_illuminance(caplog):
 
 def test_bthome_mass_kilograms(caplog):
     """Test BTHome parser for mass reading in kilograms without encryption."""
-    data_string = b"\x43\x06\xFE\x70"
+    data_string = b"\x43\x06\xfe\x70"
     advertisement = bytes_to_service_info(
         data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
     )
@@ -485,7 +485,7 @@ def test_bthome_mass_kilograms(caplog):
 
 def test_bthome_mass_pounds(caplog):
     """Test BTHome parser for mass reading in pounds without encryption."""
-    data_string = b"\x03\x07\x3E\x1d"
+    data_string = b"\x03\x07\x3e\x1d"
     advertisement = bytes_to_service_info(
         data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
     )
@@ -525,7 +525,7 @@ def test_bthome_mass_pounds(caplog):
 
 def test_bthome_dew_point(caplog):
     """Test BTHome parser for dew point reading without encryption."""
-    data_string = b"\x23\x08\xCA\x06"
+    data_string = b"\x23\x08\xca\x06"
     advertisement = bytes_to_service_info(
         data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
     )
@@ -733,7 +733,7 @@ def test_bthome_voltage(caplog):
 
 def test_bthome_binary_sensor(caplog):
     """Test BTHome parser for binary sensor without device class, without encryption."""
-    data_string = b"\x02\x0F\x01"
+    data_string = b"\x02\x0f\x01"
     advertisement = bytes_to_service_info(
         data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
     )
@@ -963,7 +963,7 @@ def test_bthome_co2(caplog):
 
 def test_bthome_timestamp(caplog):
     """Test BTHome parser for Unix timestamp (seconds from 1-1-1970)."""
-    data_string = b"\xA5\x50\x5D\x39\x61\x64"
+    data_string = b"\xa5\x50\x5d\x39\x61\x64"
     advertisement = bytes_to_service_info(
         data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
     )
@@ -1092,7 +1092,7 @@ def test_bthome_moisture(caplog):
 
 def test_bthome_event_button_long_press(caplog):
     """Test BTHome parser for an event of a long press on a button without encryption."""
-    data_string = b"\x02\x3A\x04"
+    data_string = b"\x02\x3a\x04"
     advertisement = bytes_to_service_info(
         data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
     )
@@ -1135,7 +1135,7 @@ def test_bthome_event_button_long_press(caplog):
 
 def test_bthome_event_dimmer_rotate_left_3_steps(caplog):
     """Test BTHome parser for an event rotating a dimmer 3 steps left."""
-    data_string = b"\x03\x3C\x01\x03"
+    data_string = b"\x03\x3c\x01\x03"
     advertisement = bytes_to_service_info(
         data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
     )
