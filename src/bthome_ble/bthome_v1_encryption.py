@@ -45,7 +45,7 @@ def decrypt_aes_ccm(key: bytes, mac: bytes, data: bytes) -> dict[str, float] | N
     print("MAC:", mac.hex())
     print("Bindkey:", key.hex())
     adslength = len(data)
-    if adslength > 15 and data[0] == 0x1E and data[1] == 0x18:
+    if adslength > 12 and data[0] == 0x1E and data[1] == 0x18:
         pkt = data[: data[0] + 1]
         uuid = pkt[0:2]
         encrypted_data = pkt[2:-8]
