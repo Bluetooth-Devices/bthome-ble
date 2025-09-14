@@ -283,7 +283,7 @@ def test_bindkey_correct():
     data_string = b"\x41\xa4\x72\x66\xc9\x5f\x73\x00\x11\x22\x33\x78\x23\x72\x14"
     advertisement = bytes_to_service_info(
         data_string,
-        local_name="TEST DEVICE",
+        local_name="SBHT-003C",
         address="54:48:E6:8F:80:A5",
     )
 
@@ -292,12 +292,12 @@ def test_bindkey_correct():
     assert device.bindkey_verified
     assert not device.decryption_failed
     assert device.update(advertisement) == SensorUpdate(
-        title="TEST DEVICE 80A5",
+        title="Shelly BLU H&T 80A5",
         devices={
             None: SensorDeviceInfo(
-                name="TEST DEVICE 80A5",
-                manufacturer=None,
-                model="BTHome sensor",
+                name="Shelly BLU H&T 80A5",
+                manufacturer="Shelly",
+                model="BLU H&T",
                 sw_version="BTHome BLE v2 (encrypted)",
                 hw_version=None,
             )
@@ -1752,18 +1752,18 @@ def test_bthome_motion(caplog):
     bindkey = "231d39c1d7cc1ab1aee224cd096db932"
     data_string = b"\x41\x87\xb9\x00\x11\x22\x33\x72\xb0\x23\x1f"
     advertisement = bytes_to_service_info(
-        data_string, local_name="BTHome sensor", address="54:48:E6:8F:80:A5"
+        data_string, local_name="SBMO-003Z", address="54:48:E6:8F:80:A5"
     )
 
     device = BTHomeBluetoothDeviceData(bindkey=bytes.fromhex(bindkey))
 
     assert device.update(advertisement) == SensorUpdate(
-        title="BTHome sensor 80A5",
+        title="Shelly BLU Motion 80A5",
         devices={
             None: SensorDeviceInfo(
-                name="BTHome sensor 80A5",
-                manufacturer=None,
-                model="BTHome sensor",
+                name="Shelly BLU Motion 80A5",
+                manufacturer="Shelly",
+                model="BLU Motion",
                 sw_version="BTHome BLE v2 (encrypted)",
                 hw_version=None,
             )
@@ -1844,18 +1844,18 @@ def test_bthome_event_triple_button_device(caplog):
     """
     data_string = b"\x40\x3a\x00\x3a\x01\x3a\x03"
     advertisement = bytes_to_service_info(
-        data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
+        data_string, local_name="SBBT-004CEU", address="A4:C1:38:8D:18:B2"
     )
 
     device = BTHomeBluetoothDeviceData()
 
     assert device.update(advertisement) == SensorUpdate(
-        title="TEST DEVICE 18B2",
+        title="Shelly BLU Wall Switch 4 18B2",
         devices={
             None: SensorDeviceInfo(
-                name="TEST DEVICE 18B2",
-                manufacturer=None,
-                model="BTHome sensor",
+                name="Shelly BLU Wall Switch 4 18B2",
+                manufacturer="Shelly",
+                model="BLU Wall Switch 4",
                 sw_version="BTHome BLE v2",
                 hw_version=None,
             )
@@ -1893,18 +1893,18 @@ def test_bthome_event_button_hold_press(caplog):
     """Test BTHome parser for an event of holding press on a button without encryption."""
     data_string = b"\x40\x3a\x80"
     advertisement = bytes_to_service_info(
-        data_string, local_name="SBBT-002C", address="A4:C1:38:8D:18:B2"
+        data_string, local_name="SBBT-004CUS", address="A4:C1:38:8D:18:B2"
     )
 
     device = BTHomeBluetoothDeviceData()
 
     assert device.update(advertisement) == SensorUpdate(
-        title="Shelly BLU Button1 18B2",
+        title="Shelly BLU RC Button 4 18B2",
         devices={
             None: SensorDeviceInfo(
-                name="Shelly BLU Button1 18B2",
+                name="Shelly BLU RC Button 4 18B2",
                 manufacturer="Shelly",
-                model="BLU Button1",
+                model="BLU RC Button 4",
                 sw_version="BTHome BLE v2",
                 hw_version=None,
             )
@@ -2289,18 +2289,18 @@ def test_bthome_temperature_2(caplog):
     """Test BTHome parser for temperature with one digit."""
     data_string = b"\x40\x45\x11\x01"
     advertisement = bytes_to_service_info(
-        data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
+        data_string, local_name="SBTR-001AEU", address="A4:C1:38:8D:18:B2"
     )
 
     device = BTHomeBluetoothDeviceData()
 
     assert device.update(advertisement) == SensorUpdate(
-        title="TEST DEVICE 18B2",
+        title="Shelly BLU TRV 18B2",
         devices={
             None: SensorDeviceInfo(
-                name="TEST DEVICE 18B2",
-                manufacturer=None,
-                model="BTHome sensor",
+                name="Shelly BLU TRV 18B2",
+                manufacturer="Shelly",
+                model="BLU TRV",
                 sw_version="BTHome BLE v2",
                 hw_version=None,
             )
