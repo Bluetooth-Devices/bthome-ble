@@ -15,6 +15,10 @@ def parse_value(data: bytes) -> dict[str, float]:
         humi = round(int.from_bytes(data[4:6], "little", signed=False) * 0.01, 2)
         print("Temperature:", temp, "Humidity:", humi)
         return {"temperature": temp, "humidity": humi}
+    elif vlength == 2:
+        motion = data[1]
+        print("Motion:", motion)
+        return {"Motion": motion}
     print("MsgLength:", vlength, "HexValue:", data.hex())
     return {}
 
@@ -45,7 +49,7 @@ def decrypt_aes_ccm(key: bytes, mac: bytes, data: bytes) -> dict[str, float] | N
     print("MAC:", mac.hex())
     print("Bindkey:", key.hex())
     adslength = len(data)
-    if adslength > 15 and data[0] == 0xD2 and data[1] == 0xFC:
+    if adslength > 12 and data[0] == 0xD2 and data[1] == 0xFC:
         pkt = data[: data[0] + 1]
         uuid = pkt[0:2]
         sw_version = pkt[2:3]
@@ -90,7 +94,7 @@ def main() -> None:
     """Example to encrypt and decrypt BTHome payload."""
     print()
     print("====== Test encode -----------------------------------------")
-    data = bytes(bytearray.fromhex("02CA0903BF13"))  # BTHome data (not encrypted)
+    data = bytes(bytearray.fromhex("02CA09"))  # BTHome data (not encrypted)
     parse_value(data)  # Print temperature and humidity
 
     print()

@@ -318,11 +318,11 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             manufacturer = "b-parasite"
             name = "b-parasite"
             device_type = "Plant sensor"
-        elif name.startswith("SBBT"):
+        elif name == "SBBT-002C":
             manufacturer = "Shelly"
             name = "Shelly BLU Button1"
             device_type = "BLU Button1"
-        elif name.startswith("SBDW"):
+        elif name == "SBDW-002C":
             manufacturer = "Shelly"
             name = "Shelly BLU Door/Window"
             device_type = "BLU Door/Window"
@@ -609,7 +609,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             raise ValueError
 
         # check for minimum length of encrypted advertisement
-        if len(service_data) < (12 if sw_version == 1 else 11):
+        if len(service_data) < (12 if sw_version == 1 else 10):
             _LOGGER.debug(
                 "%s: Invalid data length (for decryption), adv: %s",
                 self.title,

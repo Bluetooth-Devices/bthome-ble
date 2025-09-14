@@ -29,6 +29,7 @@ KEY_ACCELERATION = DeviceKey(key="acceleration", device_id=None)
 KEY_BATTERY = DeviceKey(key="battery", device_id=None)
 KEY_BINARY_GENERIC = DeviceKey(key="generic", device_id=None)
 KEY_BINARY_OPENING = DeviceKey(key="opening", device_id=None)
+KEY_BINARY_MOTION = DeviceKey(key="motion", device_id=None)
 KEY_BINARY_POWER = DeviceKey(key="power", device_id=None)
 KEY_BINARY_WINDOW = DeviceKey(key="window", device_id=None)
 KEY_BUTTON = DeviceKey(key="button", device_id=None)
@@ -1741,6 +1742,53 @@ def test_bthome_moisture(caplog):
             ),
             KEY_SIGNAL_STRENGTH: SensorValue(
                 device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+    )
+
+
+def test_bthome_motion(caplog):
+    """Test BTHome parser for motion reading from sensor."""
+    bindkey = "231d39c1d7cc1ab1aee224cd096db932"
+    data_string = b"\x41\x87\xb9\x00\x11\x22\x33\x72\xb0\x23\x1f"
+    advertisement = bytes_to_service_info(
+        data_string, local_name="BTHome sensor", address="54:48:E6:8F:80:A5"
+    )
+
+    device = BTHomeBluetoothDeviceData(bindkey=bytes.fromhex(bindkey))
+
+    assert device.update(advertisement) == SensorUpdate(
+        title="BTHome sensor 80A5",
+        devices={
+            None: SensorDeviceInfo(
+                name="BTHome sensor 80A5",
+                manufacturer=None,
+                model="BTHome sensor",
+                sw_version="BTHome BLE v2 (encrypted)",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            KEY_SIGNAL_STRENGTH: SensorDescription(
+                device_key=KEY_SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
+            KEY_SIGNAL_STRENGTH: SensorValue(
+                device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+        binary_entity_descriptions={
+            KEY_BINARY_MOTION: BinarySensorDescription(
+                device_key=KEY_BINARY_MOTION,
+                device_class=BinarySensorDeviceClass.MOTION,
+            ),
+        },
+        binary_entity_values={
+            KEY_BINARY_MOTION: BinarySensorValue(
+                device_key=KEY_BINARY_MOTION, name="Motion", native_value=True
             ),
         },
     )
