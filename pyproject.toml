@@ -48,7 +48,7 @@ docs = [
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.4"
-pytest-cov = "^6.3"
+pytest-cov = "^7.0"
 
 [tool.semantic_release]
 branch = "main"
