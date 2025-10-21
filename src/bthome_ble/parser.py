@@ -334,6 +334,10 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             manufacturer = "Shelly"
             name = "Shelly BLU H&T"
             device_type = "BLU H&T"
+        elif name == "SBHT-103C":
+            manufacturer = "Shelly"
+            name = "Shelly BLU H&T Display ZB"
+            device_type = "BLU H&T Display ZB"
         elif name == "SBBT-004CEU":
             manufacturer = "Shelly"
             name = "Shelly BLU Wall Switch 4"
