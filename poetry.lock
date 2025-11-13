@@ -1328,14 +1328,14 @@ test = ["pytest (>=8)"]
 
 [[package]]
 name = "sensor-state-data"
-version = "2.19.0"
+version = "2.20.0"
 description = "Models for storing and converting Sensor Data state"
 optional = false
 python-versions = "<4.0,>=3.9"
 groups = ["main"]
 files = [
-    {file = "sensor_state_data-2.19.0-py3-none-any.whl", hash = "sha256:79313cf595aa3d71d65ac349804eedae5bff5e9f17614732d6268041cb6b5043"},
-    {file = "sensor_state_data-2.19.0.tar.gz", hash = "sha256:d125c27eff7b4d56816c10e4af8866d1a9d419192eda1a0c8b40d87e6246cca5"},
+    {file = "sensor_state_data-2.20.0-py3-none-any.whl", hash = "sha256:34aaff3c956fb832dd0c6bfd4c20f2152d0fc1f50b782951d958bf08f099c12c"},
+    {file = "sensor_state_data-2.20.0.tar.gz", hash = "sha256:bad940f9a36bc18b03f59a8245af87c19436240e9ca321afa87655c61a995ac0"},
 ]
 
 [package.extras]
