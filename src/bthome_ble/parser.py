@@ -229,16 +229,23 @@ class BTHomeBluetoothDeviceData(BluetoothData):
 
         self.set_device_name(f"{name} {identifier}")
         self.set_title(f"{name} {identifier}")
-        self.set_device_type("BTHome sensor")
 
         uuid16 = list(service_info.service_data.keys())
         if "0000181c-0000-1000-8000-00805f9b34fb" in uuid16:
             # Non-encrypted BTHome BLE format
+            if self.bindkey:
+                _LOGGER.warning(
+                    "Received plaintext adv from %s while bindkey is known, ignoring!",
+                    identifier,
+                )
+                return False
+            self.set_device_type("BTHome sensor")
             self.encryption_scheme = EncryptionScheme.NONE
             self.set_device_sw_version("BTHome BLE v1")
             payload = service_data
         elif "0000181e-0000-1000-8000-00805f9b34fb" in uuid16:
             # Encrypted BTHome BLE format
+            self.set_device_type("BTHome sensor")
             self.encryption_scheme = EncryptionScheme.BTHOME_BINDKEY
             self.set_device_sw_version("BTHome BLE v1 (encrypted)")
             mac_readable = service_info.address
@@ -280,6 +287,13 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             self.encryption_scheme = EncryptionScheme.BTHOME_BINDKEY
         else:
             self.encryption_scheme = EncryptionScheme.NONE
+
+        if self.bindkey and self.encryption_scheme == EncryptionScheme.NONE:
+            _LOGGER.warning(
+                "Received plaintext adv from %s while bindkey is known, ignoring!",
+                identifier,
+            )
+            return False
 
         # If True, the first 6 bytes contain the mac address
         mac_included = adv_info & (1 << 1)  # bit 1
