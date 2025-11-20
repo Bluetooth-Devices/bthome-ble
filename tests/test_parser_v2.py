@@ -143,6 +143,22 @@ def test_encryption_no_key_needed():
     assert not device.bindkey_verified
 
 
+def test_encryption_downgrade_fails():
+    """Test that unencrypted data gets rejected when a bindkey is provided."""
+    bindkey = "814aac74c4f17b6c1581e1ab87816b99"
+    data_string = b"\x40\x04\x13\x8a\x01"
+    advertisement = bytes_to_service_info(
+        payload=data_string,
+        local_name="ATC_8D18B2",
+        address="A4:C1:38:8D:18:B2",
+    )
+
+    device = BTHomeBluetoothDeviceData(bindkey=bytes.fromhex(bindkey))
+
+    assert not device.supported(advertisement)
+    assert not device.bindkey_verified
+
+
 def test_sleepy_device():
     """Test that we can detect that a device that doesn't update regularly."""
     data_string = b"\x44\x04\x13\x8a\x01"
