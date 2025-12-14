@@ -1,5 +1,52 @@
 # Changelog
 
+## v3.15.0 (2025-10-21)
+
+### Features
+
+
+- Add shelly blu h&t display zb model ([`1f67fa9`](https://github.com/Bluetooth-Devices/bthome-ble/commit/1f67fa9895d6160bd73f52289eafc9dbeb55a656))
+
+
+### Chores
+
+
+- Delete hacktober ([`ab0c56e`](https://github.com/Bluetooth-Devices/bthome-ble/commit/ab0c56ee50ffcf0e26f4cc990fbaac88e61a1d67))
+
+
+- Pre-commit autoupdate ([`7efb5d6`](https://github.com/Bluetooth-Devices/bthome-ble/commit/7efb5d690e5ce591740cdc4a5f0a945be0ece816))
+
+
+- Bump bluetooth-data-tools from 1.28.2 to 1.28.3 ([`a6c8fb9`](https://github.com/Bluetooth-Devices/bthome-ble/commit/a6c8fb953990282f65446cee73ca2ed37516fdc5))
+
+
+- Bump habluetooth from 5.6.4 to 5.7.0 ([`968a6db`](https://github.com/Bluetooth-Devices/bthome-ble/commit/968a6db2496ff10f26de5154fd7f97efdf2b94bd))
+
+
+- Bump cryptography from 46.0.1 to 46.0.2 ([`0dd8a65`](https://github.com/Bluetooth-Devices/bthome-ble/commit/0dd8a65e639c7e9049677f126d1605d085ed24c9))
+
+
+- Bump the github-actions group with 5 updates ([`54dd435`](https://github.com/Bluetooth-Devices/bthome-ble/commit/54dd435ab2b84156c24742b72b4ab8a254a1a29a))
+
+
+- Pre-commit autoupdate ([`b4e0e41`](https://github.com/Bluetooth-Devices/bthome-ble/commit/b4e0e413dc97648802c4fb31fe821f90dc15acdf))
+
+
+- Bump cryptography from 45.0.7 to 46.0.1 ([`3039f24`](https://github.com/Bluetooth-Devices/bthome-ble/commit/3039f2422d80e734615d06dfe70cc1b0f158c341))
+
+
+- Pre-commit autoupdate ([`52f4906`](https://github.com/Bluetooth-Devices/bthome-ble/commit/52f49063d05d828c677aa2456121e573745096a9))
+
+
+- Bump habluetooth from 5.3.1 to 5.6.4 ([`4a6a596`](https://github.com/Bluetooth-Devices/bthome-ble/commit/4a6a5966d00f426fb0dc857c0fdf20293424cffa))
+
+
+- Pre-commit autoupdate ([`52c7632`](https://github.com/Bluetooth-Devices/bthome-ble/commit/52c76322100ba570c41b28339f2d92ac1a69c11e))
+
+
+- Bump pytest-cov from 6.3.0 to 7.0.0 ([`529d526`](https://github.com/Bluetooth-Devices/bthome-ble/commit/529d52652dd2de4a633f82fd851e4a4a9091de6a))
+
+
 ## v3.14.2 (2025-09-14)
 
 ### Bug fixes

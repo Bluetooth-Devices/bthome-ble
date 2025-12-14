@@ -45,6 +45,7 @@ KEY_GAS = DeviceKey(key="gas", device_id=None)
 KEY_GYROSCOPE = DeviceKey(key="gyroscope", device_id=None)
 KEY_HUMIDITY = DeviceKey(key="humidity", device_id=None)
 KEY_ILLUMINANCE = DeviceKey(key="illuminance", device_id=None)
+KEY_LIGHT = DeviceKey(key="light", device_id=None)
 KEY_MASS = DeviceKey(key="mass", device_id=None)
 KEY_MOISTURE = DeviceKey(key="moisture", device_id=None)
 KEY_PACKET_ID = DeviceKey(key="packet_id", device_id=None)
@@ -139,6 +140,22 @@ def test_encryption_no_key_needed():
 
     assert device.supported(advertisement)
     assert device.encryption_scheme == EncryptionScheme.NONE
+    assert not device.bindkey_verified
+
+
+def test_encryption_downgrade_fails():
+    """Test that unencrypted data gets rejected when a bindkey is provided."""
+    bindkey = "814aac74c4f17b6c1581e1ab87816b99"
+    data_string = b"\x40\x04\x13\x8a\x01"
+    advertisement = bytes_to_service_info(
+        payload=data_string,
+        local_name="ATC_8D18B2",
+        address="A4:C1:38:8D:18:B2",
+    )
+
+    device = BTHomeBluetoothDeviceData(bindkey=bytes.fromhex(bindkey))
+
+    assert not device.supported(advertisement)
     assert not device.bindkey_verified
 
 
@@ -328,6 +345,86 @@ def test_bindkey_correct():
             ),
             KEY_SIGNAL_STRENGTH: SensorValue(
                 device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+    )
+
+
+def test_shelly_blu_ht_display_zb():
+    """Test BTHome parser for Shelly BLU H&T Display ZB."""
+    data_string = b"\x40\x00\x2e\x01\x64\x1e\x01\x2e\x34\x45\x16\x01"
+    advertisement = bytes_to_service_info(
+        data_string,
+        local_name="SBHT-103C",
+        address="54:48:E6:8F:80:A5",
+    )
+
+    device = BTHomeBluetoothDeviceData()
+    assert device.supported(advertisement)
+    assert device.update(advertisement) == SensorUpdate(
+        title="Shelly BLU H&T Display ZB 80A5",
+        devices={
+            None: SensorDeviceInfo(
+                name="Shelly BLU H&T Display ZB 80A5",
+                manufacturer="Shelly",
+                model="BLU H&T Display ZB",
+                sw_version="BTHome BLE v2",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            KEY_PACKET_ID: SensorDescription(
+                device_key=KEY_PACKET_ID,
+                device_class=SensorDeviceClass.PACKET_ID,
+                native_unit_of_measurement=None,
+            ),
+            KEY_BATTERY: SensorDescription(
+                device_key=KEY_BATTERY,
+                device_class=SensorDeviceClass.BATTERY,
+                native_unit_of_measurement=Units.PERCENTAGE,
+            ),
+            KEY_TEMPERATURE: SensorDescription(
+                device_key=KEY_TEMPERATURE,
+                device_class=SensorDeviceClass.TEMPERATURE,
+                native_unit_of_measurement=Units.TEMP_CELSIUS,
+            ),
+            KEY_HUMIDITY: SensorDescription(
+                device_key=KEY_HUMIDITY,
+                device_class=SensorDeviceClass.HUMIDITY,
+                native_unit_of_measurement=Units.PERCENTAGE,
+            ),
+            KEY_SIGNAL_STRENGTH: SensorDescription(
+                device_key=KEY_SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
+            KEY_PACKET_ID: SensorValue(
+                device_key=KEY_PACKET_ID, name="Packet Id", native_value=46
+            ),
+            KEY_BATTERY: SensorValue(
+                device_key=KEY_BATTERY, name="Battery", native_value=100
+            ),
+            KEY_TEMPERATURE: SensorValue(
+                device_key=KEY_TEMPERATURE, name="Temperature", native_value=27.8
+            ),
+            KEY_HUMIDITY: SensorValue(
+                device_key=KEY_HUMIDITY, name="Humidity", native_value=52
+            ),
+            KEY_SIGNAL_STRENGTH: SensorValue(
+                device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+        binary_entity_descriptions={
+            KEY_LIGHT: BinarySensorDescription(
+                device_key=KEY_LIGHT,
+                device_class=BinarySensorDeviceClass.LIGHT,
+            )
+        },
+        binary_entity_values={
+            KEY_LIGHT: BinarySensorValue(
+                device_key=KEY_LIGHT, name="Light", native_value=True
             ),
         },
     )
@@ -3737,7 +3834,7 @@ def test_bthome_shelly_button(caplog):
         entity_values={
             DeviceKey(key="packet_id", device_id=None): SensorValue(
                 device_key=DeviceKey(key="packet_id", device_id=None),
-                name="Packet " "Id",
+                name="Packet Id",
                 native_value=82,
             ),
             DeviceKey(key="battery", device_id=None): SensorValue(
@@ -3747,7 +3844,7 @@ def test_bthome_shelly_button(caplog):
             ),
             DeviceKey(key="signal_strength", device_id=None): SensorValue(
                 device_key=DeviceKey(key="signal_strength", device_id=None),
-                name="Signal " "Strength",
+                name="Signal Strength",
                 native_value=-60,
             ),
         },
