@@ -1,5 +1,65 @@
 # Changelog
 
+## v3.15.1 (2025-12-14)
+
+### Bug fixes
+
+
+- Release ([`820ea1a`](https://github.com/Bluetooth-Devices/bthome-ble/commit/820ea1a2a71e3b9427db48c5330b067a53641e52))
+
+
+- Prevent encryption downgrade attack ([`85fa959`](https://github.com/Bluetooth-Devices/bthome-ble/commit/85fa9591001a284e43fa19998f53853c3d33a0ee))
+
+
+### Unknown
+
+
+
+### Chores
+
+
+- Pre-commit autoupdate ([`3c69f66`](https://github.com/Bluetooth-Devices/bthome-ble/commit/3c69f660f16896bebcec6395ca6a88363939f2ca))
+
+
+- Bump pytest from 9.0.1 to 9.0.2 ([`ecf4480`](https://github.com/Bluetooth-Devices/bthome-ble/commit/ecf44806723970296b8bcb3af2d5f341a71b7dec))
+
+
+- Bump habluetooth from 5.7.0 to 5.8.0 ([`947b786`](https://github.com/Bluetooth-Devices/bthome-ble/commit/947b786708cc9c84223ed77697802dc292bfdfbc))
+
+
+- Bump the github-actions group with 3 updates ([`92eedac`](https://github.com/Bluetooth-Devices/bthome-ble/commit/92eedacdc03e3de81fb22e466aa2f84edb41c752))
+
+
+- Pre-commit autoupdate ([`7e9826f`](https://github.com/Bluetooth-Devices/bthome-ble/commit/7e9826fa239110a16be3e9332bcd587f05d0db53))
+
+
+- Bump urllib3 from 2.5.0 to 2.6.0 ([`985081a`](https://github.com/Bluetooth-Devices/bthome-ble/commit/985081a3166c86824c9d5bf77eb02175b63797a7))
+
+
+- Pre-commit autoupdate ([`b4ffb8f`](https://github.com/Bluetooth-Devices/bthome-ble/commit/b4ffb8f037015488b0b72cbaf8a3ba7440ea1e8f))
+
+
+- Pre-commit autoupdate ([`302299c`](https://github.com/Bluetooth-Devices/bthome-ble/commit/302299cd121499540ae427ad79ba4a4851c379e7))
+
+
+- Bump pytest from 9.0.0 to 9.0.1 ([`7dcdb04`](https://github.com/Bluetooth-Devices/bthome-ble/commit/7dcdb04be553e3433f015e8426c5ad0bc87a9bfe))
+
+
+- Bump cryptography from 46.0.2 to 46.0.3 ([`f4efbcd`](https://github.com/Bluetooth-Devices/bthome-ble/commit/f4efbcd736bba510fb8ee59ae9f46fb6676ec400))
+
+
+- Bump sensor-state-data from 2.19.0 to 2.20.0 ([`2edfcb4`](https://github.com/Bluetooth-Devices/bthome-ble/commit/2edfcb4188d61e5bda8a4cc33b6b0bd36d77c3bd))
+
+
+- Bump pytest from 8.4.2 to 9.0.0 ([`18a5c28`](https://github.com/Bluetooth-Devices/bthome-ble/commit/18a5c2876ac3c7f6ccc89b692ca1358351f05d64))
+
+
+- Bump bluetooth-data-tools from 1.28.3 to 1.28.4 ([`478f553`](https://github.com/Bluetooth-Devices/bthome-ble/commit/478f553de2d5e4c17de731a0da014b95b968f333))
+
+
+- Pre-commit autoupdate ([`e6cd525`](https://github.com/Bluetooth-Devices/bthome-ble/commit/e6cd52533bef98bdbd6bf2249ae6ea7b4d883342))
+
+
 ## v3.15.0 (2025-10-21)
 
 ### Features
