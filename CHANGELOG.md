@@ -1,5 +1,49 @@
 # Changelog
 
+## v3.14.2 (2025-09-14)
+
+### Bug fixes
+
+
+- Encryption length check ([`7f6bd8b`](https://github.com/Bluetooth-Devices/bthome-ble/commit/7f6bd8b16b71b26a7e3e0c303d61c71a22d3875c))
+
+
+- Length check of encrypted messages ([`7f6bd8b`](https://github.com/Bluetooth-Devices/bthome-ble/commit/7f6bd8b16b71b26a7e3e0c303d61c71a22d3875c))
+
+
+- Shelly device types not being detected ([`7f6bd8b`](https://github.com/Bluetooth-Devices/bthome-ble/commit/7f6bd8b16b71b26a7e3e0c303d61c71a22d3875c))
+
+
+### Chores
+
+
+- Increase coverage ([`7f6bd8b`](https://github.com/Bluetooth-Devices/bthome-ble/commit/7f6bd8b16b71b26a7e3e0c303d61c71a22d3875c))
+
+
+- Bump pytest from 8.4.1 to 8.4.2 ([`3043e4d`](https://github.com/Bluetooth-Devices/bthome-ble/commit/3043e4de96a2cd05eb68858c22667589014abe8e))
+
+
+- Pre-commit autoupdate ([`976e3d7`](https://github.com/Bluetooth-Devices/bthome-ble/commit/976e3d78316811f4cdb6c183a20c1ee3dc542927))
+
+
+- Bump habluetooth from 5.1.0 to 5.3.1 ([`7a195fb`](https://github.com/Bluetooth-Devices/bthome-ble/commit/7a195fb10133a4ca8e1be23a0905bfcccd759eaf))
+
+
+- Bump pytest-cov from 6.2.1 to 6.3.0 ([`eb514e1`](https://github.com/Bluetooth-Devices/bthome-ble/commit/eb514e103dba6d5d4085b537176fc6dec3acd727))
+
+
+- Bump cryptography from 45.0.6 to 45.0.7 ([`6f726f3`](https://github.com/Bluetooth-Devices/bthome-ble/commit/6f726f3fdb0034ea6c9325520f44f99380deb034))
+
+
+- Bump the github-actions group with 3 updates ([`7f92731`](https://github.com/Bluetooth-Devices/bthome-ble/commit/7f927319b2254c4e9d821f551b8c80d27983debc))
+
+
+- Bump habluetooth from 5.0.2 to 5.1.0 ([`15f5b7c`](https://github.com/Bluetooth-Devices/bthome-ble/commit/15f5b7cfefecdc1d1bad160d07dca929a08e88e2))
+
+
+- Bump habluetooth from 5.0.1 to 5.0.2 ([`9a88d17`](https://github.com/Bluetooth-Devices/bthome-ble/commit/9a88d178a09fa31d8434d4cbe56b5bc073976a16))
+
+
 ## v3.14.1 (2025-08-13)
 
 ### Bug fixes

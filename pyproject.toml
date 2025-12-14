@@ -1,6 +1,6 @@
 [project]
 name = "bthome-ble"
-version = "3.14.1"
+version = "3.14.2"
 description = "BThome BLE support"
 authors = [{ name = "Ernst Klamer", email = "e.klamer@gmail.com" }]
 license = "MIT"
@@ -48,7 +48,7 @@ docs = [
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.4"
-pytest-cov = "^6.3"
+pytest-cov = "^7.0"
 
 [tool.semantic_release]
 branch = "main"
