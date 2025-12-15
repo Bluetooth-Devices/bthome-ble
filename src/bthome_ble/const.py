@@ -497,4 +497,16 @@ MEAS_TYPES: dict[int, MeasTypes] = {
         meas_format=ExtendedSensorLibrary.ROTATIONAL_SPEED__REVOLUTIONS_PER_MINUTE,
         data_length=2,
     ),
+    0x62: MeasTypes(
+        meas_format=SensorLibrary.SPEED__SPEED_METERS_PER_SECOND,
+        data_length=4,
+        factor=0.000001,
+        data_format="signed_integer",
+    ),
+    0x63: MeasTypes(
+        meas_format=SensorLibrary.ACCELERATION__ACCELERATION_METERS_PER_SQUARE_SECOND,
+        data_length=4,
+        factor=0.000001,
+        data_format="signed_integer",
+    ),
 }

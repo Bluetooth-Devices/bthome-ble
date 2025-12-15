@@ -2382,6 +2382,49 @@ def test_bthome_speed(caplog):
     )
 
 
+def test_bthome_speed_signed(caplog):
+    """Test BTHome parser for signed, hi-res speed in m/s."""
+    data_string = b"\x40\x62\x40\x99\xdf\xff"
+    advertisement = bytes_to_service_info(
+        data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
+    )
+
+    device = BTHomeBluetoothDeviceData()
+
+    assert device.update(advertisement) == SensorUpdate(
+        title="TEST DEVICE 18B2",
+        devices={
+            None: SensorDeviceInfo(
+                name="TEST DEVICE 18B2",
+                manufacturer=None,
+                model="BTHome sensor",
+                sw_version="BTHome BLE v2",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            KEY_SPEED: SensorDescription(
+                device_key=KEY_SPEED,
+                device_class=SensorDeviceClass.SPEED,
+                native_unit_of_measurement=Units.SPEED_METERS_PER_SECOND,
+            ),
+            KEY_SIGNAL_STRENGTH: SensorDescription(
+                device_key=KEY_SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
+            KEY_SPEED: SensorValue(
+                device_key=KEY_SPEED, name="Speed", native_value=-2.123456
+            ),
+            KEY_SIGNAL_STRENGTH: SensorValue(
+                device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+    )
+
+
 def test_bthome_temperature_2(caplog):
     """Test BTHome parser for temperature with one digit."""
     data_string = b"\x40\x45\x11\x01"
@@ -2931,6 +2974,49 @@ def test_bthome_acceleration(caplog):
         entity_values={
             KEY_ACCELERATION: SensorValue(
                 device_key=KEY_ACCELERATION, name="Acceleration", native_value=22.151
+            ),
+            KEY_SIGNAL_STRENGTH: SensorValue(
+                device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+    )
+
+
+def test_bthome_acceleration_signed(caplog):
+    """Test BTHome parser for signed, hi-res acceleration in m/s°."""
+    data_string = b"\x40\x63\x00\x57\xd0\xff"
+    advertisement = bytes_to_service_info(
+        data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
+    )
+
+    device = BTHomeBluetoothDeviceData()
+
+    assert device.update(advertisement) == SensorUpdate(
+        title="TEST DEVICE 18B2",
+        devices={
+            None: SensorDeviceInfo(
+                name="TEST DEVICE 18B2",
+                manufacturer=None,
+                model="BTHome sensor",
+                sw_version="BTHome BLE v2",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            KEY_ACCELERATION: SensorDescription(
+                device_key=KEY_ACCELERATION,
+                device_class=SensorDeviceClass.ACCELERATION,
+                native_unit_of_measurement=Units.ACCELERATION_METERS_PER_SQUARE_SECOND,
+            ),
+            KEY_SIGNAL_STRENGTH: SensorDescription(
+                device_key=KEY_SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
+            KEY_ACCELERATION: SensorValue(
+                device_key=KEY_ACCELERATION, name="Acceleration", native_value=-3.123456
             ),
             KEY_SIGNAL_STRENGTH: SensorValue(
                 device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
