@@ -1,5 +1,22 @@
 # Changelog
 
+## v3.16.0 (2025-12-17)
+
+### Features
+
+
+- Add signed speed, acceleration oids ([`c3da4f4`](https://github.com/Bluetooth-Devices/bthome-ble/commit/c3da4f40205dc2174757593c7605a9d256252bc5))
+
+
+- Add signed speed, acceleration ([`c3da4f4`](https://github.com/Bluetooth-Devices/bthome-ble/commit/c3da4f40205dc2174757593c7605a9d256252bc5))
+
+
+### Chores
+
+
+- Pre-commit autoupdate ([`5c9d06c`](https://github.com/Bluetooth-Devices/bthome-ble/commit/5c9d06c97b3778486ec617fa9cb8f0307b0a65ea))
+
+
 ## v3.15.1 (2025-12-14)
 
 ### Bug fixes
