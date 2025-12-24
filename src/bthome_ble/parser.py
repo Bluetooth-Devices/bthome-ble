@@ -172,6 +172,10 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         # If this is True, the device is not sending advertisements in a regular interval
         self.sleepy_device = False
 
+        # If this is True, the last update was blocked due to encryption downgrade
+        # (received unencrypted data when bindkey is configured)
+        self.downgrade_detected = False
+
     def set_bindkey(self, bindkey: bytes | None) -> None:
         """Set the bindkey."""
         self.bindkey = bindkey
@@ -238,13 +242,16 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                     "Received plaintext adv from %s while bindkey is known, ignoring!",
                     identifier,
                 )
+                self.downgrade_detected = True
                 return False
+            self.downgrade_detected = False
             self.set_device_type("BTHome sensor")
             self.encryption_scheme = EncryptionScheme.NONE
             self.set_device_sw_version("BTHome BLE v1")
             payload = service_data
         elif "0000181e-0000-1000-8000-00805f9b34fb" in uuid16:
             # Encrypted BTHome BLE format
+            self.downgrade_detected = False
             self.set_device_type("BTHome sensor")
             self.encryption_scheme = EncryptionScheme.BTHOME_BINDKEY
             self.set_device_sw_version("BTHome BLE v1 (encrypted)")
@@ -293,7 +300,11 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                 "Received plaintext adv from %s while bindkey is known, ignoring!",
                 identifier,
             )
+            self.downgrade_detected = True
             return False
+
+        # Clear flag when processing valid data (encrypted or unencrypted without bindkey)
+        self.downgrade_detected = False
 
         # If True, the first 6 bytes contain the mac address
         mac_included = adv_info & (1 << 1)  # bit 1

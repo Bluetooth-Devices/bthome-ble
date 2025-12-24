@@ -159,6 +159,44 @@ def test_encryption_downgrade_fails():
     assert not device.bindkey_verified
 
 
+def test_downgrade_detected_flag_v2():
+    """Test that downgrade_detected flag is set correctly for v2."""
+    bindkey = "231d39c1d7cc1ab1aee224cd096db932"
+
+    # Encrypted v2 advertisement
+    encrypted_data = b"\x41\xc8i\xd3~\xa5\xf8\x8e'\x16)\xec\xf2z\x85"
+    encrypted_adv = bytes_to_service_info(
+        payload=encrypted_data,
+        local_name="TEST DEVICE",
+        address="54:48:E6:8F:80:A5",
+    )
+
+    # Unencrypted v2 advertisement
+    unencrypted_data = b"\x40\x04\x13\x8a\x01"
+    unencrypted_adv = bytes_to_service_info(
+        payload=unencrypted_data,
+        local_name="TEST DEVICE",
+        address="54:48:E6:8F:80:A5",
+    )
+
+    device = BTHomeBluetoothDeviceData(bindkey=bytes.fromhex(bindkey))
+
+    # Encrypted → should not set flag
+    assert device.supported(encrypted_adv)
+    device.update(encrypted_adv)
+    assert not device.downgrade_detected
+
+    # Unencrypted → should set flag
+    # Note: supported() still returns True (it's valid BTHome format)
+    # but update() blocks the data and sets the flag
+    device.update(unencrypted_adv)
+    assert device.downgrade_detected
+
+    # Encrypted resumes → should clear flag
+    device.update(encrypted_adv)  # type: ignore[unreachable]  # update() changes flag
+    assert not device.downgrade_detected
+
+
 def test_sleepy_device():
     """Test that we can detect that a device that doesn't update regularly."""
     data_string = b"\x44\x04\x13\x8a\x01"
