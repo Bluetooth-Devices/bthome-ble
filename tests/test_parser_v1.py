@@ -189,7 +189,7 @@ def test_downgrade_detected_flag_v1():
     assert device.downgrade_detected  # Should be True - downgrade detected!
 
     # Finally: encrypted data resumes
-    device.update(encrypted_adv)  # type: ignore[unreachable]  # Mypy doesn't know update() can change the flag
+    device.update(encrypted_adv)  # type: ignore[unreachable]  # update() changes flag
     assert not device.downgrade_detected  # Should be cleared
 
 
