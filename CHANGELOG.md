@@ -1,5 +1,28 @@
 # Changelog
 
+## v3.17.0 (2025-12-24)
+
+### Features
+
+
+- Add downgrade_detected flag for encryption downgrade detection ([`9f79b9d`](https://github.com/Bluetooth-Devices/bthome-ble/commit/9f79b9d14e3e0cfae2ca0cd44e79c4124263efb4))
+
+
+- Add downgrade_detected flag for encryption downgrade ([`9f79b9d`](https://github.com/Bluetooth-Devices/bthome-ble/commit/9f79b9d14e3e0cfae2ca0cd44e79c4124263efb4))
+
+
+### Chores
+
+
+- Auto fixes ([`9f79b9d`](https://github.com/Bluetooth-Devices/bthome-ble/commit/9f79b9d14e3e0cfae2ca0cd44e79c4124263efb4))
+
+
+### Bug fixes
+
+
+- Shorten long comment lines to pass line length check ([`9f79b9d`](https://github.com/Bluetooth-Devices/bthome-ble/commit/9f79b9d14e3e0cfae2ca0cd44e79c4124263efb4))
+
+
 ## v3.16.0 (2025-12-17)
 
 ### Features
