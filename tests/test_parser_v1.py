@@ -157,7 +157,7 @@ def test_encryption_downgrade_fails():
 def test_downgrade_detected_flag_v1():
     """Test that downgrade_detected flag is set correctly."""
     bindkey = "231d39c1d7cc1ab1aee224cd096db932"
-    
+
     # Encrypted advertisement (use actual encrypted data from Home Assistant tests)
     encrypted_data = b'\xfb\xa45\xe4\xd3\xc3\x12\xfb\x00\x11"3W\xd9\n\x99'
     encrypted_adv = bytes_to_encrypted_service_info(
@@ -165,7 +165,7 @@ def test_downgrade_detected_flag_v1():
         local_name="TEST DEVICE",
         address="54:48:E6:8F:80:A5",
     )
-    
+
     # Unencrypted advertisement (same device)
     unencrypted_data = b"\x02\x00\x0c\x04\x04\x13\x8a\x01"
     unencrypted_adv = bytes_to_service_info(
@@ -173,23 +173,23 @@ def test_downgrade_detected_flag_v1():
         local_name="TEST DEVICE",
         address="54:48:E6:8F:80:A5",
     )
-    
+
     device = BTHomeBluetoothDeviceData(bindkey=bytes.fromhex(bindkey))
-    
+
     # First: process encrypted data
     assert device.supported(encrypted_adv)
     device.update(encrypted_adv)
     assert device.bindkey_verified
     assert not device.downgrade_detected  # Should be False after successful decrypt
-    
+
     # Then: receive unencrypted data (downgrade attack)
     # Note: supported() still returns True (it's valid BTHome format)
     # but update() blocks the data and sets the flag
     device.update(unencrypted_adv)
     assert device.downgrade_detected  # Should be True - downgrade detected!
-    
+
     # Finally: encrypted data resumes
-    device.update(encrypted_adv)
+    device.update(encrypted_adv)  # type: ignore[unreachable]  # Mypy doesn't know update() can change the flag
     assert not device.downgrade_detected  # Should be cleared
 
 
