@@ -47,6 +47,20 @@ class UuidType(Enum):
     V2 = "0000fcd2-0000-1000-8000-00805f9b34fb"
 
 
+def get_encryption_scheme(uuid: UuidType, service_data: bytes) -> EncryptionScheme:
+    match uuid:
+        case UuidType.V1_NON_ENCRYPTED:
+            return EncryptionScheme.NONE
+        case UuidType.V1_ENCRYPTED:
+            return EncryptionScheme.BTHOME_BINDKEY
+        case UuidType.V2:
+            adv_info = service_data[0]
+            encryption = adv_info & (1 << 0)  # bit 0
+            if encryption == 1:
+                return EncryptionScheme.BTHOME_BINDKEY
+            return EncryptionScheme.NONE
+
+
 def to_mac(addr: bytes) -> str:
     """Return formatted MAC address."""
     return ":".join(f"{i:02X}" for i in addr)
@@ -203,6 +217,22 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                 self.last_service_info = service_info
         return None
 
+    def _set_encryption_scheme(self, uuid: UuidType, service_data: bytes) -> None:
+        self.encryption_scheme = get_encryption_scheme(uuid, service_data)
+
+    def _set_downgrade_detected(self, service_info: BluetoothServiceInfoBleak) -> None:
+        identifier = short_address(service_info.address)
+        if self.bindkey and self.encryption_scheme == EncryptionScheme.NONE:
+            _LOGGER.warning(
+                "Received plaintext adv from %s while bindkey is known, ignoring!",
+                identifier,
+            )
+            self.downgrade_detected = True
+            return
+
+        # Clear flag when processing valid data (encrypted or unencrypted without bindkey)
+        self.downgrade_detected = False
+
     def _parse_bthome(
         self,
         uuid: str,
@@ -214,6 +244,12 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             uuid_type = UuidType(uuid)
         except ValueError:
             return False
+
+        self._set_encryption_scheme(uuid_type, service_data)
+        self._set_downgrade_detected(service_info)
+        if self.downgrade_detected:
+            return False
+
         match uuid_type:
             case UuidType.V1_NON_ENCRYPTED | UuidType.V1_ENCRYPTED:
                 return self._parse_bthome_v1(service_info, service_data)
@@ -250,36 +286,22 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         self.set_device_name(f"{name} {identifier}")
         self.set_title(f"{name} {identifier}")
 
-        uuid16 = list(service_info.service_data.keys())
-        if UuidType.V1_NON_ENCRYPTED.value in uuid16:
-            if self.bindkey:
-                _LOGGER.warning(
-                    "Received plaintext adv from %s while bindkey is known, ignoring!",
-                    identifier,
-                )
-                self.downgrade_detected = True
-                return False
-            self.downgrade_detected = False
-            self.set_device_type("BTHome sensor")
-            self.encryption_scheme = EncryptionScheme.NONE
-            self.set_device_sw_version("BTHome BLE v1")
-            payload = service_data
-        elif UuidType.V1_ENCRYPTED.value in uuid16:
-            self.downgrade_detected = False
-            self.set_device_type("BTHome sensor")
-            self.encryption_scheme = EncryptionScheme.BTHOME_BINDKEY
-            self.set_device_sw_version("BTHome BLE v1 (encrypted)")
-            mac_readable = service_info.address
-            source_mac = bytes.fromhex(mac_readable.replace(":", ""))
+        self.set_device_type("BTHome sensor")
+        match self.encryption_scheme:
+            case EncryptionScheme.NONE:
+                self.set_device_sw_version("BTHome BLE v1")
+                payload = service_data
+            case EncryptionScheme.BTHOME_BINDKEY:
+                self.set_device_sw_version("BTHome BLE v1 (encrypted)")
+                mac_readable = service_info.address
+                source_mac = bytes.fromhex(mac_readable.replace(":", ""))
 
-            try:
-                payload = self._decrypt_bthome(
-                    service_info, service_data, source_mac, sw_version
-                )
-            except (ValueError, TypeError):
-                return True
-        else:
-            return False
+                try:
+                    payload = self._decrypt_bthome(
+                        service_info, service_data, source_mac, sw_version
+                    )
+                except (ValueError, TypeError):
+                    return True
 
         return self._parse_payload(payload, sw_version, service_info.time)
 
@@ -301,24 +323,6 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             name = name[:-6].rstrip(" _")
 
         adv_info = service_data[0]
-
-        # Determine if encryption is used
-        encryption = adv_info & (1 << 0)  # bit 0
-        if encryption == 1:
-            self.encryption_scheme = EncryptionScheme.BTHOME_BINDKEY
-        else:
-            self.encryption_scheme = EncryptionScheme.NONE
-
-        if self.bindkey and self.encryption_scheme == EncryptionScheme.NONE:
-            _LOGGER.warning(
-                "Received plaintext adv from %s while bindkey is known, ignoring!",
-                identifier,
-            )
-            self.downgrade_detected = True
-            return False
-
-        # Clear flag when processing valid data (encrypted or unencrypted without bindkey)
-        self.downgrade_detected = False
 
         # If True, the first 6 bytes contain the mac address
         mac_included = adv_info & (1 << 1)  # bit 1
