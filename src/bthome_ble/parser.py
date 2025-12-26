@@ -67,6 +67,19 @@ def get_software_version(service_data: bytes) -> int:
     return sw_version
 
 
+def get_name(service_info: BluetoothServiceInfoBleak) -> str:
+    name = service_info.name
+
+    if name == service_info.address:
+        name = "BTHome sensor"
+
+    # Remove identifier from ATC sensors name.
+    atc_identifier = service_info.address.replace("-", "").replace(":", "")[-6:].upper()
+    if name[-6:] == atc_identifier:
+        name = name[:-6].rstrip(" _")
+    return name
+
+
 def to_mac(addr: bytes) -> str:
     """Return formatted MAC address."""
     return ":".join(f"{i:02X}" for i in addr)
@@ -275,34 +288,28 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         self, service_info: BluetoothServiceInfoBleak, service_data: bytes
     ) -> bool:
         """Parser for BTHome sensors version V1"""
-        identifier = short_address(service_info.address)
-        name = service_info.name
         sw_version = 1
+        self._set_software_version(sw_version, service_info)
 
-        # Remove identifier from ATC sensors.
-        atc_identifier = (
-            service_info.address.replace("-", "").replace(":", "")[-6:].upper()
-        )
-        if name[-6:] == atc_identifier:
-            name = name[:-6].rstrip(" _")
-
-        # Try to get manufacturer
+        # Try to get manufacturer based on the name
+        identifier = short_address(service_info.address)
+        name = get_name(service_info)
         if name.startswith(("ATC", "LYWSD03MMC")):
             manufacturer = "Xiaomi"
+            device_type = "Temperature/Humidity sensor"
         elif name.startswith("prst"):
             manufacturer = "b-parasite"
             name = "b-parasite"
+            device_type = "Plant sensor"
         else:
             manufacturer = None
-
+            device_type = "BTHome sensor"
         if manufacturer:
             self.set_device_manufacturer(manufacturer)
-
         self.set_device_name(f"{name} {identifier}")
         self.set_title(f"{name} {identifier}")
+        self.set_device_type(device_type)
 
-        self.set_device_type("BTHome sensor")
-        self._set_software_version(sw_version, service_info)
         match self.encryption_scheme:
             case EncryptionScheme.NONE:
                 payload = service_data
@@ -323,21 +330,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         self, service_info: BluetoothServiceInfoBleak, service_data: bytes
     ) -> bool:
         """Parser for BTHome sensors version V2"""
-        identifier = short_address(service_info.address)
-        name = service_info.name
-
-        if name == service_info.address:
-            name = "BTHome sensor"
-
-        # Remove identifier from ATC sensors name.
-        atc_identifier = (
-            service_info.address.replace("-", "").replace(":", "")[-6:].upper()
-        )
-        if name[-6:] == atc_identifier:
-            name = name[:-6].rstrip(" _")
-
         adv_info = service_data[0]
-
         # If True, the first 6 bytes contain the mac address
         mac_included = adv_info & (1 << 1)  # bit 1
         if mac_included:
@@ -353,6 +346,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
 
         sw_version = get_software_version(service_data)
         if sw_version != 2:
+            identifier = short_address(service_info.address)
             _LOGGER.error(
                 "%s: Sensor is set to use BTHome version %s, which is not existing. "
                 "Please modify the version in the first byte of the service data",
@@ -363,6 +357,8 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         self._set_software_version(sw_version, service_info)
 
         # Try to get manufacturer based on the name
+        identifier = short_address(service_info.address)
+        name = get_name(service_info)
         if name.startswith(("ATC", "LYWSD03MMC")):
             manufacturer = "Xiaomi"
             device_type = "Temperature/Humidity sensor"
@@ -405,10 +401,8 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         else:
             manufacturer = None
             device_type = "BTHome sensor"
-
         if manufacturer:
             self.set_device_manufacturer(manufacturer)
-
         # Get device information from local name and identifier
         self.set_device_name(f"{name} {identifier}")
         self.set_title(f"{name} {identifier}")
