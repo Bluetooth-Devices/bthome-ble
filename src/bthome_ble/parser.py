@@ -61,6 +61,12 @@ def get_encryption_scheme(uuid: UuidType, service_data: bytes) -> EncryptionSche
             return EncryptionScheme.NONE
 
 
+def get_software_version(service_data: bytes) -> int:
+    adv_info = service_data[0]
+    sw_version = (adv_info >> 5) & 7  # 3 bits (5-7)
+    return sw_version
+
+
 def to_mac(addr: bytes) -> str:
     """Return formatted MAC address."""
     return ":".join(f"{i:02X}" for i in addr)
@@ -221,8 +227,8 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         self.encryption_scheme = get_encryption_scheme(uuid, service_data)
 
     def _set_downgrade_detected(self, service_info: BluetoothServiceInfoBleak) -> None:
-        identifier = short_address(service_info.address)
         if self.bindkey and self.encryption_scheme == EncryptionScheme.NONE:
+            identifier = short_address(service_info.address)
             _LOGGER.warning(
                 "Received plaintext adv from %s while bindkey is known, ignoring!",
                 identifier,
@@ -232,6 +238,15 @@ class BTHomeBluetoothDeviceData(BluetoothData):
 
         # Clear flag when processing valid data (encrypted or unencrypted without bindkey)
         self.downgrade_detected = False
+
+    def _set_software_version(
+        self, sw_version: int, service_info: BluetoothServiceInfoBleak
+    ) -> None:
+        match self.encryption_scheme:
+            case EncryptionScheme.NONE:
+                self.set_device_sw_version(f"BTHome BLE v{sw_version}")
+            case EncryptionScheme.BTHOME_BINDKEY:
+                self.set_device_sw_version(f"BTHome BLE v{sw_version} (encrypted)")
 
     def _parse_bthome(
         self,
@@ -287,12 +302,11 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         self.set_title(f"{name} {identifier}")
 
         self.set_device_type("BTHome sensor")
+        self._set_software_version(sw_version, service_info)
         match self.encryption_scheme:
             case EncryptionScheme.NONE:
-                self.set_device_sw_version("BTHome BLE v1")
                 payload = service_data
             case EncryptionScheme.BTHOME_BINDKEY:
-                self.set_device_sw_version("BTHome BLE v1 (encrypted)")
                 mac_readable = service_info.address
                 source_mac = bytes.fromhex(mac_readable.replace(":", ""))
 
@@ -337,14 +351,8 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         # If True, the device is only updating when triggered
         self.sleepy_device = bool(adv_info & (1 << 2))  # bit 2
 
-        # Check BTHome version
-        sw_version = (adv_info >> 5) & 7  # 3 bits (5-7)
-        if sw_version == 2:
-            if self.encryption_scheme == EncryptionScheme.BTHOME_BINDKEY:
-                self.set_device_sw_version(f"BTHome BLE v{sw_version} (encrypted)")
-            else:
-                self.set_device_sw_version(f"BTHome BLE v{sw_version}")
-        else:
+        sw_version = get_software_version(service_data)
+        if sw_version != 2:
             _LOGGER.error(
                 "%s: Sensor is set to use BTHome version %s, which is not existing. "
                 "Please modify the version in the first byte of the service data",
@@ -352,6 +360,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                 sw_version,
             )
             return False
+        self._set_software_version(sw_version, service_info)
 
         # Try to get manufacturer based on the name
         if name.startswith(("ATC", "LYWSD03MMC")):
