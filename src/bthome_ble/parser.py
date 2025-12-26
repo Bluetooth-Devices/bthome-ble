@@ -261,101 +261,9 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             case EncryptionScheme.BTHOME_BINDKEY:
                 self.set_device_sw_version(f"BTHome BLE v{sw_version} (encrypted)")
 
-    def _parse_bthome(
-        self,
-        uuid: str,
-        service_info: BluetoothServiceInfoBleak,
-        service_data: bytes,
-    ) -> bool:
-        """Parser for BTHome sensors"""
-        try:
-            uuid_type = UuidType(uuid)
-        except ValueError:
-            return False
-
-        self._set_encryption_scheme(uuid_type, service_data)
-        self._set_downgrade_detected(service_info)
-        if self.downgrade_detected:
-            return False
-
-        match uuid_type:
-            case UuidType.V1_NON_ENCRYPTED | UuidType.V1_ENCRYPTED:
-                return self._parse_bthome_v1(service_info, service_data)
-            case UuidType.V2:
-                return self._parse_bthome_v2(service_info, service_data)
-
-    def _parse_bthome_v1(
-        self, service_info: BluetoothServiceInfoBleak, service_data: bytes
-    ) -> bool:
-        """Parser for BTHome sensors version V1"""
-        sw_version = 1
-        self._set_software_version(sw_version, service_info)
-
-        # Try to get manufacturer based on the name
-        identifier = short_address(service_info.address)
-        name = get_name(service_info)
-        if name.startswith(("ATC", "LYWSD03MMC")):
-            manufacturer = "Xiaomi"
-            device_type = "Temperature/Humidity sensor"
-        elif name.startswith("prst"):
-            manufacturer = "b-parasite"
-            name = "b-parasite"
-            device_type = "Plant sensor"
-        else:
-            manufacturer = None
-            device_type = "BTHome sensor"
-        if manufacturer:
-            self.set_device_manufacturer(manufacturer)
-        self.set_device_name(f"{name} {identifier}")
-        self.set_title(f"{name} {identifier}")
-        self.set_device_type(device_type)
-
-        match self.encryption_scheme:
-            case EncryptionScheme.NONE:
-                payload = service_data
-            case EncryptionScheme.BTHOME_BINDKEY:
-                mac_readable = service_info.address
-                source_mac = bytes.fromhex(mac_readable.replace(":", ""))
-
-                try:
-                    payload = self._decrypt_bthome(
-                        service_info, service_data, source_mac, sw_version
-                    )
-                except (ValueError, TypeError):
-                    return True
-
-        return self._parse_payload(payload, sw_version, service_info.time)
-
-    def _parse_bthome_v2(
-        self, service_info: BluetoothServiceInfoBleak, service_data: bytes
-    ) -> bool:
-        """Parser for BTHome sensors version V2"""
-        adv_info = service_data[0]
-        # If True, the first 6 bytes contain the mac address
-        mac_included = adv_info & (1 << 1)  # bit 1
-        if mac_included:
-            bthome_mac_reversed = service_data[1:7]
-            mac_readable = to_mac(bthome_mac_reversed[::-1])
-            payload = service_data[7:]
-        else:
-            mac_readable = service_info.address
-            payload = service_data[1:]
-
-        # If True, the device is only updating when triggered
-        self.sleepy_device = bool(adv_info & (1 << 2))  # bit 2
-
-        sw_version = get_software_version(service_data)
-        if sw_version != 2:
-            identifier = short_address(service_info.address)
-            _LOGGER.error(
-                "%s: Sensor is set to use BTHome version %s, which is not existing. "
-                "Please modify the version in the first byte of the service data",
-                identifier,
-                sw_version,
-            )
-            return False
-        self._set_software_version(sw_version, service_info)
-
+    def _set_manufacture_name_type_and_title(
+        self, service_info: BluetoothServiceInfoBleak
+    ) -> None:
         # Try to get manufacturer based on the name
         identifier = short_address(service_info.address)
         name = get_name(service_info)
@@ -407,6 +315,86 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         self.set_device_name(f"{name} {identifier}")
         self.set_title(f"{name} {identifier}")
         self.set_device_type(device_type)
+
+    def _parse_bthome(
+        self,
+        uuid: str,
+        service_info: BluetoothServiceInfoBleak,
+        service_data: bytes,
+    ) -> bool:
+        """Parser for BTHome sensors"""
+        try:
+            uuid_type = UuidType(uuid)
+        except ValueError:
+            return False
+
+        self._set_encryption_scheme(uuid_type, service_data)
+        self._set_downgrade_detected(service_info)
+        if self.downgrade_detected:
+            return False
+
+        match uuid_type:
+            case UuidType.V1_NON_ENCRYPTED | UuidType.V1_ENCRYPTED:
+                return self._parse_bthome_v1(service_info, service_data)
+            case UuidType.V2:
+                return self._parse_bthome_v2(service_info, service_data)
+
+    def _parse_bthome_v1(
+        self, service_info: BluetoothServiceInfoBleak, service_data: bytes
+    ) -> bool:
+        """Parser for BTHome sensors version V1"""
+        sw_version = 1
+        self._set_software_version(sw_version, service_info)
+
+        self._set_manufacture_name_type_and_title(service_info)
+
+        match self.encryption_scheme:
+            case EncryptionScheme.NONE:
+                payload = service_data
+            case EncryptionScheme.BTHOME_BINDKEY:
+                mac_readable = service_info.address
+                source_mac = bytes.fromhex(mac_readable.replace(":", ""))
+
+                try:
+                    payload = self._decrypt_bthome(
+                        service_info, service_data, source_mac, sw_version
+                    )
+                except (ValueError, TypeError):
+                    return True
+
+        return self._parse_payload(payload, sw_version, service_info.time)
+
+    def _parse_bthome_v2(
+        self, service_info: BluetoothServiceInfoBleak, service_data: bytes
+    ) -> bool:
+        """Parser for BTHome sensors version V2"""
+        adv_info = service_data[0]
+        # If True, the first 6 bytes contain the mac address
+        mac_included = adv_info & (1 << 1)  # bit 1
+        if mac_included:
+            bthome_mac_reversed = service_data[1:7]
+            mac_readable = to_mac(bthome_mac_reversed[::-1])
+            payload = service_data[7:]
+        else:
+            mac_readable = service_info.address
+            payload = service_data[1:]
+
+        # If True, the device is only updating when triggered
+        self.sleepy_device = bool(adv_info & (1 << 2))  # bit 2
+
+        sw_version = get_software_version(service_data)
+        if sw_version != 2:
+            identifier = short_address(service_info.address)
+            _LOGGER.error(
+                "%s: Sensor is set to use BTHome version %s, which is not existing. "
+                "Please modify the version in the first byte of the service data",
+                identifier,
+                sw_version,
+            )
+            return False
+        self._set_software_version(sw_version, service_info)
+
+        self._set_manufacture_name_type_and_title(service_info)
 
         if self.encryption_scheme == EncryptionScheme.BTHOME_BINDKEY:
             bthome_mac = bytes.fromhex(mac_readable.replace(":", ""))
