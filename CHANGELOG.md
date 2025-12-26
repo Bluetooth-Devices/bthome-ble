@@ -1,5 +1,31 @@
 # Changelog
 
+## v3.18.0 (2025-12-26)
+
+### Refactoring
+
+
+- Unify getting name and shape manufacture setting ([`edd71d2`](https://github.com/Bluetooth-Devices/bthome-ble/commit/edd71d20cd8c217a294554335153b3793ddb3dd5))
+
+
+- Unify getting name and shape manufacture setting ([`edd71d2`](https://github.com/Bluetooth-Devices/bthome-ble/commit/edd71d20cd8c217a294554335153b3793ddb3dd5))
+
+
+- Unify setting software version ([`cbf891a`](https://github.com/Bluetooth-Devices/bthome-ble/commit/cbf891ac372dabe3405c7dd9ecdc9f55d45dbaae))
+
+
+- Unify encryption and downgrade detection for v1 and v2 parser ([`f8bacb6`](https://github.com/Bluetooth-Devices/bthome-ble/commit/f8bacb6b161aa6ab8c5b95c0032c250af0446e40))
+
+
+- Introduce enum for uuids to split _start_update and improve readabilty ([`d3d0fcf`](https://github.com/Bluetooth-Devices/bthome-ble/commit/d3d0fcf410b1a3ed9998ce6eec2dd0b180905718))
+
+
+### Features
+
+
+- Improve device type for v1 parser ([`edd71d2`](https://github.com/Bluetooth-Devices/bthome-ble/commit/edd71d20cd8c217a294554335153b3793ddb3dd5))
+
+
 ## v3.17.0 (2025-12-24)
 
 ### Features
