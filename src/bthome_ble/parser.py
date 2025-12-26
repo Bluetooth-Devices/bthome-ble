@@ -41,6 +41,12 @@ class EncryptionScheme(Enum):
     BTHOME_BINDKEY = "bthome_bindkey"
 
 
+class UuidType(Enum):
+    V1_NON_ENCRYPTED = "0000181c-0000-1000-8000-00805f9b34fb"
+    V1_ENCRYPTED = "0000181e-0000-1000-8000-00805f9b34fb"
+    V2 = "0000fcd2-0000-1000-8000-00805f9b34fb"
+
+
 def to_mac(addr: bytes) -> str:
     """Return formatted MAC address."""
     return ":".join(f"{i:02X}" for i in addr)
@@ -193,16 +199,26 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         """Update from BLE advertisement data."""
         _LOGGER.debug("Parsing BTHome BLE advertisement data: %s", service_info)
         for uuid, service_data in service_info.service_data.items():
-            if uuid in [
-                "0000181c-0000-1000-8000-00805f9b34fb",
-                "0000181e-0000-1000-8000-00805f9b34fb",
-            ]:
-                if self._parse_bthome_v1(service_info, service_data):
-                    self.last_service_info = service_info
-            elif uuid == "0000fcd2-0000-1000-8000-00805f9b34fb":
-                if self._parse_bthome_v2(service_info, service_data):
-                    self.last_service_info = service_info
+            if self._parse_bthome(uuid, service_info, service_data):
+                self.last_service_info = service_info
         return None
+
+    def _parse_bthome(
+        self,
+        uuid: str,
+        service_info: BluetoothServiceInfoBleak,
+        service_data: bytes,
+    ) -> bool:
+        """Parser for BTHome sensors"""
+        try:
+            uuid_type = UuidType(uuid)
+        except ValueError:
+            return False
+        match uuid_type:
+            case UuidType.V1_NON_ENCRYPTED | UuidType.V1_ENCRYPTED:
+                return self._parse_bthome_v1(service_info, service_data)
+            case UuidType.V2:
+                return self._parse_bthome_v2(service_info, service_data)
 
     def _parse_bthome_v1(
         self, service_info: BluetoothServiceInfoBleak, service_data: bytes
@@ -235,8 +251,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         self.set_title(f"{name} {identifier}")
 
         uuid16 = list(service_info.service_data.keys())
-        if "0000181c-0000-1000-8000-00805f9b34fb" in uuid16:
-            # Non-encrypted BTHome BLE format
+        if UuidType.V1_NON_ENCRYPTED.value in uuid16:
             if self.bindkey:
                 _LOGGER.warning(
                     "Received plaintext adv from %s while bindkey is known, ignoring!",
@@ -249,8 +264,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             self.encryption_scheme = EncryptionScheme.NONE
             self.set_device_sw_version("BTHome BLE v1")
             payload = service_data
-        elif "0000181e-0000-1000-8000-00805f9b34fb" in uuid16:
-            # Encrypted BTHome BLE format
+        elif UuidType.V1_ENCRYPTED.value in uuid16:
             self.downgrade_detected = False
             self.set_device_type("BTHome sensor")
             self.encryption_scheme = EncryptionScheme.BTHOME_BINDKEY
