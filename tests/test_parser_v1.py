@@ -212,7 +212,7 @@ def test_bindkey_wrong():
             None: SensorDeviceInfo(
                 name="ATC 18B2",
                 manufacturer="Xiaomi",
-                model="BTHome sensor",
+                model="Temperature/Humidity sensor",
                 sw_version="BTHome BLE v1 (encrypted)",
                 hw_version=None,
             )
@@ -318,7 +318,7 @@ def test_bthome_temperature_humidity(caplog):
             None: SensorDeviceInfo(
                 name="ATC 18B2",
                 manufacturer="Xiaomi",
-                model="BTHome sensor",
+                model="Temperature/Humidity sensor",
                 sw_version="BTHome BLE v1",
                 hw_version=None,
             )
@@ -368,7 +368,7 @@ def test_bthome_temperature_humidity_battery(caplog):
             None: SensorDeviceInfo(
                 name="ATC 18B2",
                 manufacturer="Xiaomi",
-                model="BTHome sensor",
+                model="Temperature/Humidity sensor",
                 sw_version="BTHome BLE v1",
                 hw_version=None,
             )
@@ -1117,7 +1117,7 @@ def test_bthome_moisture(caplog):
             None: SensorDeviceInfo(
                 name="b-parasite 18B2",
                 manufacturer="b-parasite",
-                model="BTHome sensor",
+                model="Plant sensor",
                 sw_version="BTHome BLE v1",
                 hw_version=None,
             )
@@ -1264,7 +1264,7 @@ def test_bthome_multiple_uuids(caplog):
             None: SensorDeviceInfo(
                 name="ATC 18B2",
                 manufacturer="Xiaomi",
-                model="BTHome sensor",
+                model="Temperature/Humidity sensor",
                 sw_version="BTHome BLE v1",
                 hw_version=None,
             )

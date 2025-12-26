@@ -296,13 +296,11 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         name = get_name(service_info)
         if name.startswith(("ATC", "LYWSD03MMC")):
             manufacturer = "Xiaomi"
-            # device_type = "Temperature/Humidity sensor"
-            device_type = "BTHome sensor"
+            device_type = "Temperature/Humidity sensor"
         elif name.startswith("prst"):
             manufacturer = "b-parasite"
             name = "b-parasite"
-            # device_type = "Plant sensor"
-            device_type = "BTHome sensor"
+            device_type = "Plant sensor"
         else:
             manufacturer = None
             device_type = "BTHome sensor"
