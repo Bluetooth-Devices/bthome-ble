@@ -1,5 +1,28 @@
 # Changelog
 
+## v3.19.0 (2025-12-27)
+
+### Features
+
+
+- Add shelly blu h&t zb and blu button1 zb ([`00d62ef`](https://github.com/Bluetooth-Devices/bthome-ble/commit/00d62ef19589018cdf60d6538aeaa692b758a229))
+
+
+### Refactoring
+
+
+- Unifiy sleepy devices and software version ([`1a76059`](https://github.com/Bluetooth-Devices/bthome-ble/commit/1a76059765fc489a6cecebd126a675f59b20f09d))
+
+
+- Unify decryption of palyload ([`c2cd036`](https://github.com/Bluetooth-Devices/bthome-ble/commit/c2cd0369be39756976be8d4e079e375f2c0aa51f))
+
+
+- Unify payload decryption ([`c2cd036`](https://github.com/Bluetooth-Devices/bthome-ble/commit/c2cd0369be39756976be8d4e079e375f2c0aa51f))
+
+
+- Unify setting manufacturer, title, name and device type ([`a1b8d8d`](https://github.com/Bluetooth-Devices/bthome-ble/commit/a1b8d8def9d15df57cddaf9e658710bebb7c178f))
+
+
 ## v3.18.0 (2025-12-26)
 
 ### Refactoring
