@@ -1972,6 +1972,49 @@ def test_bthome_event_button_long_press(caplog):
     )
 
 
+def test_shelly_blu_button_zb(caplog):
+    """Test BTHome parser for an event of a long press on a button without encryption."""
+    data_string = b"\x40\x3a\x04"
+    advertisement = bytes_to_service_info(
+        data_string, local_name="SBBT-102C", address="A4:C1:38:8D:18:B2"
+    )
+
+    device = BTHomeBluetoothDeviceData()
+
+    assert device.update(advertisement) == SensorUpdate(
+        title="Shelly BLU Button1 ZB 18B2",
+        devices={
+            None: SensorDeviceInfo(
+                name="Shelly BLU Button1 ZB 18B2",
+                manufacturer="Shelly",
+                model="BLU Button1 ZB",
+                sw_version="BTHome BLE v2",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            KEY_SIGNAL_STRENGTH: SensorDescription(
+                device_key=KEY_SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
+            KEY_SIGNAL_STRENGTH: SensorValue(
+                device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+        events={
+            KEY_BUTTON: Event(
+                device_key=KEY_BUTTON,
+                name="Button",
+                event_type="long_press",
+                event_properties=None,
+            ),
+        },
+    )
+
+
 def test_bthome_event_triple_button_device(caplog):
     """
     Test BTHome parser for an event of a triple button device where
@@ -3306,6 +3349,90 @@ def test_bthome_conductivity(caplog):
         entity_values={
             KEY_CONDUCTIVITY: SensorValue(
                 device_key=KEY_CONDUCTIVITY, name="Conductivity", native_value=1000
+            ),
+            KEY_SIGNAL_STRENGTH: SensorValue(
+                device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+    )
+
+
+def test_shelly_blu_ht(caplog):
+    """Test BTHome parser shelly blu h&t."""
+    data_string = b"\x40\x57\xea"
+    advertisement = bytes_to_service_info(
+        data_string, local_name="SBHT-003C", address="A4:C1:38:8D:18:B2"
+    )
+
+    device = BTHomeBluetoothDeviceData()
+    assert device.update(advertisement) == SensorUpdate(
+        title="Shelly BLU H&T 18B2",
+        devices={
+            None: SensorDeviceInfo(
+                name="Shelly BLU H&T 18B2",
+                manufacturer="Shelly",
+                model="BLU H&T",
+                sw_version="BTHome BLE v2",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            KEY_TEMPERATURE: SensorDescription(
+                device_key=KEY_TEMPERATURE,
+                device_class=SensorDeviceClass.TEMPERATURE,
+                native_unit_of_measurement=Units.TEMP_CELSIUS,
+            ),
+            KEY_SIGNAL_STRENGTH: SensorDescription(
+                device_key=KEY_SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
+            KEY_TEMPERATURE: SensorValue(
+                device_key=KEY_TEMPERATURE, name="Temperature", native_value=-22
+            ),
+            KEY_SIGNAL_STRENGTH: SensorValue(
+                device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+    )
+
+
+def test_shelly_blu_ht_zb(caplog):
+    """Test BTHome parser shelly blu h&t."""
+    data_string = b"\x40\x57\xea"
+    advertisement = bytes_to_service_info(
+        data_string, local_name="SBHT-203C", address="A4:C1:38:8D:18:B2"
+    )
+
+    device = BTHomeBluetoothDeviceData()
+    assert device.update(advertisement) == SensorUpdate(
+        title="Shelly BLU H&T ZB 18B2",
+        devices={
+            None: SensorDeviceInfo(
+                name="Shelly BLU H&T ZB 18B2",
+                manufacturer="Shelly",
+                model="BLU H&T ZB",
+                sw_version="BTHome BLE v2",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            KEY_TEMPERATURE: SensorDescription(
+                device_key=KEY_TEMPERATURE,
+                device_class=SensorDeviceClass.TEMPERATURE,
+                native_unit_of_measurement=Units.TEMP_CELSIUS,
+            ),
+            KEY_SIGNAL_STRENGTH: SensorDescription(
+                device_key=KEY_SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
+            KEY_TEMPERATURE: SensorValue(
+                device_key=KEY_TEMPERATURE, name="Temperature", native_value=-22
             ),
             KEY_SIGNAL_STRENGTH: SensorValue(
                 device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60

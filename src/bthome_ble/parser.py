@@ -312,6 +312,10 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             manufacturer = "Shelly"
             name = "Shelly BLU Button1"
             device_type = "BLU Button1"
+        elif name == "SBBT-102C":
+            manufacturer = "Shelly"
+            name = "Shelly BLU Button1 ZB"
+            device_type = "BLU Button1 ZB"
         elif name == "SBDW-002C":
             manufacturer = "Shelly"
             name = "Shelly BLU Door/Window"
@@ -324,6 +328,10 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             manufacturer = "Shelly"
             name = "Shelly BLU H&T"
             device_type = "BLU H&T"
+        elif name == "SBHT-203C":
+            manufacturer = "Shelly"
+            name = "Shelly BLU H&T ZB"
+            device_type = "BLU H&T ZB"
         elif name == "SBHT-103C":
             manufacturer = "Shelly"
             name = "Shelly BLU H&T Display ZB"
