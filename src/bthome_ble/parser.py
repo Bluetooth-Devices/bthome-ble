@@ -95,6 +95,12 @@ def get_name(service_info: BluetoothServiceInfoBleak) -> str:
     return name
 
 
+def is_mac_included(service_data: bytes) -> bool:
+    adv_info = service_data[0]
+    # If True, the first 6 bytes contain the mac address
+    return bool(adv_info & (1 << 1))  # bit 1
+
+
 def to_mac(addr: bytes) -> str:
     """Return formatted MAC address."""
     return ":".join(f"{i:02X}" for i in addr)
@@ -271,11 +277,11 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         # Clear flag when processing valid data (encrypted or unencrypted without bindkey)
         self.downgrade_detected = False
 
-    def _set_sleepy_devices(self, uuid_type: UuidType, service_data: bytes) -> None:
-        match uuid_type:
-            case UuidType.V1_NON_ENCRYPTED | UuidType.V1_ENCRYPTED:
+    def _set_sleepy_devices(self, service_data: bytes) -> None:
+        match self.sw_version:
+            case 1:
                 self.sleepy_devices = False
-            case UuidType.V2:
+            case _:
                 adv_info = service_data[0]
                 # If True, the device is only updating when trigger
                 self.sleepy_device = bool(adv_info & (1 << 2))  # bit 2
@@ -358,21 +364,43 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         self.set_title(f"{name} {identifier}")
         self.set_device_type(device_type)
 
+    def _get_mac_readable(
+        self, service_info: BluetoothServiceInfoBleak, service_data: bytes
+    ) -> str:
+        match self.sw_version:
+            case 1:
+                return service_info.address
+            case _:
+                if is_mac_included(service_data):
+                    bthome_mac_reversed = service_data[1:7]
+                    return to_mac(bthome_mac_reversed[::-1])
+                return service_info.address
+
+    def _get_payload(self, service_data: bytes) -> bytes:
+        match self.sw_version:
+            case 1:
+                return service_data
+            case _:
+                if is_mac_included(service_data):
+                    return service_data[7:]
+                return service_data[1:]
+
     def _get_decrypted_payload(
         self,
         service_info: BluetoothServiceInfoBleak,
         service_data: bytes,
-        mac_readable: str,
-        adv_info: int = 65,
     ) -> bytes | None:
+        payload = self._get_payload(service_data)
         match self.encryption_scheme:
             case EncryptionScheme.NONE:
-                return service_data
+                return payload
             case EncryptionScheme.BTHOME_BINDKEY:
+                mac_readable = self._get_mac_readable(service_info, service_data)
                 source_mac = bytes.fromhex(mac_readable.replace(":", ""))
+                adv_info = 65 if self.sw_version == 1 else service_data[0]
                 try:
                     return self._decrypt_bthome(
-                        service_info, service_data, source_mac, adv_info
+                        service_info, payload, source_mac, adv_info
                     )
                 except (ValueError, TypeError):
                     return None
@@ -393,48 +421,15 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         self._set_downgrade_detected(service_info)
         if self.downgrade_detected:
             return False
-        self._set_sleepy_devices(uuid_type, service_data)
         self._set_software_version(uuid_type, service_info, service_data)
         if self.sw_version is None:
             return False
+        self._set_sleepy_devices(service_data)
         self._set_manufacture_name_type_and_title(service_info)
 
-        match uuid_type:
-            case UuidType.V1_NON_ENCRYPTED | UuidType.V1_ENCRYPTED:
-                return self._parse_bthome_v1(service_info, service_data)
-            case UuidType.V2:
-                return self._parse_bthome_v2(service_info, service_data)
-
-    def _parse_bthome_v1(
-        self, service_info: BluetoothServiceInfoBleak, service_data: bytes
-    ) -> bool:
-        """Parser for BTHome sensors version V1"""
-        mac_readable = service_info.address
-        payload = self._get_decrypted_payload(service_info, service_data, mac_readable)
+        payload = self._get_decrypted_payload(service_info, service_data)
         if payload is None:
             return True
-        return self._parse_payload(payload, service_info.time)
-
-    def _parse_bthome_v2(
-        self, service_info: BluetoothServiceInfoBleak, service_data: bytes
-    ) -> bool:
-        """Parser for BTHome sensors version V2"""
-        # If True, the first 6 bytes contain the mac address
-        adv_info = service_data[0]
-        mac_included = adv_info & (1 << 1)  # bit 1
-        if mac_included:
-            bthome_mac_reversed = service_data[1:7]
-            mac_readable = to_mac(bthome_mac_reversed[::-1])
-            service_data_sub = service_data[7:]
-        else:
-            mac_readable = service_info.address
-            service_data_sub = service_data[1:]
-        payload = self._get_decrypted_payload(
-            service_info, service_data_sub, mac_readable, adv_info
-        )
-        if payload is None:
-            return True
-
         return self._parse_payload(payload, service_info.time)
 
     def _skip_old_or_duplicated_advertisement(
