@@ -47,6 +47,12 @@ class UuidType(Enum):
     V2 = "0000fcd2-0000-1000-8000-00805f9b34fb"
 
 
+class BTHomeVersion(Enum):
+    INVALID = 0
+    V1 = 1
+    V2 = 2
+
+
 def get_encryption_scheme(uuid_type: UuidType, service_data: bytes) -> EncryptionScheme:
     match uuid_type:
         case UuidType.V1_NON_ENCRYPTED:
@@ -61,12 +67,12 @@ def get_encryption_scheme(uuid_type: UuidType, service_data: bytes) -> Encryptio
             return EncryptionScheme.NONE
 
 
-def get_software_version(
+def get_bthome_version(
     uuid_type: UuidType, service_info: BluetoothServiceInfoBleak, service_data: bytes
-) -> int | None:
+) -> BTHomeVersion:
     match uuid_type:
         case UuidType.V1_NON_ENCRYPTED | UuidType.V1_ENCRYPTED:
-            return 1
+            return BTHomeVersion.V1
         case UuidType.V2:
             adv_info = service_data[0]
             sw_version = (adv_info >> 5) & 7  # 3 bits (5-7)
@@ -78,8 +84,8 @@ def get_software_version(
                     identifier,
                     sw_version,
                 )
-                return None
-            return sw_version
+                return BTHomeVersion.INVALID
+            return BTHomeVersion.V2
 
 
 def get_name(service_info: BluetoothServiceInfoBleak) -> str:
@@ -234,7 +240,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
 
         # Holds the software version of the device.
         # (None indicates invalid software version)
-        self.sw_version: int | None = None
+        self.bthome_version: BTHomeVersion = BTHomeVersion.INVALID
 
         # If this is True, the last update was blocked due to encryption downgrade
         # (received unencrypted data when bindkey is configured)
@@ -278,28 +284,32 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         self.downgrade_detected = False
 
     def _set_sleepy_devices(self, service_data: bytes) -> None:
-        match self.sw_version:
-            case 1:
+        match self.bthome_version:
+            case BTHomeVersion.V1:
                 self.sleepy_devices = False
-            case _:
+            case BTHomeVersion.V2:
                 adv_info = service_data[0]
                 # If True, the device is only updating when trigger
                 self.sleepy_device = bool(adv_info & (1 << 2))  # bit 2
+            case _:
+                raise ValueError
 
-    def _set_software_version(
+    def _set_bthome_version(
         self,
         uuid_type: UuidType,
         service_info: BluetoothServiceInfoBleak,
         service_data: bytes,
     ) -> None:
-        self.sw_version = get_software_version(uuid_type, service_info, service_data)
+        self.bthome_version = get_bthome_version(uuid_type, service_info, service_data)
         # This is a little misleading for the user, since we show the bthome version
         # instead of the firmware version.
         match self.encryption_scheme:
             case EncryptionScheme.NONE:
-                self.set_device_sw_version(f"BTHome BLE v{self.sw_version}")
+                self.set_device_sw_version(f"BTHome BLE v{self.bthome_version.value}")
             case EncryptionScheme.BTHOME_BINDKEY:
-                self.set_device_sw_version(f"BTHome BLE v{self.sw_version} (encrypted)")
+                self.set_device_sw_version(
+                    f"BTHome BLE v{self.bthome_version.value} (encrypted)"
+                )
 
     def _set_manufacture_name_type_and_title(
         self, service_info: BluetoothServiceInfoBleak
@@ -367,23 +377,36 @@ class BTHomeBluetoothDeviceData(BluetoothData):
     def _get_mac_readable(
         self, service_info: BluetoothServiceInfoBleak, service_data: bytes
     ) -> str:
-        match self.sw_version:
-            case 1:
+        match self.bthome_version:
+            case BTHomeVersion.V1:
                 return service_info.address
-            case _:
+            case BTHomeVersion.V2:
                 if is_mac_included(service_data):
                     bthome_mac_reversed = service_data[1:7]
                     return to_mac(bthome_mac_reversed[::-1])
                 return service_info.address
+            case _:
+                raise ValueError
 
     def _get_payload(self, service_data: bytes) -> bytes:
-        match self.sw_version:
-            case 1:
+        match self.bthome_version:
+            case BTHomeVersion.V1:
                 return service_data
-            case _:
+            case BTHomeVersion.V2:
                 if is_mac_included(service_data):
                     return service_data[7:]
                 return service_data[1:]
+            case _:
+                raise ValueError
+
+    def _get_adv_info(self, service_data: bytes) -> int:
+        match self.bthome_version:
+            case BTHomeVersion.V1:
+                return 65
+            case BTHomeVersion.V2:
+                return service_data[0]
+            case _:
+                raise ValueError
 
     def _get_decrypted_payload(
         self,
@@ -397,7 +420,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             case EncryptionScheme.BTHOME_BINDKEY:
                 mac_readable = self._get_mac_readable(service_info, service_data)
                 source_mac = bytes.fromhex(mac_readable.replace(":", ""))
-                adv_info = 65 if self.sw_version == 1 else service_data[0]
+                adv_info = self._get_adv_info(service_data)
                 try:
                     return self._decrypt_bthome(
                         service_info, payload, source_mac, adv_info
@@ -421,8 +444,8 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         self._set_downgrade_detected(service_info)
         if self.downgrade_detected:
             return False
-        self._set_software_version(uuid_type, service_info, service_data)
-        if self.sw_version is None:
+        self._set_bthome_version(uuid_type, service_info, service_data)
+        if self.bthome_version == BTHomeVersion.INVALID:
             return False
         self._set_sleepy_devices(service_data)
         self._set_manufacture_name_type_and_title(service_info)
@@ -496,42 +519,43 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         while payload_length >= next_obj_start + 1:
             obj_start = next_obj_start
 
-            if self.sw_version == 1:
-                # BTHome V1
-                obj_meas_type = payload[obj_start + 1]
-                obj_control_byte = payload[obj_start]
-                obj_data_length = (obj_control_byte >> 0) & 31  # 5 bits (0-4)
-                obj_data_format = (obj_control_byte >> 5) & 7  # 3 bits (5-7)
-                obj_data_start = obj_start + 2
-                next_obj_start = obj_start + obj_data_length + 1
-            else:
-                # BTHome V2
-                obj_meas_type = payload[obj_start]
-                if prev_obj_meas_type > obj_meas_type:
-                    _LOGGER.warning(
-                        "%s: BTHome device is not sending object ids in numerical order (from low "
-                        "to high object id). This can cause issues with your BTHome receiver, "
-                        "payload: %s",
-                        self.title,
-                        payload.hex(),
-                    )
-                if obj_meas_type not in MEAS_TYPES:
-                    _LOGGER.debug(
-                        "%s: Invalid Object ID found in payload: %s",
-                        self.title,
-                        payload.hex(),
-                    )
-                    break
-                prev_obj_meas_type = obj_meas_type
-                obj_data_format = MEAS_TYPES[obj_meas_type].data_format
-
-                if obj_data_format in ["raw", "string"]:
-                    obj_data_length = payload[obj_start + 1]
+            match self.bthome_version:
+                case BTHomeVersion.V1:
+                    obj_meas_type = payload[obj_start + 1]
+                    obj_control_byte = payload[obj_start]
+                    obj_data_length = (obj_control_byte >> 0) & 31  # 5 bits (0-4)
+                    obj_data_format = (obj_control_byte >> 5) & 7  # 3 bits (5-7)
                     obj_data_start = obj_start + 2
-                else:
-                    obj_data_length = MEAS_TYPES[obj_meas_type].data_length
-                    obj_data_start = obj_start + 1
-                next_obj_start = obj_data_start + obj_data_length
+                    next_obj_start = obj_start + obj_data_length + 1
+                case BTHomeVersion.V2:
+                    obj_meas_type = payload[obj_start]
+                    if prev_obj_meas_type > obj_meas_type:
+                        _LOGGER.warning(
+                            "%s: BTHome device is not sending object ids in numerical order "
+                            "(from low to high object id). This can cause issues with your BTHome "
+                            "receiver, payload: %s",
+                            self.title,
+                            payload.hex(),
+                        )
+                    if obj_meas_type not in MEAS_TYPES:
+                        _LOGGER.debug(
+                            "%s: Invalid Object ID found in payload: %s",
+                            self.title,
+                            payload.hex(),
+                        )
+                        break
+                    prev_obj_meas_type = obj_meas_type
+                    obj_data_format = MEAS_TYPES[obj_meas_type].data_format
+
+                    if obj_data_format in ["raw", "string"]:
+                        obj_data_length = payload[obj_start + 1]
+                        obj_data_start = obj_start + 2
+                    else:
+                        obj_data_length = MEAS_TYPES[obj_meas_type].data_length
+                        obj_data_start = obj_start + 1
+                    next_obj_start = obj_data_start + obj_data_length
+                case _:
+                    raise ValueError
 
             if obj_data_length == 0:
                 _LOGGER.debug(
@@ -669,6 +693,34 @@ class BTHomeBluetoothDeviceData(BluetoothData):
 
         return True
 
+    def _check_minumum_length(self, service_data: bytes) -> None:
+        match self.bthome_version:
+            case BTHomeVersion.V1:
+                min_length = 12
+            case BTHomeVersion.V2:
+                min_length = 10
+            case _:
+                raise ValueError
+
+        if len(service_data) < min_length:
+            _LOGGER.debug(
+                "%s: Invalid data length (for decryption), adv: %s",
+                self.title,
+                service_data.hex(),
+            )
+            raise ValueError
+
+    def _get_nonce(self, bthome_mac: bytes, adv_info: int, counter: bytes) -> bytes:
+        match self.bthome_version:
+            case BTHomeVersion.V1:
+                uuid = b"\x1e\x18"
+            case BTHomeVersion.V2:
+                uuid = b"\xd2\xfc" + bytes([adv_info])
+            case _:
+                raise ValueError
+        # nonce: mac [6], uuid16 [2 (v1) or 3 (v2)], counter [4]
+        return b"".join([bthome_mac, uuid, counter])
+
     def _decrypt_bthome(
         self,
         service_info: BluetoothServiceInfoBleak,
@@ -690,19 +742,9 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             raise ValueError
 
         # check for minimum length of encrypted advertisement
-        if len(service_data) < (12 if self.sw_version == 1 else 10):
-            _LOGGER.debug(
-                "%s: Invalid data length (for decryption), adv: %s",
-                self.title,
-                service_data.hex(),
-            )
-            raise ValueError
+        self._check_minumum_length(service_data)
 
         # prepare the data for decryption
-        if self.sw_version == 1:
-            uuid = b"\x1e\x18"
-        else:
-            uuid = b"\xd2\xfc" + bytes([adv_info])
         encrypted_payload = service_data[:-8]
         last_encryption_counter = self.encryption_counter
         counter = service_data[-8:-4]
@@ -710,11 +752,15 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         mic = service_data[-4:]
 
         # nonce: mac [6], uuid16 [2 (v1) or 3 (v2)], counter [4]
-        nonce = b"".join([bthome_mac, uuid, counter])
+        nonce = self._get_nonce(bthome_mac, adv_info, counter)
 
-        associated_data = None
-        if self.sw_version == 1:
-            associated_data = b"\x11"
+        match self.bthome_version:
+            case BTHomeVersion.V1:
+                associated_data: bytes | None = b"\x11"
+            case BTHomeVersion.V2:
+                associated_data = None
+            case _:
+                raise ValueError
 
         assert self.cipher is not None  # nosec
 
