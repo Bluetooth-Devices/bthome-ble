@@ -239,7 +239,6 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         self.sleepy_device = False
 
         # Holds the software version of the device.
-        # (None indicates invalid software version)
         self.bthome_version: BTHomeVersion = BTHomeVersion.INVALID
 
         # If this is True, the last update was blocked due to encryption downgrade
