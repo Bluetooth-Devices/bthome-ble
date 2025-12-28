@@ -59,47 +59,60 @@ def to_mac(addr: bytes) -> str:
 
 
 def get_adv_info(service_data: bytes) -> int:
+    """Extracts the advertisement info."""
     return service_data[0]
 
 
 def is_encrypted(service_data: bytes) -> bool:
+    """Checks if the encryption flag is set."""
     return bool(get_adv_info(service_data) & (1 << 0))  # bit 0
 
 
 def is_mac_included(service_data: bytes) -> bool:
+    """Checks if the MAC is included flag is set."""
     # If True, the first 6 bytes contain the mac address
     return bool(get_adv_info(service_data) & (1 << 1))  # bit 1
 
 
 def is_sleepy_device(service_data: bytes) -> bool:
+    """Checks if device is sleepy flag is set."""
     # If True, the device is only updating when trigger
     return bool(get_adv_info(service_data) & (1 << 2))  # bit 2
 
 
 def get_version(service_data: bytes) -> int:
+    """Extracts the version from the advertisement info."""
     return (get_adv_info(service_data) >> 5) & 7  # 3 bits (5-7)
 
 
 def get_mac(service_data: bytes) -> str:
+    """Extracts the MAC."""
     bthome_mac_reversed = service_data[1:7]
     return to_mac(bthome_mac_reversed[::-1])
 
 
 def get_payload(service_data: bytes) -> bytes:
+    """Extracts the payload (removes MAC and advertisement info)."""
     if is_mac_included(service_data):
         return service_data[7:]
     return service_data[1:]
 
 
 def get_counter(service_data: bytes) -> bytes:
+    """Extracts the encryption counter bytes."""
     return service_data[-8:-4]
 
 
 def get_mic(service_data: bytes) -> bytes:
+    """Extracts the encryption mic."""
     return service_data[-4:]
 
 
 def get_encryption_scheme(uuid_type: UuidType, service_data: bytes) -> EncryptionScheme:
+    """
+    Returns the encryption schema using the UUID for V1 and the
+    advertisement info flag for V2.
+    """
     match uuid_type:
         case UuidType.V1_NON_ENCRYPTED:
             return EncryptionScheme.NONE
@@ -114,6 +127,10 @@ def get_encryption_scheme(uuid_type: UuidType, service_data: bytes) -> Encryptio
 def get_bthome_version(
     uuid_type: UuidType, service_info: BluetoothServiceInfoBleak, service_data: bytes
 ) -> BTHomeVersion:
+    """
+    Returns the bhtome version based on UUID for V1 and version bits from
+    advertisement info for V2
+    """
     match uuid_type:
         case UuidType.V1_NON_ENCRYPTED | UuidType.V1_ENCRYPTED:
             return BTHomeVersion.V1
@@ -704,7 +721,62 @@ class BTHomeBluetoothDeviceData(BluetoothData):
 
         return True
 
+    def _check_bind_key(self) -> None:
+        """Raises a ValueError, if no bindkey is set or bindkey is too short"""
+        if not self.bindkey:
+            self.bindkey_verified = False
+            _LOGGER.debug("%s: Encryption key not set and adv is encrypted", self.title)
+            raise ValueError
+        if not self.bindkey or len(self.bindkey) != 16:
+            self.bindkey_verified = False
+            _LOGGER.error(
+                "%s: Encryption key should be 16 bytes (32 characters) long", self.title
+            )
+            raise ValueError
+
+    def _check_different_than_last(
+        self, service_info: BluetoothServiceInfoBleak
+    ) -> None:
+        """
+        Raises a ValueError if advertisement is exactly the same as
+        the previous advertisement.
+        """
+        if (
+            self.last_service_info
+            and service_info.service_data == self.last_service_info.service_data
+            and self.bindkey_verified is True
+        ):
+            _LOGGER.debug(
+                "%s: The service data is the same as the previous service data. Skipping "
+                "this BLE advertisement.",
+                self.title,
+            )
+            raise ValueError
+
+    def _check_encryption_counter(self, new_encryption_counter: float) -> None:
+        """Raises a ValueError on decreasing encryption counter to avoid replay attacks."""
+        # Filter advertisements with a decreasing encryption counter.
+        # Allow cases where the counter has restarted from 0
+        # (after reaching the highest number or due to a battery change).
+        # In all other cases, assume the data has been compromised and skip the advertisement.
+        # prepare the data for decryption
+        last_encryption_counter = self.encryption_counter
+        if (
+            new_encryption_counter < last_encryption_counter
+            and self.bindkey_verified is True
+            and new_encryption_counter >= 100
+        ):
+            _LOGGER.warning(
+                "%s: The new encryption counter (%i) is lower than the previous value (%i). "
+                "The data might be compromised. BLE advertisement will be skipped.",
+                self.title,
+                new_encryption_counter,
+                last_encryption_counter,
+            )
+            raise ValueError
+
     def _check_minumum_length(self, payload: bytes) -> None:
+        """Raises a ValueError if length of encrypted advertisement is too short."""
         match self.bthome_version:
             case BTHomeVersion.V1:
                 min_length = 4
@@ -721,9 +793,14 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             )
             raise ValueError
 
+    def _get_encrypted_payload(self, service_data: bytes) -> bytes:
+        """Removes the last 8 bytes (mic and encryption counter) from payload."""
+        return self._get_payload(service_data)[:-8]
+
     def _get_nonce(
         self, service_info: BluetoothServiceInfoBleak, service_data: bytes
     ) -> bytes:
+        """Creates the nounce for decryption."""
         counter = get_counter(service_data)
         mac_readable = self._get_mac_readable(service_info, service_data)
         bthome_mac = bytes.fromhex(mac_readable.replace(":", ""))
@@ -738,99 +815,42 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         # nonce: mac [6], uuid16 [2 (v1) or 3 (v2)], counter [4]
         return b"".join([bthome_mac, uuid, counter])
 
-    def _get_encrypted_payload(self, service_data: bytes) -> bytes:
-        return self._get_payload(service_data)[:-8]
-
-    def _decrypt_bthome(
-        self,
-        service_info: BluetoothServiceInfoBleak,
-        service_data: bytes,
-    ) -> bytes:
-        """Decrypt encrypted BTHome BLE advertisements"""
-        if not self.bindkey:
-            self.bindkey_verified = False
-            _LOGGER.debug("%s: Encryption key not set and adv is encrypted", self.title)
-            raise ValueError
-
-        if not self.bindkey or len(self.bindkey) != 16:
-            self.bindkey_verified = False
-            _LOGGER.error(
-                "%s: Encryption key should be 16 bytes (32 characters) long", self.title
-            )
-            raise ValueError
-
-        encrypted_payload = self._get_encrypted_payload(service_data)
-
-        # check for minimum length of encrypted advertisement
-        self._check_minumum_length(encrypted_payload)
-
-        # prepare the data for decryption
-        last_encryption_counter = self.encryption_counter
-        new_encryption_counter = parse_uint(get_counter(service_data))
-        mic = get_mic(service_data)
-
-        # nonce: mac [6], uuid16 [2 (v1) or 3 (v2)], counter [4]
-        nonce = self._get_nonce(service_info, service_data)
-
+    def _get_associated_data(self) -> bytes | None:
+        """Defines associated data for decryption depending on bthome version."""
         match self.bthome_version:
             case BTHomeVersion.V1:
-                associated_data: bytes | None = b"\x11"
+                return b"\x11"
             case BTHomeVersion.V2:
-                associated_data = None
+                return None
             case _:
                 raise ValueError
 
-        assert self.cipher is not None  # nosec
+    def _handle_decryption_error(
+        self,
+        error: InvalidTag,
+        encrypted_payload: bytes,
+        nonce: bytes,
+        mic: bytes,
+    ) -> None:
+        """Handles a decryption InvalidTag error."""
+        if self.decryption_failed is True:
+            # we only ask for reautentification after the decryption has failed twice.
+            self.bindkey_verified = False
+        else:
+            self.decryption_failed = True
+        _LOGGER.warning("%s: Decryption failed: %s", self.title, error)
+        _LOGGER.debug("%s: nonce: %s", self.title, nonce.hex())
+        _LOGGER.debug("%s: mic: %s", self.title, mic.hex())
+        _LOGGER.debug("%s: encrypted_payload: %s", self.title, encrypted_payload.hex())
+        raise ValueError
 
-        # filter advertisements that are exactly the same as the previous advertisement
-        if (
-            self.last_service_info
-            and service_info.service_data == self.last_service_info.service_data
-            and self.bindkey_verified is True
-        ):
-            _LOGGER.debug(
-                "%s: The service data is the same as the previous service data. Skipping "
-                "this BLE advertisement.",
-                self.title,
-            )
-            raise ValueError
-
-        # Filter advertisements with a decreasing encryption counter.
-        # Allow cases where the counter has restarted from 0
-        # (after reaching the highest number or due to a battery change).
-        # In all other cases, assume the data has been compromised and skip the advertisement.
-        if (
-            new_encryption_counter < last_encryption_counter
-            and self.bindkey_verified is True
-            and new_encryption_counter >= 100
-        ):
-            _LOGGER.warning(
-                "%s: The new encryption counter (%i) is lower than the previous value (%i). "
-                "The data might be compromised. BLE advertisement will be skipped.",
-                self.title,
-                new_encryption_counter,
-                last_encryption_counter,
-            )
-            raise ValueError
-
-        # decrypt the data
-        try:
-            decrypted_payload = self.cipher.decrypt(
-                nonce, encrypted_payload + mic, associated_data
-            )
-        except InvalidTag as error:
-            if self.decryption_failed is True:
-                # we only ask for reautentification after the decryption has failed twice.
-                self.bindkey_verified = False
-            else:
-                self.decryption_failed = True
-            _LOGGER.warning("%s: Decryption failed: %s", self.title, error)
-            _LOGGER.debug("%s: mic: %s", self.title, mic.hex())
-            _LOGGER.debug("%s: nonce: %s", self.title, nonce.hex())
-            _LOGGER.debug(
-                "%s: encrypted_payload: %s", self.title, encrypted_payload.hex()
-            )
-            raise ValueError
+    def _check_empty_decrypted_payload(
+        self,
+        decrypted_payload: bytes | None,
+        service_info: BluetoothServiceInfoBleak,
+        service_data: bytes,
+    ) -> None:
+        """Raises an ValueError if decrypted values is empty."""
         if decrypted_payload is None:
             self.bindkey_verified = False
             _LOGGER.error(
@@ -839,6 +859,38 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                 self._get_mac_readable(service_info, service_data),
             )
             raise ValueError
+
+    def _decrypt_bthome(
+        self,
+        service_info: BluetoothServiceInfoBleak,
+        service_data: bytes,
+    ) -> bytes:
+        """Decrypt encrypted BTHome BLE advertisements"""
+        self._check_bind_key()
+        self._check_different_than_last(service_info)
+
+        new_encryption_counter = parse_uint(get_counter(service_data))
+        self._check_encryption_counter(new_encryption_counter)
+
+        encrypted_payload = self._get_encrypted_payload(service_data)
+        self._check_minumum_length(encrypted_payload)
+
+        mic = get_mic(service_data)
+        nonce = self._get_nonce(service_info, service_data)
+        associated_data = self._get_associated_data()
+
+        # decrypt the data
+        try:
+            assert self.cipher is not None  # nosec
+            decrypted_payload = self.cipher.decrypt(
+                nonce, encrypted_payload + mic, associated_data
+            )
+        except InvalidTag as error:
+            self._handle_decryption_error(error, encrypted_payload, nonce, mic)
+        self._check_empty_decrypted_payload(
+            decrypted_payload, service_info, service_data
+        )
+
         self.decryption_failed = False
         self.bindkey_verified = True
         self.encryption_counter = new_encryption_counter
