@@ -776,7 +776,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             raise ValueError
 
     def _check_minumum_length(self, payload: bytes) -> None:
-        """Raises a ValueError if length of encrypted advertisement is to short."""
+        """Raises a ValueError if length of encrypted advertisement is too short."""
         match self.bthome_version:
             case BTHomeVersion.V1:
                 min_length = 4
