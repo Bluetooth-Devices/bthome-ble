@@ -1,5 +1,40 @@
 # Changelog
 
+## v3.19.1 (2025-12-28)
+
+### Refactoring
+
+
+- Split decrypt_bthome into smaller chunks to make it more readable ([`107808e`](https://github.com/Bluetooth-Devices/bthome-ble/commit/107808eb2537e069ce8e7f0bf1c567d7ee066b1d))
+
+
+- Split decrypt_bthome into smaller chunks to make it more readable ([`107808e`](https://github.com/Bluetooth-Devices/bthome-ble/commit/107808eb2537e069ce8e7f0bf1c567d7ee066b1d))
+
+
+- Access to service_data ([`eca363b`](https://github.com/Bluetooth-Devices/bthome-ble/commit/eca363b41945fffdee91bb4d03d2b29ac5b977f3))
+
+
+- Make software version more robust ([`258907b`](https://github.com/Bluetooth-Devices/bthome-ble/commit/258907bd8afbf975a8b23e35caac1de74577ed8f))
+
+
+- Make software version more robust ([`258907b`](https://github.com/Bluetooth-Devices/bthome-ble/commit/258907bd8afbf975a8b23e35caac1de74577ed8f))
+
+
+- Remove comment ([`258907b`](https://github.com/Bluetooth-Devices/bthome-ble/commit/258907bd8afbf975a8b23e35caac1de74577ed8f))
+
+
+- Unify v1 and v2 ([`ae52e4a`](https://github.com/Bluetooth-Devices/bthome-ble/commit/ae52e4aca8dc4ee4af4578642e089ae319ad4508))
+
+
+### Bug fixes
+
+
+- Spelling error ([`107808e`](https://github.com/Bluetooth-Devices/bthome-ble/commit/107808eb2537e069ce8e7f0bf1c567d7ee066b1d))
+
+
+- Spelling error ([`107808e`](https://github.com/Bluetooth-Devices/bthome-ble/commit/107808eb2537e069ce8e7f0bf1c567d7ee066b1d))
+
+
 ## v3.19.0 (2025-12-27)
 
 ### Features
