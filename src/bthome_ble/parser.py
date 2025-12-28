@@ -747,19 +747,21 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             and self.bindkey_verified is True
             and new_encryption_counter >= 100
         ):
-            wording = (
-                "same as"
-                if new_encryption_counter == last_encryption_counter
-                else "lower than"
-            )
-            _LOGGER.warning(
-                "%s: The new encryption counter (%i) is %s the previous value (%i). "
-                "The data might be compromised. BLE advertisement will be skipped.",
-                self.title,
-                new_encryption_counter,
-                wording,
-                last_encryption_counter,
-            )
+            if new_encryption_counter == last_encryption_counter:
+                _LOGGER.debug(
+                    "%s: The new encryption counter (%i) is same as the previous value. "
+                    "BLE advertisement will be skipped.",
+                    self.title,
+                    new_encryption_counter,
+                )
+            else:
+                _LOGGER.warning(
+                    "%s: The new encryption counter (%i) is lower than the previous value (%i). "
+                    "The data might be compromised. BLE advertisement will be skipped.",
+                    self.title,
+                    new_encryption_counter,
+                    last_encryption_counter,
+                )
             raise ValueError
 
     def _check_minumum_length(self, payload: bytes) -> None:

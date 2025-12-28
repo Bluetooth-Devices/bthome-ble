@@ -629,7 +629,7 @@ def test_same_encryption_counter(caplog):
     assert device.encryption_counter == 1122867
     assert (
         "TEST DEVICE 80A5: The new encryption counter (1122867) is same as the "
-        "previous value (1122867). The data might be compromised. BLE advertisement will "
+        "previous value. BLE advertisement will "
         "be skipped." in caplog.text
     )
 
