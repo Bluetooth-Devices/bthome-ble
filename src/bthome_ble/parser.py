@@ -734,25 +734,6 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             )
             raise ValueError
 
-    def _check_different_than_last(
-        self, service_info: BluetoothServiceInfoBleak
-    ) -> None:
-        """
-        Raises a ValueError if advertisement is exactly the same as
-        the previous advertisement.
-        """
-        if (
-            self.last_service_info
-            and service_info.service_data == self.last_service_info.service_data
-            and self.bindkey_verified is True
-        ):
-            _LOGGER.debug(
-                "%s: The service data is the same as the previous service data. Skipping "
-                "this BLE advertisement.",
-                self.title,
-            )
-            raise ValueError
-
     def _check_encryption_counter(self, new_encryption_counter: float) -> None:
         """Raises a ValueError on decreasing encryption counter to avoid replay attacks."""
         # Filter advertisements with a decreasing encryption counter.
@@ -762,15 +743,21 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         # prepare the data for decryption
         last_encryption_counter = self.encryption_counter
         if (
-            new_encryption_counter < last_encryption_counter
+            new_encryption_counter <= last_encryption_counter
             and self.bindkey_verified is True
             and new_encryption_counter >= 100
         ):
+            wording = (
+                "same as"
+                if new_encryption_counter == last_encryption_counter
+                else "lower than"
+            )
             _LOGGER.warning(
-                "%s: The new encryption counter (%i) is lower than the previous value (%i). "
+                "%s: The new encryption counter (%i) is %s the previous value (%i). "
                 "The data might be compromised. BLE advertisement will be skipped.",
                 self.title,
                 new_encryption_counter,
+                wording,
                 last_encryption_counter,
             )
             raise ValueError
@@ -867,7 +854,6 @@ class BTHomeBluetoothDeviceData(BluetoothData):
     ) -> bytes:
         """Decrypt encrypted BTHome BLE advertisements"""
         self._check_bind_key()
-        self._check_different_than_last(service_info)
 
         new_encryption_counter = parse_uint(get_counter(service_data))
         self._check_encryption_counter(new_encryption_counter)
