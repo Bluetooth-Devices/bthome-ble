@@ -722,7 +722,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         return True
 
     def _check_bind_key(self) -> None:
-        """Raises a ValueError, if no bindkey is set or bindkey is to short"""
+        """Raises a ValueError, if no bindkey is set or bindkey is too short"""
         if not self.bindkey:
             self.bindkey_verified = False
             _LOGGER.debug("%s: Encryption key not set and adv is encrypted", self.title)
