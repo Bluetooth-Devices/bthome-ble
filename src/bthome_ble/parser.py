@@ -420,19 +420,6 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         self.set_title(f"{name} {identifier}")
         self.set_device_type(device_type)
 
-    def _get_mac_readable(
-        self, service_info: BluetoothServiceInfoBleak, service_data: bytes
-    ) -> str:
-        match self.bthome_version:
-            case BTHomeVersion.V1:
-                return service_info.address
-            case BTHomeVersion.V2:
-                if is_mac_included(service_data):
-                    return get_mac(service_data)
-                return service_info.address
-            case _:
-                raise ValueError
-
     def _get_payload(self, service_data: bytes) -> bytes:
         match self.bthome_version:
             case BTHomeVersion.V1:
@@ -802,7 +789,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
     ) -> bytes:
         """Creates the nounce for decryption."""
         counter = get_counter(service_data)
-        mac_readable = self._get_mac_readable(service_info, service_data)
+        mac_readable = service_info.address
         bthome_mac = bytes.fromhex(mac_readable.replace(":", ""))
         match self.bthome_version:
             case BTHomeVersion.V1:
@@ -848,7 +835,6 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         self,
         decrypted_payload: bytes | None,
         service_info: BluetoothServiceInfoBleak,
-        service_data: bytes,
     ) -> None:
         """Raises an ValueError if decrypted values is empty."""
         if decrypted_payload is None:
@@ -856,7 +842,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             _LOGGER.error(
                 "%s: Decryption failed for %s, decrypted payload is None",
                 self.title,
-                self._get_mac_readable(service_info, service_data),
+                service_info.address,
             )
             raise ValueError
 
@@ -887,9 +873,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             )
         except InvalidTag as error:
             self._handle_decryption_error(error, encrypted_payload, nonce, mic)
-        self._check_empty_decrypted_payload(
-            decrypted_payload, service_info, service_data
-        )
+        self._check_empty_decrypted_payload(decrypted_payload, service_info)
 
         self.decryption_failed = False
         self.bindkey_verified = True
