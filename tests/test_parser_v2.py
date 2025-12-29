@@ -604,7 +604,7 @@ def test_increasing_encryption_counter(caplog):
 
 
 def test_same_encryption_counter(caplog):
-    """Test BTHome parser with decreasing encryption counter."""
+    """Test BTHome parser with the same encryption counter."""
     bindkey = "231d39c1d7cc1ab1aee224cd096db932"
     data_string = b"\x41\xe4\x45\xf3\xc9\x96\x2b\x33\x22\x11\x00\x6c\x7c\x45\x19"
     advertisement = bytes_to_service_info(
