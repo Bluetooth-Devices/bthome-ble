@@ -71,6 +71,11 @@ def is_encrypted(service_data: bytes) -> bool:
 def is_mac_included(service_data: bytes) -> bool:
     """Checks if the MAC is included flag is set."""
     # If True, the first 6 bytes contain the mac address
+    # This is an undocumented deprecated and risky feature, due to privacy reasons
+    # It will not make it into the official documentation.
+    # It was implemented to adsress issue #42
+    # https://github.com/Bluetooth-Devices/bthome-ble/issues/42
+    # Do not use it. Use "is_mac_included_safe" instead.
     return bool(get_adv_info(service_data) & (1 << 1))  # bit 1
 
 
@@ -78,6 +83,15 @@ def is_sleepy_device(service_data: bytes) -> bool:
     """Checks if device is sleepy flag is set."""
     # If True, the device is only updating when trigger
     return bool(get_adv_info(service_data) & (1 << 2))  # bit 2
+
+
+def is_mac_included_safe(service_data: bytes) -> bool:
+    """Checks if the MAC is included safe flag is set."""
+    # If True, the first 6 bytes of the decrypted payload contain the mac address
+    # and mac address is not used for nonce anymore. It is recommended to use that
+    # feature only in combination with "is_encrypted".
+    # NOT YET IMPLEMENTED.
+    return bool(get_adv_info(service_data) & (1 << 3))  # bit 3
 
 
 def get_version(service_data: bytes) -> int:
