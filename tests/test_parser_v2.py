@@ -577,6 +577,37 @@ def test_bindkey_verified_can_be_unset():
     assert not device.bindkey_verified
 
 
+def test_same_service_data(caplog):
+    """Test BTHome parser with the same encryption counter."""
+    bindkey = "231d39c1d7cc1ab1aee224cd096db932"
+    data_string = b"\x41\xe4\x45\xf3\xc9\x96\x2b\x33\x22\x11\x00\x6c\x7c\x45\x19"
+    advertisement = bytes_to_service_info(
+        data_string,
+        local_name="TEST DEVICE",
+        address="54:48:E6:8F:80:A5",
+    )
+
+    device = BTHomeBluetoothDeviceData(bindkey=bytes.fromhex(bindkey))
+    assert device.supported(advertisement)
+    assert device.bindkey_verified
+    assert device.encryption_counter == 1122867
+
+    data_string = b"\x41\xe4\x45\xf3\xc9\x96\x2b\x33\x22\x11\x00\x6c\x7c\x45\x19"
+    advertisement = bytes_to_service_info(
+        data_string,
+        local_name="TEST DEVICE",
+        address="54:48:E6:8F:80:A5",
+        time=ADVERTISEMENT_TIME + 5,
+    )
+    assert device.supported(advertisement)
+    assert device.bindkey_verified
+    assert device.encryption_counter == 1122867
+    assert (
+        "TEST DEVICE 80A5: The encrypted service data is the same as the previous "
+        "service data. Skipping this BLE advertisement." in caplog.text
+    )
+
+
 def test_increasing_encryption_counter(caplog):
     """Test BTHome parser with increasing encryption counter."""
     bindkey = "231d39c1d7cc1ab1aee224cd096db932"
@@ -628,8 +659,8 @@ def test_same_encryption_counter(caplog):
     assert device.bindkey_verified
     assert device.encryption_counter == 1122867
     assert (
-        "TEST DEVICE 80A5: The new encryption counter (1122867) is same as the "
-        "previous value. BLE advertisement will "
+        "TEST DEVICE 80A5: The new encryption counter (1122867) is not larger than the "
+        "previous value (1122867). The data might be compromised. BLE advertisement will "
         "be skipped." in caplog.text
     )
 
@@ -660,7 +691,7 @@ def test_decreasing_encryption_counter(caplog):
     # encryption counter should not be updated as it is lower
     assert device.encryption_counter == 1122867
     assert (
-        "TEST DEVICE 80A5: The new encryption counter (1122866) is lower than the "
+        "TEST DEVICE 80A5: The new encryption counter (1122866) is not larger than the "
         "previous value (1122867). The data might be compromised. BLE advertisement will "
         "be skipped." in caplog.text
     )

@@ -313,6 +313,10 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         for uuid, service_data in service_info.service_data.items():
             if self._parse_bthome(uuid, service_info, service_data):
                 self.last_service_info = service_info
+                # iterates over a dictionary, and one device should use only
+                # one of the 3 valid uuid. so there is as most one successful
+                # iteration cycle and we can break afterwards safely.
+                break
         return None
 
     def _set_encryption_scheme(self, uuid: UuidType, service_data: bytes) -> None:
@@ -456,6 +460,26 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                 except (ValueError, TypeError):
                     return None
 
+    def _is_same_as_last(self, service_info: BluetoothServiceInfoBleak) -> bool:
+        """
+        Checks if the advertisement is encrypted and exactly the same as the previous
+        advertisement.
+        """
+        if (
+            self.last_service_info
+            and self.encryption_scheme == EncryptionScheme.BTHOME_BINDKEY
+            and service_info.time - self.last_service_info.time > 4
+            and service_info.service_data == self.last_service_info.service_data
+            and self.bindkey_verified is True
+        ):
+            _LOGGER.debug(
+                "%s: The encrypted service data is the same as the previous service data. "
+                "Skipping this BLE advertisement.",
+                self.title,
+            )
+            return True
+        return False
+
     def _parse_bthome(
         self,
         uuid: str,
@@ -469,6 +493,8 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             return False
 
         self._set_encryption_scheme(uuid_type, service_data)
+        if self._is_same_as_last(service_info):
+            return True
         self._set_downgrade_detected(service_info)
         if self.downgrade_detected:
             return False
@@ -747,21 +773,13 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             and self.bindkey_verified is True
             and new_encryption_counter >= 100
         ):
-            if new_encryption_counter == last_encryption_counter:
-                _LOGGER.debug(
-                    "%s: The new encryption counter (%i) is same as the previous value. "
-                    "BLE advertisement will be skipped.",
-                    self.title,
-                    new_encryption_counter,
-                )
-            else:
-                _LOGGER.warning(
-                    "%s: The new encryption counter (%i) is lower than the previous value (%i). "
-                    "The data might be compromised. BLE advertisement will be skipped.",
-                    self.title,
-                    new_encryption_counter,
-                    last_encryption_counter,
-                )
+            _LOGGER.warning(
+                "%s: The new encryption counter (%i) is not larger than the previous value (%i). "
+                "The data might be compromised. BLE advertisement will be skipped.",
+                self.title,
+                new_encryption_counter,
+                last_encryption_counter,
+            )
             raise ValueError
 
     def _check_minumum_length(self, payload: bytes) -> None:
