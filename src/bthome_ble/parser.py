@@ -344,13 +344,12 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             case _:
                 raise ValueError
 
-    def _set_bthome_version(
+    def _set_device_sw_version(
         self,
         uuid_type: UuidType,
         service_info: BluetoothServiceInfoBleak,
         service_data: bytes,
     ) -> None:
-        self.bthome_version = get_bthome_version(uuid_type, service_info, service_data)
         # This is a little misleading for the user, since we show the bthome version
         # instead of the firmware version.
         match self.encryption_scheme:
@@ -498,15 +497,17 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         self._set_downgrade_detected(service_info)
         if self.downgrade_detected:
             return False
-        self._set_bthome_version(uuid_type, service_info, service_data)
+        self.bthome_version = get_bthome_version(uuid_type, service_info, service_data)
         if self.bthome_version == BTHomeVersion.INVALID:
             return False
-        self._set_sleepy_devices(service_data)
-        self._set_manufacture_name_type_and_title(service_info)
 
         payload = self._get_decrypted_payload(service_info, service_data)
         if payload is None:
             return True
+
+        self._set_device_sw_version(uuid_type, service_info, service_data)
+        self._set_sleepy_devices(service_data)
+        self._set_manufacture_name_type_and_title(service_info)
         return self._parse_payload(payload, service_info.time)
 
     def _skip_old_or_duplicated_advertisement(
