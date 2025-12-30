@@ -313,6 +313,10 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         for uuid, service_data in service_info.service_data.items():
             if self._parse_bthome(uuid, service_info, service_data):
                 self.last_service_info = service_info
+                # Iterates over a dictionary, and one device should use only
+                # one of the 3 valid UUIDs. So there is as most one successful
+                # iteration cycle and we can break afterwards safely.
+                break
         return None
 
     def _set_encryption_scheme(self, uuid: UuidType, service_data: bytes) -> None:
@@ -456,6 +460,26 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                 except (ValueError, TypeError):
                     return None
 
+    def _is_same_as_last(self, service_info: BluetoothServiceInfoBleak) -> bool:
+        """
+        Checks if the advertisement is encrypted and exactly the same as the previous
+        advertisement.
+        """
+        if (
+            self.last_service_info
+            and self.encryption_scheme == EncryptionScheme.BTHOME_BINDKEY
+            and service_info.time - self.last_service_info.time > 4
+            and service_info.service_data == self.last_service_info.service_data
+            and self.bindkey_verified is True
+        ):
+            _LOGGER.debug(
+                "%s: The encrypted service data is the same as the previous service data. "
+                "Skipping this BLE advertisement.",
+                self.title,
+            )
+            return True
+        return False
+
     def _parse_bthome(
         self,
         uuid: str,
@@ -469,6 +493,8 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             return False
 
         self._set_encryption_scheme(uuid_type, service_data)
+        if self._is_same_as_last(service_info):
+            return True
         self._set_downgrade_detected(service_info)
         if self.downgrade_detected:
             return False
@@ -734,25 +760,6 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             )
             raise ValueError
 
-    def _check_different_than_last(
-        self, service_info: BluetoothServiceInfoBleak
-    ) -> None:
-        """
-        Raises a ValueError if advertisement is exactly the same as
-        the previous advertisement.
-        """
-        if (
-            self.last_service_info
-            and service_info.service_data == self.last_service_info.service_data
-            and self.bindkey_verified is True
-        ):
-            _LOGGER.debug(
-                "%s: The service data is the same as the previous service data. Skipping "
-                "this BLE advertisement.",
-                self.title,
-            )
-            raise ValueError
-
     def _check_encryption_counter(self, new_encryption_counter: float) -> None:
         """Raises a ValueError on decreasing encryption counter to avoid replay attacks."""
         # Filter advertisements with a decreasing encryption counter.
@@ -762,12 +769,12 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         # prepare the data for decryption
         last_encryption_counter = self.encryption_counter
         if (
-            new_encryption_counter < last_encryption_counter
+            new_encryption_counter <= last_encryption_counter
             and self.bindkey_verified is True
             and new_encryption_counter >= 100
         ):
             _LOGGER.warning(
-                "%s: The new encryption counter (%i) is lower than the previous value (%i). "
+                "%s: The new encryption counter (%i) is not larger than the previous value (%i). "
                 "The data might be compromised. BLE advertisement will be skipped.",
                 self.title,
                 new_encryption_counter,
@@ -867,7 +874,6 @@ class BTHomeBluetoothDeviceData(BluetoothData):
     ) -> bytes:
         """Decrypt encrypted BTHome BLE advertisements"""
         self._check_bind_key()
-        self._check_different_than_last(service_info)
 
         new_encryption_counter = parse_uint(get_counter(service_data))
         self._check_encryption_counter(new_encryption_counter)
