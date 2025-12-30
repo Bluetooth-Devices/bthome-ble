@@ -108,6 +108,19 @@ def get_mic(service_data: bytes) -> bytes:
     return service_data[-4:]
 
 
+def find_bthome_uuid(service_info: BluetoothServiceInfoBleak) -> UuidType | None:
+    """Searches for the first bthome UUID."""
+    # Iterates over a dictionary, and one device should use only
+    # one of the 3 valid UUIDs. So there is as most one successful
+    # iteration cycle and we can break afterwards safely.
+    for uuid in service_info.service_data.keys():
+        try:
+            return UuidType(uuid)
+        except ValueError:
+            continue
+    return None
+
+
 def get_encryption_scheme(uuid_type: UuidType, service_data: bytes) -> EncryptionScheme:
     """
     Returns the encryption schema using the UUID for V1 and the
@@ -310,13 +323,15 @@ class BTHomeBluetoothDeviceData(BluetoothData):
     def _start_update(self, service_info: BluetoothServiceInfoBleak) -> None:
         """Update from BLE advertisement data."""
         _LOGGER.debug("Parsing BTHome BLE advertisement data: %s", service_info)
-        for uuid, service_data in service_info.service_data.items():
-            if self._parse_bthome(uuid, service_info, service_data):
-                self.last_service_info = service_info
-                # Iterates over a dictionary, and one device should use only
-                # one of the 3 valid UUIDs. So there is as most one successful
-                # iteration cycle and we can break afterwards safely.
-                break
+        uuid_type = find_bthome_uuid(service_info)
+        if uuid_type is None:
+            return None
+        service_data = service_info.service_data.get(uuid_type.value)
+        self._set_encryption_scheme(uuid_type, service_data)
+        if self._is_same_as_last(service_info):
+            return None
+        if self._parse_bthome(uuid_type, service_info, service_data):
+            self.last_service_info = service_info
         return None
 
     def _set_encryption_scheme(self, uuid: UuidType, service_data: bytes) -> None:
@@ -482,19 +497,11 @@ class BTHomeBluetoothDeviceData(BluetoothData):
 
     def _parse_bthome(
         self,
-        uuid: str,
+        uuid_type: UuidType,
         service_info: BluetoothServiceInfoBleak,
         service_data: bytes,
     ) -> bool:
         """Parser for BTHome sensors"""
-        try:
-            uuid_type = UuidType(uuid)
-        except ValueError:
-            return False
-
-        self._set_encryption_scheme(uuid_type, service_data)
-        if self._is_same_as_last(service_info):
-            return True
         self._set_downgrade_detected(service_info)
         if self.downgrade_detected:
             return False
