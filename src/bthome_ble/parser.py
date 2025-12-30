@@ -313,8 +313,8 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         for uuid, service_data in service_info.service_data.items():
             if self._parse_bthome(uuid, service_info, service_data):
                 self.last_service_info = service_info
-                # iterates over a dictionary, and one device should use only
-                # one of the 3 valid uuid. so there is as most one successful
+                # Iterates over a dictionary, and one device should use only
+                # one of the 3 valid UUIDs. So there is as most one successful
                 # iteration cycle and we can break afterwards safely.
                 break
         return None
