@@ -58,46 +58,6 @@ def to_mac(addr: bytes) -> str:
     return ":".join(f"{i:02X}" for i in addr)
 
 
-def get_adv_info(service_data: bytes) -> int:
-    """Extracts the advertisement info."""
-    return service_data[0]
-
-
-def is_encrypted(service_data: bytes) -> bool:
-    """Checks if the encryption flag is set."""
-    return bool(get_adv_info(service_data) & (1 << 0))  # bit 0
-
-
-def is_mac_included(service_data: bytes) -> bool:
-    """Checks if the MAC is included flag is set."""
-    # If True, the first 6 bytes contain the mac address
-    return bool(get_adv_info(service_data) & (1 << 1))  # bit 1
-
-
-def is_sleepy_device(service_data: bytes) -> bool:
-    """Checks if device has sleepy flag set."""
-    # If True, the device is only updating when trigger
-    return bool(get_adv_info(service_data) & (1 << 2))  # bit 2
-
-
-def get_version(service_data: bytes) -> int:
-    """Extracts the version from the advertisement info."""
-    return (get_adv_info(service_data) >> 5) & 7  # 3 bits (5-7)
-
-
-def get_mac(service_data: bytes) -> str:
-    """Extracts the MAC."""
-    bthome_mac_reversed = service_data[1:7]
-    return to_mac(bthome_mac_reversed[::-1])
-
-
-def get_payload(service_data: bytes) -> bytes:
-    """Extracts the payload (removes MAC and advertisement info)."""
-    if is_mac_included(service_data):
-        return service_data[7:]
-    return service_data[1:]
-
-
 def find_bthome_uuid(service_info: BluetoothServiceInfoBleak) -> UuidType | None:
     """Searches for the first bthome UUID."""
     # Iterates over a dictionary, and one device should use only
@@ -205,9 +165,58 @@ class BTHomeData:
         self.uuid_type = uuid_type
         self.service_info = service_info
 
+    def get_address(self) -> str:
+        """Returns the mac address."""
+        return self.service_info.address
+
+    def get_time(self) -> float:
+        """Returns the time stamp."""
+        return self.service_info.time
+
     def _get_service_data(self) -> bytes:
         """Returns the bthome service data."""
         return self.service_info.service_data.get(self.uuid_type.value)
+
+    def _get_adv_info(self) -> int:
+        """Extracts the advertisement info."""
+        return self._get_service_data()[0]
+
+    def _is_encrypted(self) -> bool:
+        """Checks if the encryption flag is set."""
+        return bool(self._get_adv_info() & (1 << 0))  # bit 0
+
+    def _is_mac_included(self) -> bool:
+        """Checks if the MAC is included flag is set."""
+        # If True, the first 6 bytes contain the mac address
+        return bool(self._get_adv_info() & (1 << 1))  # bit 1
+
+    def _is_sleepy_device(self) -> bool:
+        """Checks if device has sleepy flag set."""
+        # If True, the device is only updating when trigger
+        return bool(self._get_adv_info() & (1 << 2))  # bit 2
+
+    def _get_version(self) -> int:
+        """Extracts the version from the advertisement info."""
+        return (self._get_adv_info() >> 5) & 7  # 3 bits (5-7)
+
+    def _get_mac(self) -> str:
+        """Extracts the MAC."""
+        bthome_mac_reversed = self._get_service_data()[1:7]
+        return to_mac(bthome_mac_reversed[::-1])
+
+    def _get_payload(self) -> bytes:
+        """Extracts the payload (removes MAC and advertisement info)."""
+        if self._is_mac_included():
+            return self._get_service_data()[7:]
+        return self._get_service_data()[1:]
+
+    def get_counter(self) -> bytes:
+        """Extracts the encryption counter bytes."""
+        return self._get_service_data()[-8:-4]
+
+    def get_mic(self) -> bytes:
+        """Extracts the encryption mic."""
+        return self._get_service_data()[-4:]
 
     def get_encryption_scheme(self) -> EncryptionScheme:
         """
@@ -220,17 +229,9 @@ class BTHomeData:
             case UuidType.V1_ENCRYPTED:
                 return EncryptionScheme.BTHOME_BINDKEY
             case UuidType.V2:
-                if is_encrypted(self._get_service_data()):
+                if self._is_encrypted():
                     return EncryptionScheme.BTHOME_BINDKEY
                 return EncryptionScheme.NONE
-
-    def get_address(self) -> str:
-        """Returns the mac address."""
-        return self.service_info.address
-
-    def get_time(self) -> float:
-        """Returns the time stamp."""
-        return self.service_info.time
 
     def get_bthome_version(self) -> BTHomeVersion:
         """
@@ -241,7 +242,7 @@ class BTHomeData:
             case UuidType.V1_NON_ENCRYPTED | UuidType.V1_ENCRYPTED:
                 return BTHomeVersion.V1
             case UuidType.V2:
-                sw_version = get_version(self._get_service_data())
+                sw_version = self._get_version()
                 if sw_version != 2:
                     identifier = short_address(self.service_info.address)
                     _LOGGER.error(
@@ -252,14 +253,6 @@ class BTHomeData:
                     )
                     return BTHomeVersion.INVALID
                 return BTHomeVersion.V2
-
-    def get_counter(self) -> bytes:
-        """Extracts the encryption counter bytes."""
-        return self._get_service_data()[-8:-4]
-
-    def get_mic(self) -> bytes:
-        """Extracts the encryption mic."""
-        return self._get_service_data()[-4:]
 
     def get_name(self) -> str:
         """Returns the name of the device."""
@@ -282,7 +275,7 @@ class BTHomeData:
             case BTHomeVersion.V1:
                 return False
             case BTHomeVersion.V2:
-                return is_sleepy_device(self._get_service_data())
+                return self._is_sleepy_device()
             case _:
                 raise ValueError
 
@@ -292,7 +285,7 @@ class BTHomeData:
             case BTHomeVersion.V1:
                 return b"\x1e\x18"
             case BTHomeVersion.V2:
-                adv_info = get_adv_info(self._get_service_data())
+                adv_info = self._get_adv_info()
                 return b"\xd2\xfc" + bytes([adv_info])
             case _:
                 raise ValueError
@@ -303,8 +296,8 @@ class BTHomeData:
             case BTHomeVersion.V1:
                 return self.get_address()
             case BTHomeVersion.V2:
-                if is_mac_included(self._get_service_data()):
-                    return get_mac(self._get_service_data())
+                if self._is_mac_included():
+                    return self._get_mac()
                 return self.get_address()
             case _:
                 raise ValueError
@@ -325,9 +318,22 @@ class BTHomeData:
             case BTHomeVersion.V1:
                 return self._get_service_data()
             case BTHomeVersion.V2:
-                return get_payload(self._get_service_data())
+                return self._get_payload()
             case _:
                 raise ValueError
+
+    def get_encrypted_payload(self) -> bytes:
+        """Removes the last 8 bytes (mic and encryption counter) from payload."""
+        return self.get_payload()[:-8]
+
+    def get_nonce(self) -> bytes:
+        """Creates the nounce for decryption."""
+        counter = self.get_counter()
+        mac_readable = self.get_mac_readable()
+        bthome_mac = bytes.fromhex(mac_readable.replace(":", ""))
+        uuid = self.get_nounce_uuid()
+        # nonce: mac [6], uuid16 [2 (v1) or 3 (v2)], counter [4]
+        return b"".join([bthome_mac, uuid, counter])
 
     def get_minimum_payload_length(self) -> int:
         """Returns the minimum payload length."""
@@ -846,19 +852,6 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             )
             raise ValueError
 
-    def _get_encrypted_payload(self, bthome_data: BTHomeData) -> bytes:
-        """Removes the last 8 bytes (mic and encryption counter) from payload."""
-        return bthome_data.get_payload()[:-8]
-
-    def _get_nonce(self, bthome_data: BTHomeData) -> bytes:
-        """Creates the nounce for decryption."""
-        counter = bthome_data.get_counter()
-        mac_readable = bthome_data.get_address()
-        bthome_mac = bytes.fromhex(mac_readable.replace(":", ""))
-        uuid = bthome_data.get_nounce_uuid()
-        # nonce: mac [6], uuid16 [2 (v1) or 3 (v2)], counter [4]
-        return b"".join([bthome_mac, uuid, counter])
-
     def _handle_decryption_error(
         self,
         error: InvalidTag,
@@ -903,11 +896,11 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         new_encryption_counter = parse_uint(bthome_data.get_counter())
         self._check_encryption_counter(new_encryption_counter)
 
-        encrypted_payload = self._get_encrypted_payload(bthome_data)
+        encrypted_payload = bthome_data.get_encrypted_payload()
         self._check_minimum_length(bthome_data, encrypted_payload)
 
         mic = bthome_data.get_mic()
-        nonce = self._get_nonce(bthome_data)
+        nonce = bthome_data.get_nonce()
         associated_data = bthome_data.get_associated_data()
 
         # decrypt the data
