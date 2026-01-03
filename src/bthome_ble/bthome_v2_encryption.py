@@ -83,6 +83,7 @@ def encrypt_payload(
     print("Data:", data.hex())
     print("Nonce:", nonce.hex())
     print("Ciphertext:", ciphertext.hex())
+    print("count_id:", count_id.hex())
     print("MIC:", mic.hex())
     return b"".join([uuid16, sw_version, ciphertext, count_id, mic])
 
@@ -94,12 +95,13 @@ def main() -> None:
     """Example to encrypt and decrypt BTHome payload."""
     print()
     print("====== Test encode -----------------------------------------")
-    data = bytes(bytearray.fromhex("02CA09"))  # BTHome data (not encrypted)
+    data = bytes(bytearray.fromhex("02CA0903BF13"))  # BTHome data (not encrypted)
     parse_value(data)  # Print temperature and humidity
 
     print()
     print("Preparing data for encryption")
-    count_id = bytes(bytearray.fromhex("00112233"))  # count id (change every message)
+    count_id = 1122867  # count id (change every message)
+    count_id_bytes = count_id.to_bytes(4, "little")
     mac = binascii.unhexlify("5448E68F80A5")  # MAC
     uuid16 = b"\xd2\xfc"
     sw_version = b"\x41"
@@ -110,7 +112,7 @@ def main() -> None:
         mac=mac,
         uuid16=uuid16,
         sw_version=sw_version,
-        count_id=count_id,
+        count_id=count_id_bytes,
         key=bindkey,
     )
     print()
