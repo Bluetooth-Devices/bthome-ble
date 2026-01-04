@@ -155,6 +155,8 @@ def parse_event_properties(
 
 
 class BTHomeData:
+    """Data for BTHome Bluetooth devices."""
+
     def __init__(
         self,
         service_info: BluetoothServiceInfoBleak,
@@ -190,17 +192,17 @@ class BTHomeData:
         # If True, the first 6 bytes contain the mac address
         # This is an undocumented deprecated and risky feature, due to privacy reasons
         # It will not make it into the official documentation.
-        # It was implemented to adsress issue #42
+        # It was implemented to address issue #42
         # https://github.com/Bluetooth-Devices/bthome-ble/issues/42
         # Do not use it. Use "is_mac_included_safe" instead.
         return bool(self._get_adv_info() & (1 << 1))  # bit 1
 
-    def is_mac_included_safe(self) -> bool:
-        """Checks if the MAC is included safe flag is set."""
+    def _is_mac_included_privately(self) -> bool:
+        """Checks if the MAC is included privatly flag is set."""
         # If True, the first 6 bytes of the decrypted payload contain the mac address
         # and mac address is not used for nonce anymore. It is recommended to use that
         # feature only in combination with "is_encrypted".
-        # NOT YET IMPLEMENTED.
+        # NOT YET FULLY IMPLEMENTED.
         return bool(self._get_adv_info() & (1 << 3))  # bit 3
 
     def _is_sleepy_device(self) -> bool:
@@ -342,9 +344,13 @@ class BTHomeData:
     def get_nonce(self) -> bytes:
         """Creates the nounce for decryption."""
         counter = self.get_counter()
+        uuid = self.get_nounce_uuid()
+        # TODO tests are needed
+        if self._is_mac_included_privately():
+            # nonce: uuid16 [2 (v1) or 3 (v2)], counter [4]
+            return b"".join([uuid, counter])
         mac_readable = self.get_mac_readable()
         bthome_mac = bytes.fromhex(mac_readable.replace(":", ""))
-        uuid = self.get_nounce_uuid()
         # nonce: mac [6], uuid16 [2 (v1) or 3 (v2)], counter [4]
         return b"".join([bthome_mac, uuid, counter])
 
@@ -360,7 +366,7 @@ class BTHomeData:
 
 
 class BTHomeBluetoothDeviceData(BluetoothData):
-    """Data for BTHome Bluetooth devices."""
+    """Processing for BTHome Bluetooth devices."""
 
     def __init__(self, bindkey: bytes | None = None) -> None:
         super().__init__()
@@ -580,6 +586,14 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         payload = self._get_decrypted_payload(bthome_data)
         if payload is None:
             return True
+        # TODO tests are needed
+        if (
+            bthome_data._is_mac_included_privately()
+        ):  # TODO method is marked private still
+            payload = payload[
+                6:
+            ]  # TODO the mac itself (payload[:6]) is not usable anymore
+
         return self._parse_payload(payload, bthome_data.get_time())
 
     def _skip_old_or_duplicated_advertisement(
