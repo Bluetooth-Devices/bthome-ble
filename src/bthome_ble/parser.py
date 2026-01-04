@@ -294,6 +294,16 @@ class BTHomeData:
             case _:
                 raise ValueError
 
+    def is_mac_included_privately(self) -> bool:
+        """Checks if the MAC is included privatly flag is set."""
+        match self.get_bthome_version():
+            case BTHomeVersion.V1:
+                return False
+            case BTHomeVersion.V2:
+                return self._is_mac_included_privately()
+            case _:
+                raise ValueError
+
     def get_nounce_uuid(self) -> bytes:
         """Returns the UUID for the nounce."""
         match self.get_bthome_version():
@@ -346,7 +356,7 @@ class BTHomeData:
         counter = self.get_counter()
         uuid = self.get_nounce_uuid()
         # TODO tests are needed
-        if self._is_mac_included_privately():
+        if self.is_mac_included_privately():
             # nonce: uuid16 [2 (v1) or 3 (v2)], counter [4]
             return b"".join([uuid, counter])
         mac_readable = self.get_mac_readable()
@@ -587,12 +597,9 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         if payload is None:
             return True
         # TODO tests are needed
-        if (
-            bthome_data._is_mac_included_privately()
-        ):  # TODO method is marked private still
-            payload = payload[
-                6:
-            ]  # TODO the mac itself (payload[:6]) is not usable anymore
+        if bthome_data.is_mac_included_privately():
+            # TODO the mac itself (payload[:6]) is not usable anymore
+            payload = payload[6:]
 
         return self._parse_payload(payload, bthome_data.get_time())
 
