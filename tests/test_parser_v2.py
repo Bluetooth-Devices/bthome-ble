@@ -68,6 +68,7 @@ KEY_VOLUME_FLOW_RATE = DeviceKey(key="volume_flow_rate", device_id=None)
 KEY_VOLUME_STORAGE = DeviceKey(key="volume_storage", device_id=None)
 KEY_WATER = DeviceKey(key="water", device_id=None)
 KEY_CONDUCTIVITY = DeviceKey(key="conductivity", device_id=None)
+KEY_LIGHT_LEVEL = DeviceKey(key="light_level", device_id=None)
 
 
 @pytest.fixture(autouse=True)
@@ -4487,6 +4488,50 @@ def test_bthome_revolutions_per_minute(caplog):
                 device_key=DeviceKey(key="rotational_speed", device_id=None),
                 name="Rotational Speed",
                 native_value=3500,
+            ),
+            KEY_SIGNAL_STRENGTH: SensorValue(
+                device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+    )
+
+
+def test_bthome_light_level(caplog):
+    """Test BTHome parser for Light Level (0x64) without encryption."""
+    data_string = b"\x40\x64\x02"
+    advertisement = bytes_to_service_info(
+        data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
+    )
+
+    device = BTHomeBluetoothDeviceData()
+    assert device.update(advertisement) == SensorUpdate(
+        title="TEST DEVICE 18B2",
+        devices={
+            None: SensorDeviceInfo(
+                name="TEST DEVICE 18B2",
+                manufacturer=None,
+                model="BTHome sensor",
+                sw_version="BTHome BLE v2",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            KEY_LIGHT_LEVEL: SensorDescription(
+                device_key=KEY_LIGHT_LEVEL,
+                device_class=ExtendedSensorDeviceClass.LIGHT_LEVEL,
+                native_unit_of_measurement=None,
+            ),
+            KEY_SIGNAL_STRENGTH: SensorDescription(
+                device_key=KEY_SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
+            KEY_LIGHT_LEVEL: SensorValue(
+                device_key=KEY_LIGHT_LEVEL,
+                name="Light Level",
+                native_value=2,
             ),
             KEY_SIGNAL_STRENGTH: SensorValue(
                 device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60

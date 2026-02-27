@@ -43,6 +43,9 @@ class ExtendedSensorDeviceClass(BaseDeviceClass):
     # Direction
     DIRECTION = "direction"
 
+    # Light level
+    LIGHT_LEVEL = "light_level"
+
     # Precipitation
     PRECIPITATION = "precipitation"
 
@@ -80,6 +83,11 @@ class ExtendedSensorLibrary(SensorLibrary):
 
     CHANNEL__NONE = description.BaseSensorDescription(
         device_class=ExtendedSensorDeviceClass.CHANNEL,
+        native_unit_of_measurement=None,
+    )
+
+    LIGHT_LEVEL__NONE = description.BaseSensorDescription(
+        device_class=ExtendedSensorDeviceClass.LIGHT_LEVEL,
         native_unit_of_measurement=None,
     )
 
@@ -509,4 +517,5 @@ MEAS_TYPES: dict[int, MeasTypes] = {
         factor=0.000001,
         data_format="signed_integer",
     ),
+    0x64: MeasTypes(meas_format=ExtendedSensorLibrary.LIGHT_LEVEL__NONE),
 }
