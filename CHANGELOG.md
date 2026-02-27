@@ -1,5 +1,85 @@
 # Changelog
 
+## v3.20.0 (2026-02-27)
+
+### Features
+
+
+- Add light level sensor (0x64) ([`3e5bbd5`](https://github.com/Bluetooth-Devices/bthome-ble/commit/3e5bbd5ef34b47d5ecc0f5fbcb24e65b74610afe))
+
+
+### Chores
+
+
+- Pre-commit autoupdate ([`b37fc81`](https://github.com/Bluetooth-Devices/bthome-ble/commit/b37fc81873ee95b9367c511ae6e651818c956544))
+
+
+- Bump sphinx from 8.2.3 to 9.0.4 ([`d23ad25`](https://github.com/Bluetooth-Devices/bthome-ble/commit/d23ad255fa2b9ca5c6dfdd281cf841168a6c214d))
+
+
+- Bump cryptography from 46.0.4 to 46.0.5 ([`c170287`](https://github.com/Bluetooth-Devices/bthome-ble/commit/c1702871f74faf54951b98e6286a6477c09e81d1))
+
+
+- Bump cryptography from 46.0.3 to 46.0.4 ([`4e41aa4`](https://github.com/Bluetooth-Devices/bthome-ble/commit/4e41aa47c5c1bd147aa87406fa39212df003f8ef))
+
+
+- Bump sphinx-rtd-theme from 3.0.2 to 3.1.0 ([`07273bb`](https://github.com/Bluetooth-Devices/bthome-ble/commit/07273bb85e0c9653c190e0b8ea228b599e618c83))
+
+
+- Pre-commit autoupdate ([`a575282`](https://github.com/Bluetooth-Devices/bthome-ble/commit/a57528229602f16d7508e2c10e7154ed3488f355))
+
+
+- Bump myst-parser from 4.0.1 to 5.0.0 ([`04879ca`](https://github.com/Bluetooth-Devices/bthome-ble/commit/04879ca6deaf47cd6e9ab29da5f9fdbe75e3ead2))
+
+
+- Bump urllib3 from 2.6.0 to 2.6.3 ([`ee2d569`](https://github.com/Bluetooth-Devices/bthome-ble/commit/ee2d56947780586bd6b8aceb87e8e0560fef7836))
+
+
+- Pre-commit autoupdate ([`113cf93`](https://github.com/Bluetooth-Devices/bthome-ble/commit/113cf935a29da6b49b105f272b40ec4afea9242b))
+
+
+- Bump the github-actions group with 2 updates ([`db6fd25`](https://github.com/Bluetooth-Devices/bthome-ble/commit/db6fd254522f9a73210816eef761c0d85ce1f887))
+
+
+- Pre-commit autoupdate ([`54c9eda`](https://github.com/Bluetooth-Devices/bthome-ble/commit/54c9edacd1ec8c6b0a28e9a93a501eebe3478e0e))
+
+
+### Documentation
+
+
+- Make encryption example in line with docs ([`3861808`](https://github.com/Bluetooth-Devices/bthome-ble/commit/3861808f99359abf6b8289f5f3a5559490e8c102))
+
+
+### Refactoring
+
+
+- Move low level layer into bthomedata ([`1c8d3a1`](https://github.com/Bluetooth-Devices/bthome-ble/commit/1c8d3a1dad104cf454a49ae7d1cd27cf0773e1d0))
+
+
+- Separate data extraction from data processing ([`f5341c8`](https://github.com/Bluetooth-Devices/bthome-ble/commit/f5341c8480a840dc34f49718d2f15da4db33a455))
+
+
+- Do same as previous test earlier ([`dc64fe1`](https://github.com/Bluetooth-Devices/bthome-ble/commit/dc64fe18923c18d8fbd25a98c6fee01105bd6d63))
+
+
+- Remove needless check ([`b9b43f4`](https://github.com/Bluetooth-Devices/bthome-ble/commit/b9b43f4fa2ea08292247a6ea9832536e57e3f0a6))
+
+
+- Remove needless check ([`b9b43f4`](https://github.com/Bluetooth-Devices/bthome-ble/commit/b9b43f4fa2ea08292247a6ea9832536e57e3f0a6))
+
+
+- Use debug level on same encryption counter ([`b9b43f4`](https://github.com/Bluetooth-Devices/bthome-ble/commit/b9b43f4fa2ea08292247a6ea9832536e57e3f0a6))
+
+
+- Fix description ([`b9b43f4`](https://github.com/Bluetooth-Devices/bthome-ble/commit/b9b43f4fa2ea08292247a6ea9832536e57e3f0a6))
+
+
+- Bring back removed check modfied and to it earlier and ([`b9b43f4`](https://github.com/Bluetooth-Devices/bthome-ble/commit/b9b43f4fa2ea08292247a6ea9832536e57e3f0a6))
+
+
+- Fix spelling ([`b9b43f4`](https://github.com/Bluetooth-Devices/bthome-ble/commit/b9b43f4fa2ea08292247a6ea9832536e57e3f0a6))
+
+
 ## v3.19.1 (2025-12-28)
 
 ### Refactoring
