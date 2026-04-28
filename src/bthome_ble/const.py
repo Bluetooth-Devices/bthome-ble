@@ -522,9 +522,13 @@ MEAS_TYPES: dict[int, MeasTypes] = {
     0x63: MeasTypes(
         meas_format=SensorLibrary.ACCELERATION__ACCELERATION_METERS_PER_SQUARE_SECOND,
         data_length=4,
-        factor=0.000001,
+         factor=0.000001,
         data_format="signed_integer",
     ),
     0x64: MeasTypes(meas_format=ExtendedSensorLibrary.LIGHT_LEVEL__NONE),
     0x65: MeasTypes(meas_format=ExtendedSensorLibrary.SETTINGS_REVISION__NONE),
+    0xE0: MeasTypes(
+        meas_format=EventDeviceKeys.COMMAND,
+        data_format="command",
+    ),
 }

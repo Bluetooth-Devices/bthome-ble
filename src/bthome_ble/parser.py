@@ -28,7 +28,7 @@ from sensor_state_data.description import (
 )
 
 from .const import MEAS_TYPES
-from .event import BUTTON_EVENTS, DIMMER_EVENTS, EventDeviceKeys
+from .event import BUTTON_EVENTS, COMMAND_EVENTS, DIMMER_EVENTS, EventDeviceKeys
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -138,6 +138,8 @@ def parse_event_type(event_device: str, data_obj: int) -> str | None:
         event_type = DIMMER_EVENTS.get(data_obj)
     elif event_device == "button":
         event_type = BUTTON_EVENTS.get(data_obj)
+    elif event_device == "command":
+        event_type = COMMAND_EVENTS.get(data_obj)
     else:
         event_type = None
     return event_type
@@ -150,6 +152,9 @@ def parse_event_properties(
     if event_device == "dimmer":
         # number of steps for rotating a dimmer
         return {"steps": int.from_bytes(data_obj, "little", signed=True)}
+    elif event_device == "command":
+        # manufacturer-specific arguments, exposed as hex string
+        return {"args": data_obj.hex()}
     else:
         return None
 
@@ -664,6 +669,12 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                     if obj_data_format in ["raw", "string"]:
                         obj_data_length = payload[obj_start + 1]
                         obj_data_start = obj_start + 2
+                    elif obj_data_format == "command":
+                        # length byte: high 3 bits reserved, low 5 bits args length
+                        args_length = payload[obj_start + 1] & 0x1F
+                        # measurement data covers opcode + args
+                        obj_data_length = 1 + args_length
+                        obj_data_start = obj_start + 2
                     else:
                         obj_data_length = MEAS_TYPES[obj_meas_type].data_length
                         obj_data_start = obj_start + 1
@@ -751,6 +762,8 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                 value = parse_raw(meas["measurement data"])
             elif meas["data format"] == 5 or meas["data format"] == "timestamp":
                 value = parse_timestamp(meas["measurement data"])
+            elif meas["data format"] == "command":
+                value = meas["measurement data"].hex()
             else:
                 _LOGGER.error(
                     "%s: UNKNOWN dataobject in BTHome BLE payload! Adv: %s",

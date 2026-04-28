@@ -34,6 +34,7 @@ KEY_BINARY_POWER = DeviceKey(key="power", device_id=None)
 KEY_BINARY_WINDOW = DeviceKey(key="window", device_id=None)
 KEY_BUTTON = DeviceKey(key="button", device_id=None)
 KEY_CO2 = DeviceKey(key="carbon_dioxide", device_id=None)
+KEY_COMMAND = DeviceKey(key="command", device_id=None)
 KEY_DIMMER = DeviceKey(key="dimmer", device_id=None)
 KEY_DISTANCE = DeviceKey(key="distance", device_id=None)
 KEY_COUNT = DeviceKey(key="count", device_id=None)
@@ -4578,6 +4579,128 @@ def test_bthome_settings_revision(caplog):
                 name="Settings Revision",
                 native_value=3,
             ),
+            KEY_SIGNAL_STRENGTH: SensorValue(
+                device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+    )
+
+
+def test_bthome_event_command_step_up_5(caplog):
+    """Test BTHome parser for a command event (step_up with 1-byte arg)."""
+    data_string = b"\x40\xe0\x01\x03\x05"
+    advertisement = bytes_to_service_info(
+        data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
+    )
+
+    device = BTHomeBluetoothDeviceData()
+
+    assert device.update(advertisement) == SensorUpdate(
+        title="TEST DEVICE 18B2",
+        devices={
+            None: SensorDeviceInfo(
+                name="TEST DEVICE 18B2",
+                manufacturer=None,
+                model="BTHome sensor",
+                sw_version="BTHome BLE v2",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            KEY_SIGNAL_STRENGTH: SensorDescription(
+                device_key=KEY_SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
+            KEY_SIGNAL_STRENGTH: SensorValue(
+                device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+        events={
+            KEY_COMMAND: Event(
+                device_key=KEY_COMMAND,
+                name="Command",
+                event_type="step_up",
+                event_properties={"args": "05"},
+            ),
+        },
+    )
+
+
+def test_bthome_event_command_toggle_no_args(caplog):
+    """Test BTHome parser for a command event with zero-length args (toggle)."""
+    data_string = b"\x40\xe0\x00\x02"
+    advertisement = bytes_to_service_info(
+        data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
+    )
+
+    device = BTHomeBluetoothDeviceData()
+
+    assert device.update(advertisement) == SensorUpdate(
+        title="TEST DEVICE 18B2",
+        devices={
+            None: SensorDeviceInfo(
+                name="TEST DEVICE 18B2",
+                manufacturer=None,
+                model="BTHome sensor",
+                sw_version="BTHome BLE v2",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            KEY_SIGNAL_STRENGTH: SensorDescription(
+                device_key=KEY_SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
+            KEY_SIGNAL_STRENGTH: SensorValue(
+                device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+        events={
+            KEY_COMMAND: Event(
+                device_key=KEY_COMMAND,
+                name="Command",
+                event_type="toggle",
+                event_properties={"args": ""},
+            ),
+        },
+    )
+
+
+def test_bthome_event_command_unknown_opcode(caplog):
+    """Test BTHome parser for a command with unknown opcode (no event fired)."""
+    # opcode 0x7F is manufacturer-specific / unknown; no standard event should fire.
+    data_string = b"\x40\xe0\x00\x7f"
+    advertisement = bytes_to_service_info(
+        data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
+    )
+
+    device = BTHomeBluetoothDeviceData()
+
+    assert device.update(advertisement) == SensorUpdate(
+        title="TEST DEVICE 18B2",
+        devices={
+            None: SensorDeviceInfo(
+                name="TEST DEVICE 18B2",
+                manufacturer=None,
+                model="BTHome sensor",
+                sw_version="BTHome BLE v2",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            KEY_SIGNAL_STRENGTH: SensorDescription(
+                device_key=KEY_SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
             KEY_SIGNAL_STRENGTH: SensorValue(
                 device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
             ),

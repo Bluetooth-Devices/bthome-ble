@@ -17,6 +17,9 @@ class EventDeviceKeys(StrEnum):
     # Button
     BUTTON = "button"
 
+    # Command
+    COMMAND = "command"
+
 
 BUTTON_EVENTS: dict[int, str | None] = {
     0x00: None,
@@ -33,4 +36,12 @@ DIMMER_EVENTS: dict[int, str | None] = {
     0x00: None,
     0x01: "rotate_left",
     0x02: "rotate_right",
+}
+
+COMMAND_EVENTS: dict[int, str | None] = {
+    0x00: "off",
+    0x01: "on",
+    0x02: "toggle",
+    0x03: "step_up",
+    0x04: "step_down",
 }
