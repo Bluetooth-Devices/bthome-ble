@@ -52,6 +52,9 @@ class ExtendedSensorDeviceClass(BaseDeviceClass):
     # Rotational speed
     ROTATIONAL_SPEED = "rotational_speed"
 
+    # Settings revision
+    SETTINGS_REVISION = "settings_revision"
+
 
 class ExtendedSensorLibrary(SensorLibrary):
     """Sensor Library for additional sensors (compared to sensor-state-data)."""
@@ -94,6 +97,11 @@ class ExtendedSensorLibrary(SensorLibrary):
     ROTATIONAL_SPEED__REVOLUTIONS_PER_MINUTE = description.BaseSensorDescription(
         device_class=ExtendedSensorDeviceClass.ROTATIONAL_SPEED,
         native_unit_of_measurement=Units.REVOLUTIONS_PER_MINUTE,
+    )
+
+    SETTINGS_REVISION__NONE = description.BaseSensorDescription(
+        device_class=ExtendedSensorDeviceClass.SETTINGS_REVISION,
+        native_unit_of_measurement=None,
     )
 
 
@@ -518,4 +526,5 @@ MEAS_TYPES: dict[int, MeasTypes] = {
         data_format="signed_integer",
     ),
     0x64: MeasTypes(meas_format=ExtendedSensorLibrary.LIGHT_LEVEL__NONE),
+    0x65: MeasTypes(meas_format=ExtendedSensorLibrary.SETTINGS_REVISION__NONE),
 }

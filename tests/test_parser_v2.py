@@ -69,6 +69,7 @@ KEY_VOLUME_STORAGE = DeviceKey(key="volume_storage", device_id=None)
 KEY_WATER = DeviceKey(key="water", device_id=None)
 KEY_CONDUCTIVITY = DeviceKey(key="conductivity", device_id=None)
 KEY_LIGHT_LEVEL = DeviceKey(key="light_level", device_id=None)
+KEY_SETTINGS_REVISION = DeviceKey(key="settings_revision", device_id=None)
 
 
 @pytest.fixture(autouse=True)
@@ -4532,6 +4533,50 @@ def test_bthome_light_level(caplog):
                 device_key=KEY_LIGHT_LEVEL,
                 name="Light Level",
                 native_value=2,
+            ),
+            KEY_SIGNAL_STRENGTH: SensorValue(
+                device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+    )
+
+
+def test_bthome_settings_revision(caplog):
+    """Test BTHome parser for Settings Revision (0x65) without encryption."""
+    data_string = b"\x40\x65\x03"
+    advertisement = bytes_to_service_info(
+        data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
+    )
+
+    device = BTHomeBluetoothDeviceData()
+    assert device.update(advertisement) == SensorUpdate(
+        title="TEST DEVICE 18B2",
+        devices={
+            None: SensorDeviceInfo(
+                name="TEST DEVICE 18B2",
+                manufacturer=None,
+                model="BTHome sensor",
+                sw_version="BTHome BLE v2",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            KEY_SETTINGS_REVISION: SensorDescription(
+                device_key=KEY_SETTINGS_REVISION,
+                device_class=ExtendedSensorDeviceClass.SETTINGS_REVISION,
+                native_unit_of_measurement=None,
+            ),
+            KEY_SIGNAL_STRENGTH: SensorDescription(
+                device_key=KEY_SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
+            KEY_SETTINGS_REVISION: SensorValue(
+                device_key=KEY_SETTINGS_REVISION,
+                name="Settings Revision",
+                native_value=3,
             ),
             KEY_SIGNAL_STRENGTH: SensorValue(
                 device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
