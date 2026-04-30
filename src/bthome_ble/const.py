@@ -330,6 +330,10 @@ MEAS_TYPES: dict[int, MeasTypes] = {
     0x2E: MeasTypes(meas_format=SensorLibrary.HUMIDITY__PERCENTAGE),
     0x2F: MeasTypes(meas_format=SensorLibrary.MOISTURE__PERCENTAGE),
     0x3A: MeasTypes(meas_format=EventDeviceKeys.BUTTON),
+    0x3B: MeasTypes(
+        meas_format=EventDeviceKeys.COMMAND,
+        data_format="command",
+    ),
     0x3C: MeasTypes(
         meas_format=EventDeviceKeys.DIMMER,
         data_length=2,
@@ -527,8 +531,4 @@ MEAS_TYPES: dict[int, MeasTypes] = {
     ),
     0x64: MeasTypes(meas_format=ExtendedSensorLibrary.LIGHT_LEVEL__NONE),
     0x65: MeasTypes(meas_format=ExtendedSensorLibrary.SETTINGS_REVISION__NONE),
-    0xE0: MeasTypes(
-        meas_format=EventDeviceKeys.COMMAND,
-        data_format="command",
-    ),
 }

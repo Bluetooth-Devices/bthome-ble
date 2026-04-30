@@ -4588,7 +4588,7 @@ def test_bthome_settings_revision(caplog):
 
 def test_bthome_event_command_step_up_5(caplog):
     """Test BTHome parser for a command event (step_up with 1-byte arg)."""
-    data_string = b"\x40\xe0\x01\x03\x05"
+    data_string = b"\x40\x3b\x01\x03\x05"
     advertisement = bytes_to_service_info(
         data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
     )
@@ -4631,7 +4631,7 @@ def test_bthome_event_command_step_up_5(caplog):
 
 def test_bthome_event_command_toggle_no_args(caplog):
     """Test BTHome parser for a command event with zero-length args (toggle)."""
-    data_string = b"\x40\xe0\x00\x02"
+    data_string = b"\x40\x3b\x00\x02"
     advertisement = bytes_to_service_info(
         data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
     )
@@ -4675,7 +4675,7 @@ def test_bthome_event_command_toggle_no_args(caplog):
 def test_bthome_event_command_unknown_opcode(caplog):
     """Test BTHome parser for a command with unknown opcode (no event fired)."""
     # opcode 0x7F is manufacturer-specific / unknown; no standard event should fire.
-    data_string = b"\x40\xe0\x00\x7f"
+    data_string = b"\x40\x3b\x00\x7f"
     advertisement = bytes_to_service_info(
         data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
     )
