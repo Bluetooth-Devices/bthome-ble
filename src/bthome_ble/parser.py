@@ -409,6 +409,17 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         else:
             self.cipher = None
 
+    def reset_encryption_counter(self) -> None:
+        """Reset the tracked encryption counter.
+
+        Use this when the device's AES-CCM counter is known to have restarted
+        from an arbitrary value (e.g. after a battery replacement on a device
+        that seeds the counter with a random initial value). Resets the
+        tracked counter so the next advertisement is accepted regardless of
+        its counter value; replay protection resumes from there.
+        """
+        self.encryption_counter = 0.0
+
     def supported(self, data: BluetoothServiceInfoBleak) -> bool:
         if not super().supported(data):
             return False

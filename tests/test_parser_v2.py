@@ -700,6 +700,52 @@ def test_decreasing_encryption_counter(caplog):
     )
 
 
+def test_manual_reset_encryption_counter(caplog):
+    """Test that reset_encryption_counter() accepts an otherwise lower counter.
+
+    Simulates a battery replacement on a device that seeds the AES-CCM
+    counter with a random value: the new counter is lower than the tracked
+    one, so the next advertisement is normally dropped as a replay. After
+    calling reset_encryption_counter(), the advertisement is accepted.
+    """
+    bindkey = "231d39c1d7cc1ab1aee224cd096db932"
+    high_counter_adv = b"\x41\xe4\x45\xf3\xc9\x96\x2b\x33\x22\x11\x00\x6c\x7c\x45\x19"
+    advertisement = bytes_to_service_info(
+        high_counter_adv,
+        local_name="TEST DEVICE",
+        address="54:48:E6:8F:80:A5",
+    )
+
+    device = BTHomeBluetoothDeviceData(bindkey=bytes.fromhex(bindkey))
+    assert device.supported(advertisement)
+    assert device.bindkey_verified
+    assert device.encryption_counter == 1122867
+
+    lower_counter_adv = b"\x41\x72\x3d\x30\x35\xfb\x88\x32\x22\x11\x00\x9e\x74\x14\xc0"
+    advertisement = bytes_to_service_info(
+        lower_counter_adv,
+        local_name="TEST DEVICE",
+        address="54:48:E6:8F:80:A5",
+    )
+    assert device.supported(advertisement)
+    # rejected — counter dropped from 1122867 to 1122866
+    assert device.encryption_counter == 1122867
+
+    device.reset_encryption_counter()
+    assert device.encryption_counter == 0
+    # bindkey is still valid — only the replay-protection counter was reset
+    assert device.bindkey_verified
+
+    advertisement = bytes_to_service_info(
+        lower_counter_adv,
+        local_name="TEST DEVICE",
+        address="54:48:E6:8F:80:A5",
+    )
+    assert device.supported(advertisement)
+    assert device.bindkey_verified
+    assert device.encryption_counter == 1122866
+
+
 def test_reset_encryption_counter(caplog):
     """Test BTHome parser during reset of the encryption counter."""
     bindkey = "231d39c1d7cc1ab1aee224cd096db932"
