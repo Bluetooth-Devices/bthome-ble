@@ -652,6 +652,13 @@ class BTHomeBluetoothDeviceData(BluetoothData):
 
             match self.bthome_version:
                 case BTHomeVersion.V1:
+                    if payload_length < obj_start + 2:
+                        _LOGGER.debug(
+                            "%s: Truncated V1 payload, missing measurement type byte: %s",
+                            self.title,
+                            payload.hex(),
+                        )
+                        break
                     obj_meas_type = payload[obj_start + 1]
                     obj_control_byte = payload[obj_start]
                     obj_data_length = (obj_control_byte >> 0) & 31  # 5 bits (0-4)
@@ -678,14 +685,23 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                     prev_obj_meas_type = obj_meas_type
                     obj_data_format = MEAS_TYPES[obj_meas_type].data_format
 
-                    if obj_data_format in ["raw", "string"]:
-                        obj_data_length = payload[obj_start + 1]
-                        obj_data_start = obj_start + 2
-                    elif obj_data_format == "command":
-                        # length byte: high 3 bits reserved, low 5 bits args length
-                        args_length = payload[obj_start + 1] & 0x1F
-                        # measurement data covers opcode + args
-                        obj_data_length = 1 + args_length
+                    if obj_data_format in ["raw", "string", "command"]:
+                        if payload_length < obj_start + 2:
+                            _LOGGER.debug(
+                                "%s: Truncated payload, missing length byte for "
+                                "%s object: %s",
+                                self.title,
+                                obj_data_format,
+                                payload.hex(),
+                            )
+                            break
+                        if obj_data_format == "command":
+                            # length byte: high 3 bits reserved, low 5 bits args length
+                            args_length = payload[obj_start + 1] & 0x1F
+                            # measurement data covers opcode + args
+                            obj_data_length = 1 + args_length
+                        else:
+                            obj_data_length = payload[obj_start + 1]
                         obj_data_start = obj_start + 2
                     else:
                         obj_data_length = MEAS_TYPES[obj_meas_type].data_length
