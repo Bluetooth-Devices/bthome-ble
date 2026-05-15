@@ -150,8 +150,9 @@ def parse_event_properties(
 ) -> dict[str, str | int | float | None] | None:
     """Convert bytes to event properties."""
     if event_device == "dimmer":
-        # number of steps for rotating a dimmer
-        return {"steps": int.from_bytes(data_obj, "little", signed=True)}
+        # Number of steps for rotating a dimmer. Direction is encoded in the event
+        # type (rotate_left / rotate_right), so the magnitude is a uint8 per spec.
+        return {"steps": int.from_bytes(data_obj, "little", signed=False)}
     elif event_device == "command":
         # manufacturer-specific arguments, exposed as hex string
         return {"args": data_obj.hex()}
