@@ -4926,3 +4926,68 @@ def test_bthome_firmware_version_3_overrides_default_sw_version_encrypted() -> N
     # F2 00 01 06 → 6.1.0 should overwrite the encrypted default in place.
     assert device._parse_payload(b"\xf2\x00\x01\x06", 0.0) is True
     assert device._get_device_info(None).sw_version == "6.1.0"
+
+
+def test_meas_key_helper_branches():
+    """Direct unit test for _meas_key() covering every branch.
+
+    Locks in the silent-skip contract: any future refactor that changes the
+    fallback (e.g. raise instead of return None) will fail this test.
+    """
+    from sensor_state_data import SensorLibrary, description
+
+    from bthome_ble.event import EventDeviceKeys
+    from bthome_ble.parser import _meas_key
+
+    # Sensor with truthy device_class -> str(device_class)
+    assert _meas_key(SensorLibrary.DISTANCE__LENGTH_METERS) == "distance"
+
+    # EventDeviceKeys -> str(meas_format)
+    assert _meas_key(EventDeviceKeys.BUTTON) == "button"
+
+    # Sensor description with falsy device_class -> None
+    falsy_sensor = description.BaseSensorDescription(
+        device_class=None,
+        native_unit_of_measurement=None,
+    )
+    assert _meas_key(falsy_sensor) is None
+
+    # Object that is neither a sensor description nor EventDeviceKeys -> None
+    assert _meas_key(object()) is None
+    assert _meas_key("not a sensor") is None
+
+
+def test_parser_skips_dedup_for_meas_format_without_key(caplog):
+    """Parser must not crash when a meas_format yields no dedup key.
+
+    Exercises the ``if meas_key is None: continue`` branch in the dedup loop
+    and the ``meas_key is not None and ...`` short-circuit in the parse loop.
+    Both are theoretical today (every shipped MEAS_TYPES entry has a
+    device_class), so we inject a fake meas type to keep the contract tested.
+    """
+    from sensor_state_data import description
+
+    from bthome_ble import parser as parser_mod
+    from bthome_ble.const import MeasTypes
+
+    fake_entry = MeasTypes(
+        meas_format=description.BaseSensorDescription(
+            device_class=None,
+            native_unit_of_measurement=None,
+        ),
+        data_length=1,
+    )
+
+    # Two consecutive 0x66 measurements: the dedup loop hits the None-key
+    # ``continue`` for each, and the parse loop short-circuits on the same key.
+    data_string = b"\x40\x66\x01\x66\x02"
+    advertisement = bytes_to_service_info(
+        data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
+    )
+
+    with patch.dict(parser_mod.MEAS_TYPES, {0x66: fake_entry}):
+        device = BTHomeBluetoothDeviceData()
+        assert device.supported(advertisement)
+        # Parser must not crash; no sensor entity is emitted because the
+        # fake meas_format has no device_class.
+        device.update(advertisement)
