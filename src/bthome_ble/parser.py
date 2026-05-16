@@ -58,7 +58,11 @@ def to_mac(addr: bytes) -> str:
     return ":".join(f"{i:02X}" for i in addr)
 
 
-def _meas_key(meas_format: Any) -> str | None:
+def _meas_key(
+    meas_format: (
+        EventDeviceKeys | BaseBinarySensorDescription | BaseSensorDescription
+    ),
+) -> str | None:
     """Return the sensor key prefix that ``meas_format`` will emit.
 
     Used by the duplicate-detection logic so that distinct ``meas_format``

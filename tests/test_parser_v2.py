@@ -4956,10 +4956,6 @@ def test_meas_key_helper_branches() -> None:
     )
     assert _meas_key(falsy_sensor) is None
 
-    # Object that is neither a sensor description nor EventDeviceKeys -> None
-    assert _meas_key(object()) is None
-    assert _meas_key("not a sensor") is None
-
 
 def test_parser_skips_dedup_for_meas_format_without_key(
     caplog: pytest.LogCaptureFixture,
