@@ -59,9 +59,7 @@ def to_mac(addr: bytes) -> str:
 
 
 def _meas_key(
-    meas_format: (
-        EventDeviceKeys | BaseBinarySensorDescription | BaseSensorDescription
-    ),
+    meas_format: EventDeviceKeys | BaseBinarySensorDescription | BaseSensorDescription,
 ) -> str | None:
     """Return the sensor key prefix that ``meas_format`` will emit.
 
