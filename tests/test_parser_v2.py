@@ -16,12 +16,21 @@ from sensor_state_data import (
     SensorDescription,
     SensorDeviceClass,
     SensorDeviceInfo,
+    SensorLibrary,
     SensorValue,
     Units,
+    description,
 )
 
-from bthome_ble.const import ExtendedSensorDeviceClass
-from bthome_ble.parser import BTHomeBluetoothDeviceData, BTHomeVersion, EncryptionScheme
+from bthome_ble import parser as parser_mod
+from bthome_ble.const import ExtendedSensorDeviceClass, MeasTypes
+from bthome_ble.event import EventDeviceKeys
+from bthome_ble.parser import (
+    BTHomeBluetoothDeviceData,
+    BTHomeVersion,
+    EncryptionScheme,
+    _meas_key,
+)
 
 ADVERTISEMENT_TIME = 1709331995.5181565
 
@@ -4934,11 +4943,6 @@ def test_meas_key_helper_branches():
     Locks in the silent-skip contract: any future refactor that changes the
     fallback (e.g. raise instead of return None) will fail this test.
     """
-    from sensor_state_data import SensorLibrary, description
-
-    from bthome_ble.event import EventDeviceKeys
-    from bthome_ble.parser import _meas_key
-
     # Sensor with truthy device_class -> str(device_class)
     assert _meas_key(SensorLibrary.DISTANCE__LENGTH_METERS) == "distance"
 
@@ -4965,11 +4969,6 @@ def test_parser_skips_dedup_for_meas_format_without_key(caplog):
     Both are theoretical today (every shipped MEAS_TYPES entry has a
     device_class), so we inject a fake meas type to keep the contract tested.
     """
-    from sensor_state_data import description
-
-    from bthome_ble import parser as parser_mod
-    from bthome_ble.const import MeasTypes
-
     fake_entry = MeasTypes(
         meas_format=description.BaseSensorDescription(
             device_class=None,
