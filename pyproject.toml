@@ -27,7 +27,7 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.11,<3.14"
+python = "^3.11,<3.15"
 
 # Documentation Dependencies
 Sphinx = {version = ">=5,<10", optional = true}
