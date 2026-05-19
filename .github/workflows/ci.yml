@@ -22,7 +22,6 @@ jobs:
       - name: Set up uv
         uses: astral-sh/setup-uv@v8.1.0
         with:
-          enable-cache: true
           python-version: "3.13"
       - uses: pre-commit/action@v3.0.1
 
