@@ -13,7 +13,7 @@ from __future__ import annotations
 
 import logging
 import struct
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from enum import Enum
 from typing import Any
 
@@ -122,7 +122,7 @@ def parse_timestamp(data_obj: bytes) -> datetime | None:
     """Convert bytes to a datetime object."""
     try:
         value = datetime.fromtimestamp(
-            int.from_bytes(data_obj, "little", signed=False), tz=timezone.utc
+            int.from_bytes(data_obj, "little", signed=False), tz=UTC
         )
     except ValueError:
         _LOGGER.error(
