@@ -10,13 +10,19 @@ concurrency:
   group: ${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
 
+env:
+  POETRY_VIRTUALENVS_IN_PROJECT: "true"
+  UV_PYTHON_PREFERENCE: only-managed
+
 jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-python@v6
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v8.1.0
         with:
+          enable-cache: false
           python-version: "3.13"
       - uses: pre-commit/action@v3.0.1
 
@@ -46,13 +52,24 @@ jobs:
     continue-on-error: ${{ matrix.python-version == '3.14' }}
     steps:
       - uses: actions/checkout@v6
-      - name: Set up Python
-        uses: actions/setup-python@v6
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v8.1.0
         with:
+          enable-cache: true
           python-version: ${{ matrix.python-version }}
-      - uses: snok/install-poetry@v1
+      - name: Install poetry
+        run: uv tool install poetry
+      - name: Cache poetry venv
+        id: cache-venv
+        uses: actions/cache@v4
+        with:
+          path: .venv
+          key: venv-v1-${{ runner.os }}-py${{ matrix.python-version }}-${{ hashFiles('poetry.lock', 'pyproject.toml') }}
       - name: Install Dependencies
-        run: poetry install
+        if: steps.cache-venv.outputs.cache-hit != 'true'
+        run: |
+          poetry env use $(uv python find ${{ matrix.python-version }})
+          poetry install
       - name: Test with Pytest
         run: poetry run pytest --cov-report=xml
       - name: Upload coverage to Codecov
