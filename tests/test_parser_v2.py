@@ -4989,7 +4989,5 @@ def test_parser_skips_dedup_for_meas_format_without_key(
         # fake meas_format has no device_class. Only the implicit RSSI
         # signal-strength entity should remain.
         result = device.update(advertisement)
-        assert all(
-            key.key == "signal_strength" for key in result.entity_descriptions
-        )
+        assert all(key.key == "signal_strength" for key in result.entity_descriptions)
         assert all(key.key == "signal_strength" for key in result.entity_values)
