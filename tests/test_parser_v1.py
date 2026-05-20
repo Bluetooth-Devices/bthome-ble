@@ -1231,6 +1231,50 @@ def test_bthome_event_dimmer_rotate_left_3_steps(caplog):
     )
 
 
+def test_bthome_event_dimmer_rotate_right_high_steps(caplog):
+    """Steps is an unsigned byte; values >127 must not wrap to negative."""
+    # 0x3C dimmer object: event_type=0x02 (rotate_right), steps=0xC8 (=200)
+    data_string = b"\x03\x3c\x02\xc8"
+    advertisement = bytes_to_service_info(
+        data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
+    )
+
+    device = BTHomeBluetoothDeviceData()
+
+    assert device.update(advertisement) == SensorUpdate(
+        title="TEST DEVICE 18B2",
+        devices={
+            None: SensorDeviceInfo(
+                name="TEST DEVICE 18B2",
+                manufacturer=None,
+                model="BTHome sensor",
+                sw_version="BTHome BLE v1",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            KEY_SIGNAL_STRENGTH: SensorDescription(
+                device_key=KEY_SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
+            KEY_SIGNAL_STRENGTH: SensorValue(
+                device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+        events={
+            KEY_DIMMER: Event(
+                device_key=KEY_DIMMER,
+                name="Dimmer",
+                event_type="rotate_right",
+                event_properties={"steps": 200},
+            ),
+        },
+    )
+
+
 def test_bthome_multiple_uuids(caplog):
     """Test BTHome parser for a device that broadcasts multiple uuids."""
     advertisement = BluetoothServiceInfoBleak(
