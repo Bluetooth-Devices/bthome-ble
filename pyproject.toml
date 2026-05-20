@@ -82,8 +82,9 @@ select = [
     "F",     # pyflakes
     "I",     # isort
     "UP",    # pyupgrade
-    "PT006", # pytest-parametrize-names-wrong-type
-    "PT007", # pytest-parametrize-values-wrong-type
+    "PT006",   # pytest-parametrize-names-wrong-type
+    "PT007",   # pytest-parametrize-values-wrong-type
+    "PLC0415", # import-outside-top-level
 ]
 
 [tool.ruff.lint.pycodestyle]
