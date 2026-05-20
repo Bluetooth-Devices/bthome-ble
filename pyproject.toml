@@ -77,11 +77,13 @@ target-version = "py311"
 
 [tool.ruff.lint]
 select = [
-    "E",   # pycodestyle errors
-    "W",   # pycodestyle warnings
-    "F",   # pyflakes
-    "I",   # isort
-    "UP",  # pyupgrade
+    "E",     # pycodestyle errors
+    "W",     # pycodestyle warnings
+    "F",     # pyflakes
+    "I",     # isort
+    "UP",    # pyupgrade
+    "PT006", # pytest-parametrize-names-wrong-type
+    "PT007", # pytest-parametrize-values-wrong-type
 ]
 
 [tool.ruff.lint.pycodestyle]
