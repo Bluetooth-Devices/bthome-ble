@@ -53,6 +53,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - name: Set up uv
+        id: setup-uv
         uses: astral-sh/setup-uv@v8.1.0
         with:
           enable-cache: true
@@ -64,7 +65,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: .venv
-          key: venv-v1-${{ runner.os }}-py${{ matrix.python-version }}-${{ hashFiles('poetry.lock', 'pyproject.toml') }}
+          key: venv-v1-${{ runner.os }}-py${{ steps.setup-uv.outputs.python-version }}-${{ hashFiles('poetry.lock', 'pyproject.toml') }}
       - name: Install Dependencies
         if: steps.cache-venv.outputs.cache-hit != 'true'
         run: |
