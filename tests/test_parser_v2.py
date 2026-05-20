@@ -21,7 +21,7 @@ from sensor_state_data import (
 )
 
 from bthome_ble.const import ExtendedSensorDeviceClass
-from bthome_ble.parser import BTHomeBluetoothDeviceData, EncryptionScheme
+from bthome_ble.parser import BTHomeBluetoothDeviceData, BTHomeVersion, EncryptionScheme
 
 ADVERTISEMENT_TIME = 1709331995.5181565
 
@@ -4800,8 +4800,6 @@ def test_bthome_event_command_unknown_opcode(caplog):
 
 def test_truncated_string_object_length_byte():
     """Regression: V2 string object truncated to type byte only must not crash."""
-    from bthome_ble.parser import BTHomeVersion
-
     device = BTHomeBluetoothDeviceData()
     device.set_title("test")
     device.bthome_version = BTHomeVersion.V2
@@ -4811,8 +4809,6 @@ def test_truncated_string_object_length_byte():
 
 def test_truncated_command_object_length_byte():
     """Regression: V2 command object truncated to type byte only must not crash."""
-    from bthome_ble.parser import BTHomeVersion
-
     device = BTHomeBluetoothDeviceData()
     device.set_title("test")
     device.bthome_version = BTHomeVersion.V2
@@ -4822,8 +4818,6 @@ def test_truncated_command_object_length_byte():
 
 def test_truncated_raw_object_length_byte():
     """Regression: V2 raw object truncated to type byte only must not crash."""
-    from bthome_ble.parser import BTHomeVersion
-
     device = BTHomeBluetoothDeviceData()
     device.set_title("test")
     device.bthome_version = BTHomeVersion.V2
