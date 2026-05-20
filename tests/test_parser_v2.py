@@ -4798,28 +4798,14 @@ def test_bthome_event_command_unknown_opcode(caplog):
     )
 
 
-def test_truncated_string_object_length_byte():
-    """Regression: V2 string object truncated to type byte only must not crash."""
+@pytest.mark.parametrize(
+    "payload",
+    [b"\x53", b"\x3b", b"\x54"],
+    ids=["string", "command", "raw"],
+)
+def test_truncated_v2_object_length_byte(payload: bytes) -> None:
+    """Regression: V2 object truncated to type byte only must not crash."""
     device = BTHomeBluetoothDeviceData()
     device.set_title("test")
     device.bthome_version = BTHomeVersion.V2
-    # Object id 0x53 (string), no length byte follows.
-    assert device._parse_payload(b"\x53", 0.0) is False
-
-
-def test_truncated_command_object_length_byte():
-    """Regression: V2 command object truncated to type byte only must not crash."""
-    device = BTHomeBluetoothDeviceData()
-    device.set_title("test")
-    device.bthome_version = BTHomeVersion.V2
-    # Object id 0x3B (command), no length byte follows.
-    assert device._parse_payload(b"\x3b", 0.0) is False
-
-
-def test_truncated_raw_object_length_byte():
-    """Regression: V2 raw object truncated to type byte only must not crash."""
-    device = BTHomeBluetoothDeviceData()
-    device.set_title("test")
-    device.bthome_version = BTHomeVersion.V2
-    # Object id 0x54 (raw), no length byte follows.
-    assert device._parse_payload(b"\x54", 0.0) is False
+    assert device._parse_payload(payload, 0.0) is False

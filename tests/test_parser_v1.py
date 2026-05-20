@@ -1357,7 +1357,7 @@ def test_bthome_multiple_uuids(caplog):
     )
 
 
-def test_truncated_v1_payload_missing_meas_type():
+def test_truncated_v1_payload_missing_meas_type() -> None:
     """Regression: V1 payload truncated to control byte only must not crash."""
     device = BTHomeBluetoothDeviceData()
     device.set_title("test")
