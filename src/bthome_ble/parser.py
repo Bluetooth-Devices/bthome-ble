@@ -870,12 +870,12 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         # prepare the data for decryption
         last_encryption_counter = self.encryption_counter
         if (
-            new_encryption_counter <= last_encryption_counter
+            new_encryption_counter < last_encryption_counter
             and self.bindkey_verified is True
             and new_encryption_counter >= 100
         ):
             _LOGGER.warning(
-                "%s: The new encryption counter (%i) is not larger than the previous value (%i). "
+                "%s: The new encryption counter (%i) is smaller than the previous value (%i). "
                 "The data might be compromised. BLE advertisement will be skipped.",
                 self.title,
                 new_encryption_counter,
