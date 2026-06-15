@@ -36,7 +36,7 @@ myst-parser = {version = ">=5.1.0,<5.2", optional = true}
 bluetooth-sensor-state-data = ">=1.6.1"
 sensor-state-data = ">=2.19.0"
 bluetooth-data-tools = ">=1.29.1"
-cryptography = ">=46.0.7"
+cryptography = ">=49.0.0"
 habluetooth = ">=3.0"
 
 [tool.poetry.extras]
