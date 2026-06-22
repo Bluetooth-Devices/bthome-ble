@@ -143,18 +143,18 @@ docs = ["Sphinx (>=5,<8)", "myst-parser (>=0.18,<3.1)", "sphinx-rtd-theme (>=1,<
 
 [[package]]
 name = "bluetooth-data-tools"
-version = "1.29.1"
+version = "1.29.18"
 description = "Tools for converting bluetooth data and packets"
 optional = false
 python-versions = ">=3.10"
 groups = ["main"]
 files = [
-    {file = "bluetooth_data_tools-1.29.1-cp314-cp314-manylinux_2_41_x86_64.whl", hash = "sha256:ee8947bde46f70849dad4b93cdce84e448317d30c4339ccaf086c96535c8e608"},
-    {file = "bluetooth_data_tools-1.29.1.tar.gz", hash = "sha256:a2e88ccdd3a486dfd81e9859f8d5ec1e6a8b3dc99b490d9b8bedfd8f7d4890bc"},
+    {file = "bluetooth_data_tools-1.29.18-cp314-cp314-manylinux_2_41_x86_64.whl", hash = "sha256:fd5408d54eac9f5ecf34193a40e1badb905ae8b3a1801b92252e365064888c11"},
+    {file = "bluetooth_data_tools-1.29.18.tar.gz", hash = "sha256:87f678cc7b4963cb3ba73064dd72155f915bec4b21f22acd997848ddc0b1c67b"},
 ]
 
 [package.dependencies]
-cryptography = ">=46.0.7"
+cryptography = ">=47.0.0"
 
 [package.extras]
 docs = ["Sphinx (>=5,<9)", "myst-parser (>=0.18,<4.1)", "sphinx-rtd-theme (>=1,<4)"]
@@ -1797,4 +1797,4 @@ docs = ["Sphinx", "myst-parser", "sphinx-rtd-theme"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.11,<3.15"
-content-hash = "425713ee65d7a45251de09fba323dc5d5c7484578dd7c93e50a1ff1b53538ad0"
+content-hash = "afbd47184fa076decad4e20b97de3859bc249753d3cf1b995de1b11204c8fcb8"
