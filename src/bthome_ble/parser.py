@@ -58,6 +58,26 @@ def to_mac(addr: bytes) -> str:
     return ":".join(f"{i:02X}" for i in addr)
 
 
+def _meas_key(
+    meas_format: EventDeviceKeys | BaseBinarySensorDescription | BaseSensorDescription,
+) -> str | None:
+    """Return the sensor key prefix that ``meas_format`` will emit.
+
+    Used by the duplicate-detection logic so that distinct ``meas_format``
+    objects sharing the same emitted key (e.g. distance in millimeters and
+    distance in meters both produce ``distance``) are still recognised as
+    duplicates and receive ``_1`` / ``_2`` postfixes.
+    """
+    if (
+        isinstance(meas_format, (BaseSensorDescription, BaseBinarySensorDescription))
+        and meas_format.device_class
+    ):
+        return str(meas_format.device_class)
+    if isinstance(meas_format, EventDeviceKeys):
+        return str(meas_format)
+    return None
+
+
 def find_bthome_uuid(service_info: BluetoothServiceInfoBleak) -> UuidType | None:
     """Searches for the first bthome UUID."""
     # Iterates over a dictionary, and one device should use only
@@ -743,16 +763,23 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                 }
             )
 
-        # Get a list of measurement types that are included more than once.
-        seen_meas_formats = set()
-        dup_meas_formats = set()
+        # Get a list of sensor keys that are emitted more than once.
+        # Dedup on the actual key prefix (device_class for sensors/binary
+        # sensors, str(meas_format) for events) rather than the meas_format
+        # itself, because different meas_formats can share a device_class
+        # (e.g. 0x40 mm and 0x41 m both map to ``distance``).
+        seen_meas_keys: set[str] = set()
+        dup_meas_keys: set[str] = set()
         for meas in measurements:
             if meas["measurement type"] in MEAS_TYPES:
                 meas_format = MEAS_TYPES[meas["measurement type"]].meas_format
-                if meas_format in seen_meas_formats:
-                    dup_meas_formats.add(meas_format)
+                meas_key = _meas_key(meas_format)
+                if meas_key is None:
+                    continue
+                if meas_key in seen_meas_keys:
+                    dup_meas_keys.add(meas_key)
                 else:
-                    seen_meas_formats.add(meas_format)
+                    seen_meas_keys.add(meas_key)
 
         # Parse each object into readable information
         for meas in measurements:
@@ -769,10 +796,13 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             meas_format = meas_type.meas_format
             meas_factor = meas_type.factor
 
-            if meas_type.meas_format in dup_meas_formats:
-                # Add a postfix for advertisements with multiple measurements of the same type
-                postfix_counter = postfix_dict.get(meas_format, 0) + 1
-                postfix_dict[meas_format] = postfix_counter
+            meas_key = _meas_key(meas_format)
+            if meas_key is not None and meas_key in dup_meas_keys:
+                # Add a postfix for advertisements with multiple measurements
+                # that share the same emitted key (same device_class for
+                # sensors, same str(meas_format) for events).
+                postfix_counter = postfix_dict.get(meas_key, 0) + 1
+                postfix_dict[meas_key] = postfix_counter
                 postfix = f"_{postfix_counter}"
             else:
                 postfix = ""

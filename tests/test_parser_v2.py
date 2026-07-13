@@ -16,12 +16,21 @@ from sensor_state_data import (
     SensorDescription,
     SensorDeviceClass,
     SensorDeviceInfo,
+    SensorLibrary,
     SensorValue,
     Units,
+    description,
 )
 
-from bthome_ble.const import ExtendedSensorDeviceClass
-from bthome_ble.parser import BTHomeBluetoothDeviceData, BTHomeVersion, EncryptionScheme
+from bthome_ble import parser as parser_mod
+from bthome_ble.const import ExtendedSensorDeviceClass, MeasTypes
+from bthome_ble.event import EventDeviceKeys
+from bthome_ble.parser import (
+    BTHomeBluetoothDeviceData,
+    BTHomeVersion,
+    EncryptionScheme,
+    _meas_key,
+)
 
 ADVERTISEMENT_TIME = 1709331995.5181565
 
@@ -2428,6 +2437,67 @@ def test_bthome_distance_meters(caplog):
     )
 
 
+def test_bthome_distance_meters_and_millimeters(caplog):
+    """Test BTHome parser for distance when both mm and m are in the same packet.
+
+    Regression test for issue #247: 0x40 (mm) and 0x41 (m) share device_class
+    ``distance``. When both appeared in one advertisement they collided on the
+    same key, so only the last value survived. Both should be emitted as
+    ``distance_1`` and ``distance_2``.
+    """
+    data_string = b"\x40\x41\x64\x00\x40\x0b\x00"
+    advertisement = bytes_to_service_info(
+        data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
+    )
+
+    device = BTHomeBluetoothDeviceData()
+
+    assert device.update(advertisement) == SensorUpdate(
+        title="TEST DEVICE 18B2",
+        devices={
+            None: SensorDeviceInfo(
+                name="TEST DEVICE 18B2",
+                manufacturer=None,
+                model="BTHome sensor",
+                sw_version="BTHome BLE v2",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            DeviceKey(key="distance_1", device_id=None): SensorDescription(
+                device_key=DeviceKey(key="distance_1", device_id=None),
+                device_class=SensorDeviceClass.DISTANCE,
+                native_unit_of_measurement=Units.LENGTH_METERS,
+            ),
+            DeviceKey(key="distance_2", device_id=None): SensorDescription(
+                device_key=DeviceKey(key="distance_2", device_id=None),
+                device_class=SensorDeviceClass.DISTANCE,
+                native_unit_of_measurement=Units.LENGTH_MILLIMETERS,
+            ),
+            KEY_SIGNAL_STRENGTH: SensorDescription(
+                device_key=KEY_SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
+            DeviceKey(key="distance_1", device_id=None): SensorValue(
+                device_key=DeviceKey(key="distance_1", device_id=None),
+                name="Distance 1",
+                native_value=10.0,
+            ),
+            DeviceKey(key="distance_2", device_id=None): SensorValue(
+                device_key=DeviceKey(key="distance_2", device_id=None),
+                name="Distance 2",
+                native_value=11,
+            ),
+            KEY_SIGNAL_STRENGTH: SensorValue(
+                device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+    )
+
+
 def test_bthome_duration(caplog):
     """Test BTHome parser for duration in seconds."""
     data_string = b"\x40\x42\x4e\x34\x00"
@@ -4778,3 +4848,59 @@ def test_truncated_v2_object_length_byte(payload: bytes) -> None:
     device.set_title("test")
     device.bthome_version = BTHomeVersion.V2
     assert device._parse_payload(payload, 0.0) is False
+
+
+def test_meas_key_helper_branches() -> None:
+    """Direct unit test for _meas_key() covering every branch.
+
+    Locks in the silent-skip contract: any future refactor that changes the
+    fallback (e.g. raise instead of return None) will fail this test.
+    """
+    # Sensor with truthy device_class -> str(device_class)
+    assert _meas_key(SensorLibrary.DISTANCE__LENGTH_METERS) == "distance"
+
+    # EventDeviceKeys -> str(meas_format)
+    assert _meas_key(EventDeviceKeys.BUTTON) == "button"
+
+    # Sensor description with falsy device_class -> None
+    falsy_sensor = description.BaseSensorDescription(
+        device_class=None,
+        native_unit_of_measurement=None,
+    )
+    assert _meas_key(falsy_sensor) is None
+
+
+def test_parser_skips_dedup_for_meas_format_without_key(
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    """Parser must not crash when a meas_format yields no dedup key.
+
+    Exercises the ``if meas_key is None: continue`` branch in the dedup loop
+    and the ``meas_key is not None and ...`` short-circuit in the parse loop.
+    Both are theoretical today (every shipped MEAS_TYPES entry has a
+    device_class), so we inject a fake meas type to keep the contract tested.
+    """
+    fake_entry = MeasTypes(
+        meas_format=description.BaseSensorDescription(
+            device_class=None,
+            native_unit_of_measurement=None,
+        ),
+        data_length=1,
+    )
+
+    # Two consecutive 0x66 measurements: the dedup loop hits the None-key
+    # ``continue`` for each, and the parse loop short-circuits on the same key.
+    data_string = b"\x40\x66\x01\x66\x02"
+    advertisement = bytes_to_service_info(
+        data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
+    )
+
+    with patch.dict(parser_mod.MEAS_TYPES, {0x66: fake_entry}):
+        device = BTHomeBluetoothDeviceData()
+        assert device.supported(advertisement)
+        # Parser must not crash; no sensor entity is emitted because the
+        # fake meas_format has no device_class. Only the implicit RSSI
+        # signal-strength entity should remain.
+        result = device.update(advertisement)
+        assert all(key.key == "signal_strength" for key in result.entity_descriptions)
+        assert all(key.key == "signal_strength" for key in result.entity_values)
