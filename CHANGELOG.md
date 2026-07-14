@@ -1,5 +1,95 @@
 # Changelog
 
+## v3.23.5 (2026-07-14)
+
+### Chores
+
+
+- Update issue-manager workflow to use fixed upstream action ([`dfe0f48`](https://github.com/Bluetooth-Devices/bthome-ble/commit/dfe0f4824a2531d5722a6a78b2693d4560d87b81))
+
+
+- Pre-commit autoupdate ([`0d7fc29`](https://github.com/Bluetooth-Devices/bthome-ble/commit/0d7fc29454a9ef2889123cf19855c511044f2325))
+
+
+- Bump the github-actions group with 5 updates ([`45ab9e6`](https://github.com/Bluetooth-Devices/bthome-ble/commit/45ab9e62f1d010b94a21f26804555894bd66f2e7))
+
+
+- Pre-commit autoupdate ([`863fb83`](https://github.com/Bluetooth-Devices/bthome-ble/commit/863fb83d1b376b6e6fc7ed042929251d7ddb5a57))
+
+
+- Bump habluetooth from 6.9.0 to 6.26.0 ([`51c0282`](https://github.com/Bluetooth-Devices/bthome-ble/commit/51c028206db7ed0b68eef80344feab783810a292))
+
+
+- Bump habluetooth from 5.8.0 to 6.9.0 ([`b706451`](https://github.com/Bluetooth-Devices/bthome-ble/commit/b7064518eaf1a04b521fe7086d7849b3141ff6fd))
+
+
+- Bump bluetooth-data-tools from 1.29.1 to 1.29.18 ([`a6d7d6b`](https://github.com/Bluetooth-Devices/bthome-ble/commit/a6d7d6b315726b33c3f18be07ab06ebd5fdc5d84))
+
+
+- Pre-commit autoupdate ([`5f11d16`](https://github.com/Bluetooth-Devices/bthome-ble/commit/5f11d16073cfdfd22b4e47536a69ca7a542875fd))
+
+
+- Bump pytest from 9.1.0 to 9.1.1 ([`99744dc`](https://github.com/Bluetooth-Devices/bthome-ble/commit/99744dcbf0ad96e10b023bf852a12a368467a5c1))
+
+
+- Bump cryptography from 46.0.7 to 49.0.0 ([`0d66b22`](https://github.com/Bluetooth-Devices/bthome-ble/commit/0d66b2238e8efb26ddce94070839ae6a5c9c8ea2))
+
+
+- Pre-commit autoupdate ([`d54e3ec`](https://github.com/Bluetooth-Devices/bthome-ble/commit/d54e3ec78699f35285a3037443633eb72736e624))
+
+
+- Bump bluetooth-data-tools from 1.28.4 to 1.29.1 ([`07207d9`](https://github.com/Bluetooth-Devices/bthome-ble/commit/07207d924d63634ccbeb6ab026c6ce50ff0f1e38))
+
+
+- Bump pytest from 9.0.3 to 9.1.0 ([`d9420dd`](https://github.com/Bluetooth-Devices/bthome-ble/commit/d9420ddbcec7d691c153adbd46b2b5ca8493582f))
+
+
+### Bug fixes
+
+
+- Update issue-manager action ([`dfe0f48`](https://github.com/Bluetooth-Devices/bthome-ble/commit/dfe0f4824a2531d5722a6a78b2693d4560d87b81))
+
+
+### Documentation
+
+
+- Fix broken ci shields badge in readme ([`46b1d4e`](https://github.com/Bluetooth-Devices/bthome-ble/commit/46b1d4e4520ceb534f5ec991a1d2e05c4292e22d))
+
+
+## v3.23.4 (2026-06-11)
+
+### Bug fixes
+
+
+- Re-release due to sigstore flake ([`56c6c5d`](https://github.com/Bluetooth-Devices/bthome-ble/commit/56c6c5dd9d3bcb0a349c4f634f8c77d27b4cd612))
+
+
+## v3.23.3 (2026-06-11)
+
+### Bug fixes
+
+
+- Revert encryption counter check ([`de550a8`](https://github.com/Bluetooth-Devices/bthome-ble/commit/de550a8240ba4a4b9d4905ff529780bd3da2ab5b))
+
+
+### Chores
+
+
+- Bump actions/cache from 4 to 5 in the github-actions group ([`617461a`](https://github.com/Bluetooth-Devices/bthome-ble/commit/617461a5bd66be05383e164d97b36789844b1842))
+
+
+- Pre-commit autoupdate ([`55e6f11`](https://github.com/Bluetooth-Devices/bthome-ble/commit/55e6f112c07e4a47005cbbe64d76e3fdd1321577))
+
+
+- Bump myst-parser from 5.0.0 to 5.1.0 ([`3dd11dc`](https://github.com/Bluetooth-Devices/bthome-ble/commit/3dd11dc1cde43ee868af790be25c41e21787a003))
+
+
+- Bump pytest-cov from 7.0.0 to 7.1.0 ([`32d9674`](https://github.com/Bluetooth-Devices/bthome-ble/commit/32d9674d4307186a9007ceb6092826220d8d05b6))
+
+
+- Pre-commit autoupdate ([`3af2842`](https://github.com/Bluetooth-Devices/bthome-ble/commit/3af28427457b2e4e8732a9986b75e4b49fdec7b0))
+
+
 ## v3.23.2 (2026-05-20)
 
 ### Bug fixes
