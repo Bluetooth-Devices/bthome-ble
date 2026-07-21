@@ -19,6 +19,7 @@ class MeasTypes:
         EventDeviceKeys
         | description.BaseBinarySensorDescription
         | description.BaseSensorDescription
+        | None
     )
     data_length: int = 1
     data_format: str = "unsigned_integer"
@@ -531,4 +532,21 @@ MEAS_TYPES: dict[int, MeasTypes] = {
     ),
     0x64: MeasTypes(meas_format=ExtendedSensorLibrary.LIGHT_LEVEL__NONE),
     0x65: MeasTypes(meas_format=ExtendedSensorLibrary.SETTINGS_REVISION__NONE),
+    # Device information objects (BTHome misc range). These do not produce
+    # sensor entities; the parser consumes them to set device-level metadata.
+    0xF0: MeasTypes(
+        meas_format=None,
+        data_length=2,
+        data_format="device_type_id",
+    ),
+    0xF1: MeasTypes(
+        meas_format=None,
+        data_length=4,
+        data_format="firmware_version_4",
+    ),
+    0xF2: MeasTypes(
+        meas_format=None,
+        data_length=3,
+        data_format="firmware_version_3",
+    ),
 }

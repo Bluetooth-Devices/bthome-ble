@@ -398,6 +398,11 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         # Holds the software version of the device.
         self.bthome_version: BTHomeVersion = BTHomeVersion.INVALID
 
+        # Optional BTHome device type id (object 0xF0). Manufacturer-specific
+        # identifier; consumers can map it to a model string if they know
+        # the registry.
+        self.device_type_id: int | None = None
+
         # If this is True, the last update was blocked due to encryption downgrade
         # (received unencrypted data when bindkey is configured)
         self.downgrade_detected = False
@@ -749,6 +754,10 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         for meas in measurements:
             if meas["measurement type"] in MEAS_TYPES:
                 meas_format = MEAS_TYPES[meas["measurement type"]].meas_format
+                if meas_format is None:
+                    # Device-info objects (F0/F1/F2) don't dispatch sensors,
+                    # so they can't collide with other measurement types.
+                    continue
                 if meas_format in seen_meas_formats:
                     dup_meas_formats.add(meas_format)
                 else:
@@ -768,6 +777,30 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             meas_type = MEAS_TYPES[meas["measurement type"]]
             meas_format = meas_type.meas_format
             meas_factor = meas_type.factor
+
+            # Device-info objects (F0/F1/F2): update device metadata and skip
+            # the sensor/event dispatch below.
+            if meas["data format"] == "device_type_id":
+                self.device_type_id = int(parse_uint(meas["measurement data"]))
+                result = True
+                continue
+            if meas["data format"] == "firmware_version_4":
+                fw = meas["measurement data"]
+                # Bytes are transmitted least-significant-component first, so
+                # `00 01 02 04` represents firmware version 4.2.1.0.
+                self.set_device_sw_version(f"{fw[3]}.{fw[2]}.{fw[1]}.{fw[0]}")
+                result = True
+                continue
+            if meas["data format"] == "firmware_version_3":
+                fw = meas["measurement data"]
+                # `00 01 06` represents firmware version 6.1.0.
+                self.set_device_sw_version(f"{fw[2]}.{fw[1]}.{fw[0]}")
+                result = True
+                continue
+
+            # Device-info objects above already `continue`d, so meas_format
+            # cannot be None past this point. Assert for type narrowing.
+            assert meas_format is not None  # nosec
 
             if meas_type.meas_format in dup_meas_formats:
                 # Add a postfix for advertisements with multiple measurements of the same type
