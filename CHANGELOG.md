@@ -1,5 +1,49 @@
 # Changelog
 
+## v3.24.0 (2026-07-21)
+
+### Features
+
+
+- Parse device info objects 0xf0/0xf1/0xf2 (issue #180) ([`6b4aa2c`](https://github.com/Bluetooth-Devices/bthome-ble/commit/6b4aa2c499fdae31e64fde632011223cd972e735))
+
+
+- Parse device info objects 0xf0/0xf1/0xf2 (issue #180) ([`6b4aa2c`](https://github.com/Bluetooth-Devices/bthome-ble/commit/6b4aa2c499fdae31e64fde632011223cd972e735))
+
+
+### Bug fixes
+
+
+- Resolve mypy errors for device info objects ([`6b4aa2c`](https://github.com/Bluetooth-Devices/bthome-ble/commit/6b4aa2c499fdae31e64fde632011223cd972e735))
+
+
+- Resolve ci failures on #361 (attempt 1) ([`6b4aa2c`](https://github.com/Bluetooth-Devices/bthome-ble/commit/6b4aa2c499fdae31e64fde632011223cd972e735))
+
+
+- Resolve ci failures on #361 (attempt 1) ([`6b4aa2c`](https://github.com/Bluetooth-Devices/bthome-ble/commit/6b4aa2c499fdae31e64fde632011223cd972e735))
+
+
+### Testing
+
+
+- Assert f2 sw_version override on same instance ([`6b4aa2c`](https://github.com/Bluetooth-Devices/bthome-ble/commit/6b4aa2c499fdae31e64fde632011223cd972e735))
+
+
+- Close coverage gap on device info type narrowing ([`6b4aa2c`](https://github.com/Bluetooth-Devices/bthome-ble/commit/6b4aa2c499fdae31e64fde632011223cd972e735))
+
+
+- Add return type annotations to device info tests ([`6b4aa2c`](https://github.com/Bluetooth-Devices/bthome-ble/commit/6b4aa2c499fdae31e64fde632011223cd972e735))
+
+
+### Chores
+
+
+- Pre-commit autoupdate ([`970c6e1`](https://github.com/Bluetooth-Devices/bthome-ble/commit/970c6e14b6967767ad8fb9414ed5e3d342385697))
+
+
+- Bump habluetooth from 6.26.0 to 6.26.5 ([`4024178`](https://github.com/Bluetooth-Devices/bthome-ble/commit/4024178ed75f7e31a55f99a7329c4e2c2fc9d70d))
+
+
 ## v3.23.5 (2026-07-14)
 
 ### Chores
