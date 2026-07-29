@@ -22,7 +22,13 @@ from sensor_state_data import (
     Units,
 )
 
-from bthome_ble.parser import BTHomeBluetoothDeviceData, BTHomeVersion, EncryptionScheme
+from bthome_ble.parser import (
+    BTHomeBluetoothDeviceData,
+    BTHomeVersion,
+    EncryptionScheme,
+    parse_event_type,
+    parse_float,
+)
 
 ADVERTISEMENT_TIME = 1709331995.5181565
 
@@ -1366,3 +1372,13 @@ def test_truncated_v1_payload_missing_meas_type() -> None:
     device.bthome_version = BTHomeVersion.V1
     # Single control byte, no measurement type byte follows.
     assert device._parse_payload(b"\x02", 0.0) is False
+
+
+def test_parse_float_rejects_unsupported_length() -> None:
+    """Invalid float payload lengths should return None."""
+    assert parse_float(b"\x00") is None
+
+
+def test_parse_event_type_unknown_device_returns_none() -> None:
+    """Unknown event devices should not raise."""
+    assert parse_event_type("switch", 0) is None
