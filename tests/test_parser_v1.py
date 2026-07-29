@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import struct
 from datetime import UTC, datetime
 from unittest.mock import patch
 
@@ -1379,6 +1380,32 @@ def test_parse_float_rejects_unsupported_length() -> None:
     assert parse_float(b"\x00") is None
 
 
+def test_parse_float_accepts_four_and_eight_byte_values() -> None:
+    """Common float encodings should round-trip through parse_float."""
+    assert parse_float(struct.pack("<f", 1.5)) is not None
+    assert parse_float(struct.pack("<d", 2.5)) is not None
+
+
 def test_parse_event_type_unknown_device_returns_none() -> None:
     """Unknown event devices should not raise."""
     assert parse_event_type("switch", 0) is None
+
+
+def test_start_update_ignores_non_bthome_advertisement() -> None:
+    """Advertisements without a BTHome service UUID should be ignored."""
+    device = BTHomeBluetoothDeviceData()
+    service_info = BluetoothServiceInfoBleak(
+        name="test",
+        address="00:00:00:00:00:00",
+        rssi=-60,
+        manufacturer_data={},
+        service_data={"0000ffff-0000-1000-8000-00805f9b34fb": b"\x00"},
+        service_uuids=["0000ffff-0000-1000-8000-00805f9b34fb"],
+        source="",
+        device=None,
+        advertisement=None,
+        connectable=False,
+        time=ADVERTISEMENT_TIME,
+        tx_power=None,
+    )
+    device._start_update(service_info)

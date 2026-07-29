@@ -54,3 +54,10 @@ def test_encryption_example_2():
     assert decrypt_aes_ccm(key=bindkey, mac=mac, data=encrypted_payload) == {
         "Motion": 1,
     }
+
+
+def test_decrypt_aes_ccm_invalid_packet_returns_none() -> None:
+    """Malformed advertisements should not raise from decrypt_aes_ccm."""
+    bindkey = binascii.unhexlify("231d39c1d7cc1ab1aee224cd096db932")
+    mac = binascii.unhexlify("5448E68F80A5")
+    assert decrypt_aes_ccm(key=bindkey, mac=mac, data=b"tooshort") is None
