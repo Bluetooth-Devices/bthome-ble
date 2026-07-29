@@ -7,8 +7,8 @@ from bthome_ble.bthome_v2_encryption import decrypt_aes_ccm, encrypt_payload
 
 def test_encryption_example_1():
     """Test BTHome V2 encryption example."""
-    data = bytes(bytearray.fromhex("02CA0903BF13"))  # BTHome data (not encrypted)
-    count_id = bytes(bytearray.fromhex("00112233"))  # count id (change every message)
+    data = bytes.fromhex("02CA0903BF13")  # BTHome data (not encrypted)
+    count_id = bytes.fromhex("00112233")  # count id (change every message)
     mac = binascii.unhexlify("5448E68F80A5")  # MAC
     uuid16 = b"\xd2\xfc"
     sw_version = b"\x41"
@@ -34,8 +34,8 @@ def test_encryption_example_1():
 
 def test_encryption_example_2():
     """Test BTHome V2 encryption example."""
-    data = bytes(bytearray.fromhex("2101"))  # BTHome data (not encrypted)
-    count_id = bytes(bytearray.fromhex("00112233"))  # count id (change every message)
+    data = bytes.fromhex("2101")  # BTHome data (not encrypted)
+    count_id = bytes.fromhex("00112233")  # count id (change every message)
     mac = binascii.unhexlify("5448E68F80A5")  # MAC
     uuid16 = b"\xd2\xfc"
     sw_version = b"\x41"

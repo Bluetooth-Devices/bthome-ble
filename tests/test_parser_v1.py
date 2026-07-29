@@ -1,5 +1,7 @@
 """Tests for the parser of BLE advertisements in BTHome V1 format."""
 
+from __future__ import annotations
+
 import logging
 from datetime import UTC, datetime
 from unittest.mock import patch

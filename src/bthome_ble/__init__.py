@@ -19,8 +19,8 @@ from .parser import BTHomeBluetoothDeviceData
 __version__ = "3.9.2"
 
 __all__ = [
-    "BinarySensorDeviceClass",
     "BTHomeBluetoothDeviceData",
+    "BinarySensorDeviceClass",
     "DeviceClass",
     "DeviceKey",
     "SensorDescription",

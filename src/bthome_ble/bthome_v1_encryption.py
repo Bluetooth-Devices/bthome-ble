@@ -47,15 +47,14 @@ def decrypt_aes_ccm(key: bytes, mac: bytes, data: bytes) -> dict[str, float] | N
     adslength = len(data)
     if adslength > 12 and data[0] == 0x1E and data[1] == 0x18:
         pkt = data[: data[0] + 1]
-        uuid = pkt[0:2]
+        uuid = pkt[:2]
         encrypted_data = pkt[2:-8]
         count_id = pkt[-8:-4]
         mic = pkt[-4:]
         # nonce: mac [6], uuid16 [2], count_id [4] # 6+2+4 = 12 bytes
         nonce = b"".join([mac, uuid, count_id])
         return decrypt_payload(encrypted_data, mic, key, nonce)
-    else:
-        print("Error: format packet!")
+    print("Error: format packet!")
     return None
 
 
@@ -77,8 +76,7 @@ def encrypt_payload(
     return b"".join([uuid16, ciphertext, count_id, mic])
 
 
-# =============================
-# main()
+# Main entry point
 # =============================
 def main() -> None:
     """Example to encrypt and decrypt BTHome payload."""

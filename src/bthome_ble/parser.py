@@ -63,7 +63,7 @@ def find_bthome_uuid(service_info: BluetoothServiceInfoBleak) -> UuidType | None
     # Iterates over a dictionary, and one device should use only
     # one of the 3 valid UUIDs. So there is as most one successful
     # iteration cycle and we can break afterwards safely.
-    for uuid in service_info.service_data.keys():
+    for uuid in service_info.service_data:
         try:
             return UuidType(uuid)
         except ValueError:
@@ -90,15 +90,16 @@ def parse_int(data_obj: bytes, factor: float = 1.0) -> float:
 def parse_float(data_obj: bytes, factor: float = 1.0) -> float | None:
     """Convert bytes (as float) and factor to float."""
     decimal_places = -int(f"{factor:e}".split("e")[-1])
-    if len(data_obj) == 2:
-        [val] = struct.unpack("<e", data_obj)
-    elif len(data_obj) == 4:
-        [val] = struct.unpack("<f", data_obj)
-    elif len(data_obj) == 8:
-        [val] = struct.unpack("<d", data_obj)
-    else:
-        _LOGGER.error("only 2, 4 or 8 byte long floats are supported in BTHome BLE")
-        return None
+    match len(data_obj):
+        case 2:
+            [val] = struct.unpack("<e", data_obj)
+        case 4:
+            [val] = struct.unpack("<f", data_obj)
+        case 8:
+            [val] = struct.unpack("<d", data_obj)
+        case _:
+            _LOGGER.error("only 2, 4 or 8 byte long floats are supported in BTHome BLE")
+            return None
     return round(val * factor, decimal_places)
 
 
@@ -134,15 +135,15 @@ def parse_timestamp(data_obj: bytes) -> datetime | None:
 
 def parse_event_type(event_device: str, data_obj: int) -> str | None:
     """Convert bytes to event type."""
-    if event_device == "dimmer":
-        event_type = DIMMER_EVENTS.get(data_obj)
-    elif event_device == "button":
-        event_type = BUTTON_EVENTS.get(data_obj)
-    elif event_device == "command":
-        event_type = COMMAND_EVENTS.get(data_obj)
-    else:
-        event_type = None
-    return event_type
+    match event_device:
+        case "dimmer":
+            return DIMMER_EVENTS.get(data_obj)
+        case "button":
+            return BUTTON_EVENTS.get(data_obj)
+        case "command":
+            return COMMAND_EVENTS.get(data_obj)
+        case _:
+            return None
 
 
 def parse_event_properties(
@@ -153,11 +154,10 @@ def parse_event_properties(
         # Number of steps for rotating a dimmer. Direction is encoded in the event
         # type (rotate_left / rotate_right), so the magnitude is a uint8 per spec.
         return {"steps": int.from_bytes(data_obj, "little", signed=False)}
-    elif event_device == "command":
+    if event_device == "command":
         # manufacturer-specific arguments, exposed as hex string
         return {"args": data_obj.hex()}
-    else:
-        return None
+    return None
 
 
 class BTHomeData:
@@ -437,14 +437,14 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         try:
             bthome_data = BTHomeData(service_info)
         except ValueError:
-            return None
+            return
 
         self.encryption_scheme = bthome_data.get_encryption_scheme()
         if self._is_same_as_last(service_info):
-            return None
+            return
         if self._parse_bthome(bthome_data):
             self.last_service_info = service_info
-        return None
+        return
 
     def _set_downgrade_detected(self, bthome_data: BTHomeData) -> None:
         """Sets the downgrade_detected flag if bindkey is set and encryption scheme not NONE."""
@@ -690,7 +690,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                     prev_obj_meas_type = obj_meas_type
                     obj_data_format = MEAS_TYPES[obj_meas_type].data_format
 
-                    if obj_data_format in ["raw", "string", "command"]:
+                    if obj_data_format in {"raw", "string", "command"}:
                         if payload_length < obj_start + 2:
                             _LOGGER.debug(
                                 "%s: Truncated payload, missing length byte for "
@@ -800,9 +800,9 @@ class BTHomeBluetoothDeviceData(BluetoothData):
 
             # Device-info objects above already `continue`d, so meas_format
             # cannot be None past this point. Assert for type narrowing.
-            assert meas_format is not None  # nosec
+            assert meas_format is not None, "device-info objects should continue early"  # nosec
 
-            if meas_type.meas_format in dup_meas_formats:
+            if meas_format in dup_meas_formats:
                 # Add a postfix for advertisements with multiple measurements of the same type
                 postfix_counter = postfix_dict.get(meas_format, 0) + 1
                 postfix_dict[meas_format] = postfix_counter
@@ -810,7 +810,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             else:
                 postfix = ""
 
-            value: None | str | int | float | datetime
+            value: str | int | float | datetime | None
             if meas["data format"] == 0 or meas["data format"] == "unsigned_integer":
                 value = parse_uint(meas["measurement data"], meas_factor)
             elif meas["data format"] == 1 or meas["data format"] == "signed_integer":
@@ -839,7 +839,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                     and meas_format.device_class
                 ):
                     self.update_sensor(
-                        key=f"{str(meas_format.device_class)}{postfix}",
+                        key=f"{meas_format.device_class!s}{postfix}",
                         native_unit_of_measurement=meas_format.native_unit_of_measurement,
                         native_value=value,
                         device_class=meas_format.device_class,
@@ -849,7 +849,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                     and meas_format.device_class
                 ):
                     self.update_binary_sensor(
-                        key=f"{str(meas_format.device_class)}{postfix}",
+                        key=f"{meas_format.device_class!s}{postfix}",
                         device_class=meas_format.device_class,
                         native_value=bool(value),
                     )
@@ -864,7 +864,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                     )
                     if event_type:
                         self.fire_event(
-                            key=f"{str(meas_format)}{postfix}",
+                            key=f"{meas_format!s}{postfix}",
                             event_type=event_type,
                             event_properties=event_properties,
                         )
@@ -979,7 +979,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
 
         # decrypt the data
         try:
-            assert self.cipher is not None  # nosec
+            assert self.cipher is not None, "cipher must be set before decrypting"  # nosec
             decrypted_payload = self.cipher.decrypt(
                 nonce, encrypted_payload + mic, associated_data
             )

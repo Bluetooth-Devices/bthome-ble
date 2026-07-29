@@ -15,7 +15,7 @@ def parse_value(data: bytes) -> dict[str, float]:
         humi = round(int.from_bytes(data[4:6], "little", signed=False) * 0.01, 2)
         print("Temperature:", temp, "Humidity:", humi)
         return {"temperature": temp, "humidity": humi}
-    elif vlength == 2:
+    if vlength == 2:
         motion = data[1]
         print("Motion:", motion)
         return {"Motion": motion}
@@ -51,7 +51,7 @@ def decrypt_aes_ccm(key: bytes, mac: bytes, data: bytes) -> dict[str, float] | N
     adslength = len(data)
     if adslength > 12 and data[0] == 0xD2 and data[1] == 0xFC:
         pkt = data[: data[0] + 1]
-        uuid = pkt[0:2]
+        uuid = pkt[:2]
         sw_version = pkt[2:3]
         encrypted_data = pkt[3:-8]
         count_id = pkt[-8:-4]
@@ -59,8 +59,7 @@ def decrypt_aes_ccm(key: bytes, mac: bytes, data: bytes) -> dict[str, float] | N
         # nonce: mac [6], uuid16 [2], count_id [4] # 6+3+4 = 13 bytes
         nonce = b"".join([mac, uuid, sw_version, count_id])
         return decrypt_payload(encrypted_data, mic, key, nonce)
-    else:
-        print("Error: format packet!")
+    print("Error: format packet!")
     return None
 
 
@@ -88,8 +87,7 @@ def encrypt_payload(
     return b"".join([uuid16, sw_version, ciphertext, count_id, mic])
 
 
-# =============================
-# main()
+# Main entry point
 # =============================
 def main() -> None:
     """Example to encrypt and decrypt BTHome payload."""
