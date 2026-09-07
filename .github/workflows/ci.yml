@@ -20,7 +20,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - name: Set up uv
-        uses: astral-sh/setup-uv@v9.0.0
+        uses: astral-sh/setup-uv@v10.0.1
         with:
           enable-cache: false
           python-version: "3.13"
@@ -54,7 +54,7 @@ jobs:
       - uses: actions/checkout@v7
       - name: Set up uv
         id: setup-uv
-        uses: astral-sh/setup-uv@v9.0.0
+        uses: astral-sh/setup-uv@v10.0.1
         with:
           enable-cache: true
           python-version: ${{ matrix.python-version }}
@@ -99,7 +99,7 @@ jobs:
 
       - name: Python Semantic Release
         id: release
-        uses: python-semantic-release/python-semantic-release@v10.6.1
+        uses: python-semantic-release/python-semantic-release@v10.6.2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -108,7 +108,7 @@ jobs:
         if: steps.release.outputs.released == 'true'
 
       - name: Publish package to GitHub Release
-        uses: python-semantic-release/publish-action@v10.6.1
+        uses: python-semantic-release/publish-action@v10.6.2
         if: steps.release.outputs.released == 'true'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
