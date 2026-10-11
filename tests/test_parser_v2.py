@@ -837,6 +837,53 @@ def test_identical_packet_id(caplog):
     )
 
 
+def test_identical_packet_id_changed_payload(caplog):
+    """Test BTHome parser for a changed payload that reuses the previous packet id."""
+    device = BTHomeBluetoothDeviceData()
+
+    # window open, rotation 3.5 degrees, packet id 2
+    data_string = b"\x44\x00\x02\x01\x57\x05\x00\x00\x00\x2d\x01\x3f\x23\x00"
+    advertisement = bytes_to_service_info(
+        data_string, local_name="SBDW-002C", address="A4:C1:38:8D:18:B2"
+    )
+    update = device.update(advertisement)
+    assert update.binary_entity_values[KEY_BINARY_WINDOW].native_value is True
+    assert update.entity_values[KEY_ROTATION].native_value == 3.5
+    assert device.packet_id == 2
+
+    # window closed within 4 seconds, with the same packet id. The payload is not the
+    # same as the payload of the previous advertisement, so it is not a duplicate.
+    data_string_2 = b"\x44\x00\x02\x01\x53\x05\x00\x00\x00\x2d\x00\x3f\x00\x00"
+    advertisement_2 = bytes_to_service_info(
+        data_string_2,
+        local_name="SBDW-002C",
+        address="A4:C1:38:8D:18:B2",
+        time=ADVERTISEMENT_TIME + 1,
+    )
+    update = device.update(advertisement_2)
+    assert update.binary_entity_values[KEY_BINARY_WINDOW].native_value is False
+    assert update.entity_values[KEY_ROTATION].native_value == 0.0
+    assert device.packet_id == 2
+    assert (
+        "Shelly BLU Door/Window 18B2: Not filtering packet_id 2, the payload is not "
+        "the same as the payload of the previous advertisement" in caplog.text
+    )
+
+    # the same advertisement repeated within 4 seconds is a duplicate
+    advertisement_3 = bytes_to_service_info(
+        data_string_2,
+        local_name="SBDW-002C",
+        address="A4:C1:38:8D:18:B2",
+        time=ADVERTISEMENT_TIME + 3,
+    )
+    device.update(advertisement_3)
+    assert (
+        "Shelly BLU Door/Window 18B2: New packet_id 2 indicates an older packet "
+        "(previous packet_id 2). BLE advertisement will be skipped" in caplog.text
+    )
+    assert device.last_service_info is advertisement_2
+
+
 def test_increasing_packet_id(caplog):
     """Test BTHome parser for BLE advertisement with increasing packet id."""
     # start with 189
