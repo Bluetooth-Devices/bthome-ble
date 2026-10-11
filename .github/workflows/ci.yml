@@ -60,12 +60,17 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install poetry
         run: uv tool install poetry
+      - name: Get full Python version
+        id: python
+        run: |
+          python=$(uv python find ${{ matrix.python-version }})
+          echo "version=$("$python" -c 'import platform; print(platform.python_version())')" >> "$GITHUB_OUTPUT"
       - name: Cache poetry venv
         id: cache-venv
         uses: actions/cache@v6
         with:
           path: .venv
-          key: venv-v1-${{ runner.os }}-py${{ steps.setup-uv.outputs.python-version }}-${{ hashFiles('poetry.lock', 'pyproject.toml') }}
+          key: venv-v1-${{ runner.os }}-py${{ steps.python.outputs.version }}-${{ hashFiles('poetry.lock', 'pyproject.toml') }}
       - name: Install Dependencies
         if: steps.cache-venv.outputs.cache-hit != 'true'
         run: |
