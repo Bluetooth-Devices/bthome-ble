@@ -4892,9 +4892,7 @@ def test_bthome_writable_entries_does_not_stop_the_parser() -> None:
 
     assert device.writable_entries == (0x1E, 0x53)
     assert (
-        result.entity_values[
-            DeviceKey(key="battery", device_id=None)
-        ].native_value
+        result.entity_values[DeviceKey(key="battery", device_id=None)].native_value
         == 97
     )
 
@@ -4924,8 +4922,6 @@ def test_a_device_that_never_declares_is_untouched() -> None:
 
     assert device.writable_entries is None
     assert (
-        result.entity_values[
-            DeviceKey(key="temperature", device_id=None)
-        ].native_value
+        result.entity_values[DeviceKey(key="temperature", device_id=None)].native_value
         == 25.0
     )
