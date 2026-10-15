@@ -373,6 +373,10 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         # The packet_id is used to filter duplicate messages in BTHome V2.
         self.packet_id: float | None = None
 
+        # The payload of the last advertisement with a packet_id that was not
+        # filtered. A duplicate has the same packet_id and the same payload.
+        self.last_payload: bytes | None = None
+
         # If True then we have used the provided encryption key to decrypt at least
         # one payload.
         # If False then we have either not seen an encrypted payload, the key is wrong
@@ -592,7 +596,7 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         return self._parse_payload(payload, bthome_data.get_time())
 
     def _skip_old_or_duplicated_advertisement(
-        self, new_packet_id: float, adv_time: float
+        self, new_packet_id: float, adv_time: float, payload: bytes
     ) -> bool:
         """
         Detect duplicated or older packets
@@ -600,6 +604,9 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         Devices may send duplicated advertisements or advertisements order can change
         when passing through a proxy. If more than 4 seconds pass since the last
         advertisement assume it is a new packet even if it has the same packet id.
+        An advertisement with the same packet id is only a duplicate if the payload is
+        the same as well. A skipped advertisement is not parsed later on, as repeated
+        advertisements with unchanged data do not reach the parser a second time.
         Packet id rollover at 255 to 0, validate that the difference between last packet id
         and new packet id is less than 64. This assumes device is not sending more than 16
         advertisements per second.
@@ -623,6 +630,16 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                 self.title,
                 adv_time,
                 self.last_service_info.time,
+            )
+            return False
+
+        # same packet id with a different payload, new data, don't discard packet
+        if new_packet_id == last_packet_id and payload != self.last_payload:
+            _LOGGER.debug(
+                "%s: Not filtering packet_id %i, the payload is not the same as the "
+                "payload of the previous advertisement",
+                self.title,
+                new_packet_id,
             )
             return False
 
@@ -734,9 +751,12 @@ class BTHomeBluetoothDeviceData(BluetoothData):
             # Filter BLE advertisements with packet_id that has already been parsed.
             if obj_meas_type == 0:
                 new_packet_id = parse_uint(payload[obj_data_start:next_obj_start])
-                if self._skip_old_or_duplicated_advertisement(new_packet_id, adv_time):
+                if self._skip_old_or_duplicated_advertisement(
+                    new_packet_id, adv_time, payload
+                ):
                     break
                 self.packet_id = new_packet_id
+                self.last_payload = payload
 
             measurements.append(
                 {
