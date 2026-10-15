@@ -67,7 +67,6 @@ jobs:
           path: .venv
           key: venv-v1-${{ runner.os }}-py${{ steps.setup-uv.outputs.python-version }}-${{ hashFiles('poetry.lock', 'pyproject.toml') }}
       - name: Install Dependencies
-        if: steps.cache-venv.outputs.cache-hit != 'true'
         run: |
           poetry env use $(uv python find ${{ matrix.python-version }})
           poetry install
