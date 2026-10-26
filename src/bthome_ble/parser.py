@@ -403,6 +403,10 @@ class BTHomeBluetoothDeviceData(BluetoothData):
         # the registry.
         self.device_type_id: int | None = None
 
+        # Object IDs the device accepts writes for (object 0xFF), in entry
+        # order. None when the device has never sent a declaration.
+        self.writable_entries: tuple[int, ...] | None = None
+
         # If this is True, the last update was blocked due to encryption downgrade
         # (received unencrypted data when bindkey is configured)
         self.downgrade_detected = False
@@ -690,7 +694,12 @@ class BTHomeBluetoothDeviceData(BluetoothData):
                     prev_obj_meas_type = obj_meas_type
                     obj_data_format = MEAS_TYPES[obj_meas_type].data_format
 
-                    if obj_data_format in ["raw", "string", "command"]:
+                    if obj_data_format in [
+                        "raw",
+                        "string",
+                        "command",
+                        "writable_entries",
+                    ]:
                         if payload_length < obj_start + 2:
                             _LOGGER.debug(
                                 "%s: Truncated payload, missing length byte for "
@@ -780,6 +789,10 @@ class BTHomeBluetoothDeviceData(BluetoothData):
 
             # Device-info objects (F0/F1/F2): update device metadata and skip
             # the sensor/event dispatch below.
+            if meas["data format"] == "writable_entries":
+                self.writable_entries = tuple(meas["measurement data"])
+                result = True
+                continue
             if meas["data format"] == "device_type_id":
                 self.device_type_id = int(parse_uint(meas["measurement data"]))
                 result = True
