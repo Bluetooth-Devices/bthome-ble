@@ -30,6 +30,7 @@ BUTTON_EVENTS: dict[int, str | None] = {
     0x05: "long_double_press",
     0x06: "long_triple_press",
     0x80: "hold_press",
+    0x81: "hold_release",
 }
 
 DIMMER_EVENTS: dict[int, str | None] = {
