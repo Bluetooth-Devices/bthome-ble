@@ -1,5 +1,71 @@
 # Changelog
 
+## v3.25.0 (2026-10-27)
+
+### Features
+
+
+- Add hold_release button event (0x81) ([`7b82a95`](https://github.com/Bluetooth-Devices/bthome-ble/commit/7b82a9592802b73a41f30217b689504d46cd00f7))
+
+
+### Chores
+
+
+- Pre-commit autoupdate ([`4e50607`](https://github.com/Bluetooth-Devices/bthome-ble/commit/4e50607cf11d9807737886f149834cb58e816d58))
+
+
+- Bump certifi from 2025.1.31 to 2026.10.19 ([`18e1c66`](https://github.com/Bluetooth-Devices/bthome-ble/commit/18e1c664c8595ac5f7e2daa63e9a90516ccd3800))
+
+
+- Pre-commit autoupdate ([`12358ba`](https://github.com/Bluetooth-Devices/bthome-ble/commit/12358ba49054ddfdb06a04a216a71096ee9ef895))
+
+
+- Pre-commit autoupdate ([`bdb810a`](https://github.com/Bluetooth-Devices/bthome-ble/commit/bdb810ac79e07cc210add992b20f473fa8f846b9))
+
+
+- Bump urllib3 from 2.7.0 to 2.8.0 ([`dff7498`](https://github.com/Bluetooth-Devices/bthome-ble/commit/dff74983d541ad625597eb11a9d3ce0f11984143))
+
+
+- Bump cryptography from 50.0.1 to 50.0.2 ([`6723f7f`](https://github.com/Bluetooth-Devices/bthome-ble/commit/6723f7f6e6eb916435f1415ea96b0cac8f21796f))
+
+
+- Bump the github-actions group with 3 updates ([`52a64d9`](https://github.com/Bluetooth-Devices/bthome-ble/commit/52a64d969c3a487d5c72510a65eb078ff2eedb49))
+
+
+- Bump habluetooth from 6.26.11 to 7.1.2 ([`9449bac`](https://github.com/Bluetooth-Devices/bthome-ble/commit/9449bac22487f4ce15b452c0fdab4638ffb66a8b))
+
+
+- Bump the github-actions group with 3 updates ([`6337ef1`](https://github.com/Bluetooth-Devices/bthome-ble/commit/6337ef1aa9a9c9a0afdda25bce0ccf8dba94b6b1))
+
+
+- Pre-commit autoupdate ([`e54224f`](https://github.com/Bluetooth-Devices/bthome-ble/commit/e54224fa6f73187e0bc06ba34916a23748663cb9))
+
+
+- Bump cryptography from 50.0.0 to 50.0.1 ([`57ad42d`](https://github.com/Bluetooth-Devices/bthome-ble/commit/57ad42dcb8c43d9717cb09931669f5f505f74b93))
+
+
+- Bump habluetooth from 6.26.5 to 6.26.11 ([`e0fcafd`](https://github.com/Bluetooth-Devices/bthome-ble/commit/e0fcafd915457d8b05ee60a50cc0f12e87ba5a9b))
+
+
+- Bump bluetooth-data-tools from 1.29.21 to 1.29.24 ([`dc0f361`](https://github.com/Bluetooth-Devices/bthome-ble/commit/dc0f36177f55f45414f0126e50299994a4bdec79))
+
+
+- Pre-commit autoupdate ([`08ac044`](https://github.com/Bluetooth-Devices/bthome-ble/commit/08ac044f160abc5cb8e57337d6b6a10576d6dfe4))
+
+
+- Bump cryptography from 49.0.0 to 50.0.0 ([`59dbe5a`](https://github.com/Bluetooth-Devices/bthome-ble/commit/59dbe5a80323ec8c2ee2611db14774bf760a7322))
+
+
+- Bump the github-actions group with 4 updates ([`db7bf31`](https://github.com/Bluetooth-Devices/bthome-ble/commit/db7bf31c58db2e3355d79082721aae4bda5c61d1))
+
+
+- Bump bluetooth-data-tools from 1.29.18 to 1.29.21 ([`8cb38f9`](https://github.com/Bluetooth-Devices/bthome-ble/commit/8cb38f9464bbe0131347cefa3fc9874c5d78ec7e))
+
+
+### Unknown
+
+
+
 ## v3.24.0 (2026-07-21)
 
 ### Features
