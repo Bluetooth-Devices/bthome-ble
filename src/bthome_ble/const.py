@@ -5,6 +5,7 @@ import dataclasses
 from sensor_state_data import (
     BaseDeviceClass,
     BinarySensorDeviceClass,
+    SensorDeviceClass,
     SensorLibrary,
     Units,
     description,
@@ -103,6 +104,11 @@ class ExtendedSensorLibrary(SensorLibrary):
     SETTINGS_REVISION__NONE = description.BaseSensorDescription(
         device_class=ExtendedSensorDeviceClass.SETTINGS_REVISION,
         native_unit_of_measurement=None,
+    )
+
+    FREQUENCY__FREQUENCY_HERTZ = description.BaseSensorDescription(
+        device_class=SensorDeviceClass.FREQUENCY,
+        native_unit_of_measurement=Units.FREQUENCY_HERTZ,
     )
 
 
@@ -532,6 +538,11 @@ MEAS_TYPES: dict[int, MeasTypes] = {
     ),
     0x64: MeasTypes(meas_format=ExtendedSensorLibrary.LIGHT_LEVEL__NONE),
     0x65: MeasTypes(meas_format=ExtendedSensorLibrary.SETTINGS_REVISION__NONE),
+    0x66: MeasTypes(
+        meas_format=ExtendedSensorLibrary.FREQUENCY__FREQUENCY_HERTZ,
+        data_length=2,
+        factor=0.01,
+    ),
     # Device information objects (BTHome misc range). These do not produce
     # sensor entities; the parser consumes them to set device-level metadata.
     0xF0: MeasTypes(
