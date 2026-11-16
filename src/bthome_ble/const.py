@@ -549,4 +549,8 @@ MEAS_TYPES: dict[int, MeasTypes] = {
         data_length=3,
         data_format="firmware_version_3",
     ),
+    0xFF: MeasTypes(
+        meas_format=None,
+        data_format="writable_entries",
+    ),
 }
