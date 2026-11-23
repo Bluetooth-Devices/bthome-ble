@@ -37,7 +37,7 @@ bluetooth-sensor-state-data = ">=1.9.2"
 sensor-state-data = ">=2.19.0"
 bluetooth-data-tools = ">=1.29.24"
 cryptography = ">=50.0.2"
-habluetooth = ">=7.1.2"
+habluetooth = ">=7.1.3"
 
 [tool.poetry.extras]
 docs = [
