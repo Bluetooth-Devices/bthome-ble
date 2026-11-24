@@ -71,6 +71,7 @@ KEY_WATER = DeviceKey(key="water", device_id=None)
 KEY_CONDUCTIVITY = DeviceKey(key="conductivity", device_id=None)
 KEY_LIGHT_LEVEL = DeviceKey(key="light_level", device_id=None)
 KEY_SETTINGS_REVISION = DeviceKey(key="settings_revision", device_id=None)
+KEY_PROGRESS = DeviceKey(key="progress", device_id=None)
 
 
 @pytest.fixture(autouse=True)
@@ -4732,6 +4733,50 @@ def test_bthome_settings_revision(caplog):
                 device_key=KEY_SETTINGS_REVISION,
                 name="Settings Revision",
                 native_value=3,
+            ),
+            KEY_SIGNAL_STRENGTH: SensorValue(
+                device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
+            ),
+        },
+    )
+
+
+def test_bthome_progress(caplog):
+    """Test BTHome parser for Progress (0x67) without encryption."""
+    data_string = b"\x40\x67\x41"
+    advertisement = bytes_to_service_info(
+        data_string, local_name="TEST DEVICE", address="A4:C1:38:8D:18:B2"
+    )
+
+    device = BTHomeBluetoothDeviceData()
+    assert device.update(advertisement) == SensorUpdate(
+        title="TEST DEVICE 18B2",
+        devices={
+            None: SensorDeviceInfo(
+                name="TEST DEVICE 18B2",
+                manufacturer=None,
+                model="BTHome sensor",
+                sw_version="BTHome BLE v2",
+                hw_version=None,
+            )
+        },
+        entity_descriptions={
+            KEY_PROGRESS: SensorDescription(
+                device_key=KEY_PROGRESS,
+                device_class=ExtendedSensorDeviceClass.PROGRESS,
+                native_unit_of_measurement=Units.PERCENTAGE,
+            ),
+            KEY_SIGNAL_STRENGTH: SensorDescription(
+                device_key=KEY_SIGNAL_STRENGTH,
+                device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+                native_unit_of_measurement=Units.SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+            ),
+        },
+        entity_values={
+            KEY_PROGRESS: SensorValue(
+                device_key=KEY_PROGRESS,
+                name="Progress",
+                native_value=65,
             ),
             KEY_SIGNAL_STRENGTH: SensorValue(
                 device_key=KEY_SIGNAL_STRENGTH, name="Signal Strength", native_value=-60
