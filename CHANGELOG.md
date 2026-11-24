@@ -1,5 +1,46 @@
 # Changelog
 
+## v3.26.0 (2026-11-24)
+
+### Features
+
+
+- Add frequency sensor (0x66) ([`5b16292`](https://github.com/Bluetooth-Devices/bthome-ble/commit/5b16292b3fac82ef542f0c53e51f801a290657a7))
+
+
+### Chores
+
+
+- Pre-commit autoupdate ([`e935cdd`](https://github.com/Bluetooth-Devices/bthome-ble/commit/e935cdd349f1e920d3f4ba872fe80d0454f26049))
+
+
+- Bump habluetooth from 7.1.2 to 7.1.3 ([`b63af07`](https://github.com/Bluetooth-Devices/bthome-ble/commit/b63af0722b87e828ee0e574ff2cd6dee73212242))
+
+
+- Pre-commit autoupdate ([`d43828f`](https://github.com/Bluetooth-Devices/bthome-ble/commit/d43828fa056ade9a9ab8fa2872aaf5b8b15224f9))
+
+
+- Bump myst-parser from 5.1.0 to 5.2.0 ([`dd29239`](https://github.com/Bluetooth-Devices/bthome-ble/commit/dd29239282f3a8f03a7b6afe537b517cd23acb4a))
+
+
+- Pre-commit autoupdate ([`4fc2e94`](https://github.com/Bluetooth-Devices/bthome-ble/commit/4fc2e946727b64a7bf367fb565c084a2de1355a3))
+
+
+- Pre-commit autoupdate ([`2a4d786`](https://github.com/Bluetooth-Devices/bthome-ble/commit/2a4d7869212206ed4ac6bfa3e6b77b2168382f6c))
+
+
+- Bump bluetooth-sensor-state-data from 1.9.0 to 1.9.2 ([`0bd5da3`](https://github.com/Bluetooth-Devices/bthome-ble/commit/0bd5da3f631f64d0e6a17c5c1973c5367f53ac7c))
+
+
+- Bump pytest from 9.1.1 to 9.2.0 ([`cfc5372`](https://github.com/Bluetooth-Devices/bthome-ble/commit/cfc53722c70de0ec39156a013c083b30b2911d40))
+
+
+- Bump astral-sh/setup-uv from 10.2.0 to 10.3.3 in the github-actions group ([`df5840b`](https://github.com/Bluetooth-Devices/bthome-ble/commit/df5840b9b114ad8da13d1fa4484fa36175b04e44))
+
+
+- Bump astral-sh/setup-uv ([`df5840b`](https://github.com/Bluetooth-Devices/bthome-ble/commit/df5840b9b114ad8da13d1fa4484fa36175b04e44))
+
+
 ## v3.25.0 (2026-10-27)
 
 ### Features
