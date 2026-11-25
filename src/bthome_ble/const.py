@@ -57,6 +57,9 @@ class ExtendedSensorDeviceClass(BaseDeviceClass):
     # Settings revision
     SETTINGS_REVISION = "settings_revision"
 
+    # Progress
+    PROGRESS = "progress"
+
 
 class ExtendedSensorLibrary(SensorLibrary):
     """Sensor Library for additional sensors (compared to sensor-state-data)."""
@@ -109,6 +112,11 @@ class ExtendedSensorLibrary(SensorLibrary):
     FREQUENCY__FREQUENCY_HERTZ = description.BaseSensorDescription(
         device_class=SensorDeviceClass.FREQUENCY,
         native_unit_of_measurement=Units.FREQUENCY_HERTZ,
+    )
+
+    PROGRESS__PERCENTAGE = description.BaseSensorDescription(
+        device_class=ExtendedSensorDeviceClass.PROGRESS,
+        native_unit_of_measurement=Units.PERCENTAGE,
     )
 
 
@@ -543,6 +551,7 @@ MEAS_TYPES: dict[int, MeasTypes] = {
         data_length=2,
         factor=0.01,
     ),
+    0x67: MeasTypes(meas_format=ExtendedSensorLibrary.PROGRESS__PERCENTAGE),
     # Device information objects (BTHome misc range). These do not produce
     # sensor entities; the parser consumes them to set device-level metadata.
     0xF0: MeasTypes(
