@@ -1,5 +1,13 @@
 # Changelog
 
+## v3.27.0 (2026-11-25)
+
+### Features
+
+
+- Add progress (0x67) ([`f9f71ea`](https://github.com/Bluetooth-Devices/bthome-ble/commit/f9f71eac36f39e7bb0a63345c13077399c25311b))
+
+
 ## v3.26.0 (2026-11-24)
 
 ### Features
