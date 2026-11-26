@@ -1,11 +1,23 @@
 # Changelog
 
-## v3.27.0 (2026-11-25)
+## v3.27.0 (2026-11-26)
 
 ### Features
 
 
+- Add python 3.15 support ([`d51734a`](https://github.com/Bluetooth-Devices/bthome-ble/commit/d51734ada5db95693b403e72db7d54c7d4d5ce9e))
+
+
+- Add python 3.15 support ([`d51734a`](https://github.com/Bluetooth-Devices/bthome-ble/commit/d51734ada5db95693b403e72db7d54c7d4d5ce9e))
+
+
 - Add progress (0x67) ([`f9f71ea`](https://github.com/Bluetooth-Devices/bthome-ble/commit/f9f71eac36f39e7bb0a63345c13077399c25311b))
+
+
+### Continuous integration
+
+
+- Make python 3.15 a required test job ([`d51734a`](https://github.com/Bluetooth-Devices/bthome-ble/commit/d51734ada5db95693b403e72db7d54c7d4d5ce9e))
 
 
 ## v3.26.0 (2026-11-24)
